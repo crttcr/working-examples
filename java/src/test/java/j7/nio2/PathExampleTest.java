@@ -11,26 +11,26 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class FilesExampleTest
+public class PathExampleTest
 {
-	FilesExample fe = null;
+	PathExample pe = null;
 
 	@Before
 	public void setUp() throws Exception
 	{
-		fe = new FilesExample();
+		pe = new PathExample();
 	}
 
 	@After
 	public void tearDown() throws Exception
 	{
-		fe = null;
+		pe = null;
 	}
 
 	@Test
 	public void testBuildDirectoryMap()
 	{
-		Map<String, Path> map = fe.buildDirectoryMap("/usr/bin");
+		Map<String, Path> map = pe.buildDirectoryMap("/usr/bin");
 		
 		
 		assertNotNull(map);
@@ -52,7 +52,7 @@ public class FilesExampleTest
 	@Test
 	public void testTestFileExists()
 	{
-		Path path = fe.resourceLocationForTest();
+		Path path = pe.resourceLocationForTest();
 		
 		assertNotNull(path);
 		assertTrue(Files.exists(path));
@@ -68,7 +68,7 @@ public class FilesExampleTest
 		
 		// Act
 		//
-		Map<Path, Long> map = fe.subtreeFileSizes("/usr/local/bin");
+		Map<Path, Long> map = pe.subtreeFileSizes("/usr/local/bin");
 		
 		// Assert
 		//
@@ -80,16 +80,24 @@ public class FilesExampleTest
 	@Test
 	public void testReadAllBytesOfAFile()
 	{
-		String s = fe.readAllBytesOfAFile();
+		String s = pe.readAllBytesOfAFile();
 		
 		assertNotNull(s);
 		System.out.println(s);
 	}
 
 	@Test
+	public void testReadAllLinesOfAFile()
+	{
+		boolean ok = pe.readAllLines();
+		
+		assertTrue(ok);
+	}
+
+	@Test
 	public void testZipDetails()
 	{
-		String[] array = fe.getZipDetails();
+		String[] array = pe.getZipDetails();
 		
 		assertNotNull(array);
 		

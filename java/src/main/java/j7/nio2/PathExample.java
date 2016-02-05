@@ -1,7 +1,9 @@
 package j7.nio2;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.FileVisitResult;
@@ -11,12 +13,13 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class FilesExample
+public class PathExample
 {
-	public FilesExample()
+	public PathExample()
 	{
 
 	}
@@ -152,6 +155,51 @@ public class FilesExample
 	   return result;
 	}
 
+	public boolean readAllLines()
+	{
+		Path path = Paths.get("/etc/group");
+		
+		// NOTE: This is the simplest way to read all the lines of a file
+		//
+		try
+		{
+			List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+			String         msg = String.format("File: [%s] contains [%d] lines.", path, lines.size());
+
+			System.out.println(msg);
+		}
+		catch (IOException e1)
+		{
+			return false;
+		}
+
+		// NOTE, if you want line, by line access, you can use this approach:
+		//
+		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8))
+		{
+			String line = null;
+			
+			while ((line = reader.readLine()) != null)
+			{
+				if (line.contains("daemon"))
+				{
+					String msg = String.format("Daemon-related group: [%s]", line);
+					System.out.println(msg);
+				}
+				
+			}
+			
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
 	public String readAllBytesOfAFile()
 	{
 		Path wiki_path = Paths.get("src/test/resources", "Sample.File.txt");
