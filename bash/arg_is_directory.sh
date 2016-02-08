@@ -9,7 +9,7 @@
 ## Check arg count
 ##
 if [ "$#" -ne 1 ]; then
-   echo "FAIL: Expected 1 parameter. Received $0"
+   echo "FAIL: Expected 1 parameter. Received $#"
    exit 0
 fi
 
