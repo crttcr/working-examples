@@ -1,0 +1,23 @@
+<html>
+<body>
+	<table>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Key</th>
+		<th>Required</th>
+		<th>Unique</th>
+	</tr>
+#foreach($property in ${properties})
+	<tr>
+		<td>$property.name</td>
+		<td>$property.type</td>
+		<td>$property.key</td>
+		<td>$property.required</td>
+		<td>$property.unique</td>
+	</tr>
+#end
+	</table>
+
+</body>
+</html>

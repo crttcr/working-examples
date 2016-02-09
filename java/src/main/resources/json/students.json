@@ -1,0 +1,40 @@
+{
+    "students": 
+    [
+        {
+            "name": "Sandeep",
+            "mark": 35,
+            "subject": "Geography"
+        },
+        {
+            "name": "Sarah",
+            "mark": 135,
+            "subject": "English"
+        },
+        {
+            "name": "Robert",
+            "mark": 315,
+            "subject": "History"
+        },
+        {
+            "name": "Rana",
+            "mark": 305,
+            "subject": "Mathematics"
+        },
+        {
+            "name": "Heidi",
+            "mark": 352,
+            "subject": "History"
+        },
+        {
+            "name": "John",
+            "mark": 350,
+            "subject": "Geography"
+        },
+        {
+            "name": "Jack",
+            "mark": 355,
+            "subject": "English"
+        }
+	]
+}

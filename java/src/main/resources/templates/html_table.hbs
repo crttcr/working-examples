@@ -1,0 +1,25 @@
+<html>
+<body>
+	<table>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Key</th>
+		<th>Required</th>
+		<th>Unique</th>
+	</tr>
+
+	{{#each properties}}
+	<tr>
+		<td>{{name}}</td>
+		<td>{{type}}</td>
+		<td>{{key}}</td>
+		<td>{{required}}</td>
+		<td>{{unique}}</td>
+	</tr>
+	{{/each}}
+	
+	</table>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+"properties":
+[
+    {
+    "name": "ID",
+    "type": "String",
+    "key": true,
+    "unique": true,
+    "required": true
+    },
+    {
+    "name": "Name",
+    "type": "String",
+    "key": false,
+    "unique": false,
+    "required": true
+    },
+    {
+    "name": "CUSIP",
+    "type": "String",
+    "key": false,
+    "unique": false,
+    "required": false
+    },
+    {
+    "name": "ISIN",
+    "type": "String",
+    "unique": false,
+    "required": true
+    }
+]
+
+}
