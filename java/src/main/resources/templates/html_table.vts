@@ -1,3 +1,25 @@
+## Velocity Template for an HTML table
+##
+## Single line comment like this. Does not have to start the line.
+##
+#*
+ Velocity supports multi-line comments in this form.
+ If there were some interesting comments to make, 
+ this would be a good place to put them.
+#*
+#**
+ VTL Comment block. 
+ Can be used for metadata, but it's not clear what tool uses it, 
+ and how it is expressed.
+
+ 
+ @author CRT
+ @version 1.0
+
+ Note a single * next to the # is used to terminate this block.
+*#
+
+
 <html>
 <body>
 	<table>
@@ -10,11 +32,11 @@
 	</tr>
 #foreach($property in ${properties})
 	<tr>
-		<td>$property.name</td>
-		<td>$property.type</td>
-		<td>$property.key</td>
-		<td>$property.required</td>
-		<td>$property.unique</td>
+		<td>$property.get("name")</td>
+		<td>$property.get("type")</td>
+		<td>$property.get("key")</td>
+		<td>$property.get("required")</td>
+		<td>$property.get("unique")</td>
 	</tr>
 #end
 	</table>
