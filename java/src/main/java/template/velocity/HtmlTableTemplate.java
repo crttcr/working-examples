@@ -11,7 +11,7 @@ public class HtmlTableTemplate
 	public static String getTemplateText()
 	{
 		String result = null;
-		Path path = Paths.get("src/main/resources/templates/html_table.vts");
+		Path path = Paths.get("src/main/resources/templates/html_table.vtl");
 		
 		try
 		{

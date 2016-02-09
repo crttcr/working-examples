@@ -68,8 +68,7 @@ public class JsonDataSourceTest
 		StringResourceRepository repo = StringResourceLoader.getRepository();
 
 	   String myTemplateName = "/some/imaginary/path/hello.vm";
-	   String myTemplate     = text; // "Hi, ${username}... this is some template!";
-	   repo.putStringResource(myTemplateName, myTemplate);
+	   repo.putStringResource(myTemplateName, text);
 	 
 		Template template = null;
 

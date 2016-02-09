@@ -27,11 +27,11 @@ public class MapDataSourceTest
 			Template template = hb.compileInline(text);
 			String   expanded = template.apply(data);
 
+			// System.out.println(expanded);
+
 			assertTrue(expanded.contains("GT4"));
 			assertTrue(expanded.contains("Damien"));
 			assertTrue(expanded.contains("Boo hoo"));
-			
-			// System.out.println(expanded);
 		}
 		catch (IOException e)
 		{
