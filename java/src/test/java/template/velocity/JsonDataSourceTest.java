@@ -23,6 +23,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import template.JsonDataSource;
+
+/**
+ * Note, in this approach, there's nothing that Velocity does that natively supports JSON, 
+ * so Jackson is used to create a JsonNode from the root of the document.
+ * 
+ * Velocity is a bit picky about what can be used to handle array-type values, so the
+ * properties array is turned into Object[] which is placed into the context. Velocity
+ * will wrap an array with an Iteratable class to allow #foreach to loop through values.
+ * 
+ * In the VTL, the JsonNode.get("property_name") method is called to get property values.
+ * 
+ * @author reid.dev
+ *
+ */
 public class JsonDataSourceTest
 {
 	private VelocityContext context;
