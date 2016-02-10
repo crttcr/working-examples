@@ -83,7 +83,7 @@ public class WatchExampleTest
 		// FIXME: This test is broken.  We should see a change in the directory, we just
 		// wrote a file there.
 		//
-		assertEquals(0, changes.intValue());
+		assertEquals(1, changes.intValue());
 	}
 	
 	
