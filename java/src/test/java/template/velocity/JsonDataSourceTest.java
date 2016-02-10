@@ -14,7 +14,6 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,18 +39,23 @@ import template.JsonDataSource;
 public class JsonDataSourceTest
 {
 	private VelocityContext context;
+	private StringResourceRepository repo;
 	
 	@Before
 	public void setUp() throws Exception
 	{
-		boolean ok = VelocityUtil.InitializeVelocityForStringTemplates();
+		boolean ok = VelocityUtil.initializeVelocityForStringTemplates();
 		
 		if (! ok)
 		{
 			fail("Could not set up Velocity for string templates");
 		}
 
-      VelocityUtil.getRepo(null, null);
+      repo = VelocityUtil.getRepo(null, null);
+      if (repo == null)
+      {
+      	fail("Could not acquire repository");
+      }
  
       context = new VelocityContext();
 	}
@@ -65,8 +69,6 @@ public class JsonDataSourceTest
 
 		context.put("properties", data);
 		
-		StringResourceRepository repo = StringResourceLoader.getRepository();
-
 	   String myTemplateName = "/some/imaginary/path/hello.vm";
 	   repo.putStringResource(myTemplateName, text);
 	 

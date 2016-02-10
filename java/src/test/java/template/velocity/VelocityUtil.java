@@ -7,7 +7,23 @@ import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
 public class VelocityUtil
 {
-	public static boolean InitializeVelocityForStringTemplates()
+	// Since v1.2 Velocity supports a non-singleton approach
+	// using a VelocityEngine instance to replace static methods
+	// on the Velocity class.
+	//
+	public static VelocityEngine getVelocityEngine()
+	{
+		VelocityEngine ve = new VelocityEngine();
+		
+		ve.setProperty(Velocity.RESOURCE_LOADER, "string");
+		ve.addProperty("string.resource.loader.class", StringResourceLoader.class.getName());
+		ve.addProperty("string.resource.loader.modificationCheckInterval", "1");
+		ve.init();
+		
+		return ve;
+	}
+
+	public static boolean initializeVelocityForStringTemplates()
 	{
 
 //    Velocity.reset();

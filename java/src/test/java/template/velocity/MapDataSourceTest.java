@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -21,11 +21,14 @@ import template.MapDataSource;
 public class MapDataSourceTest
 {
 	private VelocityContext context;
+	private VelocityEngine       ve;
 	
 	@Before
 	public void setUp() throws Exception
 	{
-      Velocity.init();
+      ve = new VelocityEngine();
+      ve.init();
+      
       context = new VelocityContext();
 	}
 	
@@ -49,8 +52,8 @@ public class MapDataSourceTest
 	   	//
 			Path path = Paths.get("./src/main/resources/templates/map_template.vtl");
 	   	
-//	      template = Velocity.getTemplate(path.normalize().toAbsolutePath().toString());
-	      template = Velocity.getTemplate(path.toString());
+//	      template = ve.getTemplate(path.normalize().toAbsolutePath().toString());
+	      template = ve.getTemplate(path.toString());
 	   }
 		catch( ResourceNotFoundException rnfe )
 		{
