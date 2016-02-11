@@ -55,7 +55,13 @@ public class IndexDataFile
 			long        modified = doc_path.toFile().lastModified();
 			
 			indexFileOfData(writer, doc_path, modified);
-
+			
+			// NOTE: if you want to maximize search performance, you can optionally call forceMerge() here.
+			// THis can be a terribly costly operation, so generally it's only worth it when the index is
+			// relatively static (i.e. you're done adding documents to it)
+			//
+			// writer.forceMerge(1);
+			//
 			writer.close();
 
 			Date     end = new Date();
