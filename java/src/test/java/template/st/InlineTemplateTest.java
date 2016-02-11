@@ -18,14 +18,16 @@ public class InlineTemplateTest
 	@Test
 	public void testHelloWorld()
 	{
-		ST st = new ST("Hello, {name}!", '{', '}');
-		st.add("name", "Moto");
+		String name = "Moto";
+		ST       st = new ST("Hello, {name}!", '{', '}');
+		st.add("name", name);
+
 		String expanded = st.render();
 
 		// System.out.println(expanded);
 		//
 
-		assertTrue(expanded.contains("Moto"));
+		assertTrue(expanded.contains(name));
 	}
 
 	@Test
