@@ -1,0 +1,4 @@
+ID!TICKER|NAME|PARENT|LEGAL NAME
+100|AA|Alcoa|Alcoa|Aluminium Company of America
+101|PEP|Pepsi Bottlers of America|PepsiCo|Pepsi American Bottlers Association
+102|PEP|PepsiCo|PepsiCo|Pepsi Corporation of America

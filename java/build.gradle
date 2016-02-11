@@ -11,7 +11,14 @@ repositories
 
 dependencies 
 {
+	// AutoValue
+	//
+	compile 'com.google.auto.value:auto-value:1.1+'
 
+	// Commons Lang
+	//
+	compile 'org.apache.commons:commons-lang3:3.4'
+	
 	// Jetty
 	//
 	compile 'org.eclipse.jetty:jetty-servlets:9.3+'
@@ -24,17 +31,16 @@ dependencies
 	compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.22+'
 	compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.22+'
 	
+	// Lucene
+	// 
+	compile 'org.apache.lucene:lucene-core:5.4.1+'
+	compile 'org.apache.lucene:lucene-analyzers-common:5.4.1+'
+	compile 'org.apache.lucene:lucene-queryparser:5.4.1+'
+
 	// Rest
 	//
 	compile 'javax.ws.rs:javax.ws.rs-api:2.0+'
 	
-	// Commons Lang
-	//
-	compile 'org.apache.commons:commons-lang3:3.4'
-	
-	// AutoValue
-	//
-	compile 'com.google.auto.value:auto-value:1.1+'
 	
 	// Handlebars
 	//
