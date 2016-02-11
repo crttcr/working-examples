@@ -26,7 +26,7 @@ public class JsonDataSourceTest
 		Path     path = Paths.get("src/main/resources/templates");
 		String  spath = path.normalize().toAbsolutePath().toString();
 		STGroup group = new STGroupDir(spath, '$', '$');
-		ST         st = group.getInstanceOf("html");
+		ST         st = group.getInstanceOf("html_table");
 		
 		if (st == null)
 			fail("Unable to process template");
