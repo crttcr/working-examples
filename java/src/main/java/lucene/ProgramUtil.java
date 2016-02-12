@@ -18,9 +18,9 @@ public class ProgramUtil
 	{
 		Map<String, Object> result = new HashMap<>();
 		
-		result.put(ARG_CREATE,       Boolean.TRUE);
-		result.put(ARG_DOC_PATH,    "src/main/resources/issuers.txt");
-		result.put(ARG_INDEX_PATH, "lucene_index");
+		result.put(ARG_CREATE,                        Boolean.TRUE);
+		result.put(ARG_DOC_PATH,    "src/main/resources/books.txt");
+		result.put(ARG_INDEX_PATH,                  "lucene_index");
 
 		if (args == null || args.length == 0)
 			return result;
@@ -56,7 +56,7 @@ public class ProgramUtil
 		String s = (String) argmap.get(ARG_INDEX_PATH);
 
 		if (s == null)
-			s = "index";
+			s = "lucene_index";
 		
 		final Path path = Paths.get(s);
 		

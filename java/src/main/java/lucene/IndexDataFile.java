@@ -104,6 +104,10 @@ public class IndexDataFile
 				
 				// Make a new empty document for each valid line of the file
 				//
+				// The data file looks like this:
+				//
+				// ID!ISBN|TITLE|AUTHOR|BLURB
+				// 
 				Document d = new Document();
 				
 				// Add the ID of the record as a field named "id." Use a field that is indexed
@@ -126,18 +130,30 @@ public class IndexDataFile
 				Field content_f = new TextField("content", content, Field.Store.NO);
 				d.add(content_f);
 
-				// Add the TICKER of the record as a field named "ticker." Use a field that is indexed
-				// (i.e. searchable), but don't tokenize or otherwise analyze/modify the field
-				// into terms and don't index term frequency or positional information.
+				// Add the Title as a field named "title" and store it so that it can be retrieved.
 				//
-				Field ticker_f = new StringField("ticker", parts[3], Field.Store.YES);
-				d.add(ticker_f);
+				Field f_title = new TextField("title", parts[2], Field.Store.YES);
+				d.add(f_title);
+
+				// Add ISBN as a non-tokenized, stored field.
+				//
+				Field f_isbn = new StringField("isbn", parts[1], Field.Store.YES);
+				d.add(f_isbn);
+				
+				// Add Authors as a tokenized, stored field.
+				//
+				Field f_author = new TextField("author", parts[3], Field.Store.YES);
+				d.add(f_author);
+				
 				
 				writer.addDocument(d);
 			}
 		}
 	}
 
+	// The data file looks like this:
+	// ID!ISBN|TITLE|AUTHOR|BLURB
+	// 
 	private static String createCompositeText(String[] parts)
 	{
 		if (parts == null || parts.length < 5)
@@ -148,7 +164,7 @@ public class IndexDataFile
 			return "";
 		}
 		
-		return String.join(" ", parts[1],  parts[2], parts[3], parts[4]);
+		return String.join(" ", parts[2],  parts[4]);
 	}
 
 	private static String[] splitIntoFields(String line)
