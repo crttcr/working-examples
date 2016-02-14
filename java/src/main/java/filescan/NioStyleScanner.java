@@ -65,9 +65,6 @@ public class NioStyleScanner
 			return null;
 		}
 		
-		// DO SCAN
-		//
-		
 		result.end();
 		result.setCount(count);
 		
