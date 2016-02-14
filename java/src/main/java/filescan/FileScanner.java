@@ -19,9 +19,7 @@ public class FileScanner
 	
 	FileScanner(Path file)
 	{
-		Objects.nonNull(path_to_file);
-		
-		this.path_to_file = file;
+		path_to_file = Objects.requireNonNull(file);
 	}
 	
 	public ScanResult scan()
@@ -29,10 +27,10 @@ public class FileScanner
 		ScanResult result = new ScanResult();
 		
 		long count = 0;
-		result.start();
 		
 		String file = path_to_file.toString();
 		
+		result.start();
 		try (FileInputStream in = new FileInputStream(file))
 		{
 			// In this example method, nothing is done with the byte read
@@ -49,7 +47,7 @@ public class FileScanner
 		{
 			String msg = String.format("Scan Failure: [%s]", e.getMessage());
 			System.err.println(msg);
-			System.exit(-1);
+			return null;
 		}
 		
 		// DO SCAN
