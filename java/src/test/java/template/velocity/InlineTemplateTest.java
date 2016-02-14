@@ -12,7 +12,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +20,7 @@ import template.InlineDataSource;
 
 public class InlineTemplateTest
 {
+	@SuppressWarnings("unused")
 	private VelocityEngine             ve;
 	private VelocityContext       context;
 	private StringResourceRepository repo;
