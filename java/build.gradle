@@ -19,6 +19,10 @@ dependencies
 	//
 	compile 'org.apache.commons:commons-lang3:3.4'
 	
+	// ICU Unicode utilities
+	//
+	compile 'com.ibm.icu:icu4j:56.1'
+
 	// Jetty
 	//
 	compile 'org.eclipse.jetty:jetty-servlets:9.3+'
