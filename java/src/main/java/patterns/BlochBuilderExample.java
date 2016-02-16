@@ -14,9 +14,9 @@ package patterns;
  */
 public class BlochBuilderExample
 {
-	private String           name;
-	private boolean		required;
-	private final int         max;
+	private String        name;
+	private boolean   required;
+	private final int      max;  // Forces value to be set in constructor.
 	
 	private BlochBuilderExample(int max)
 	{
@@ -79,9 +79,9 @@ public class BlochBuilderExample
 	//
 	// However, it does mean that the builder cannot be reused, as that would expose the field
 	// values of the built object. (Hence setting instance = null in the build() method in this
-	// variation. This example exposes the unwary user to an NPE, so probably would want to protect
+	// variation.) This example exposes the unwary user to an NPE, so probably would want to protect
 	// against that or eliminate the parameter to the builder() method and replace null assignment with
-	// instance = new BlochBuilderExample(). The downside there is no reasonable defaults for the second
+	// instance = new BlochBuilderExample(). The downside is no reasonable defaults for the second
 	// use and possible confusion. Factor out the defaults to handle that issue.
 	//
 	// Force the use of this factory method (instead of allowing new BlochBuilderExample.Builder() 
