@@ -19,7 +19,11 @@ public interface Interface
 	@JsonProperty("id")
 	String id();
 	
-	@JsonProperty("Name")
+	// PAY Attention to case here.  By using a different case such as @JsonProperty("Name")
+	// you will change how the serialized JSON looks. This would need to be respected in
+	// the deserialization.
+	//
+	@JsonProperty("name")
 	String name();
 	
    @JsonSerialize(using = LocalDateTimeSerializer.class)
