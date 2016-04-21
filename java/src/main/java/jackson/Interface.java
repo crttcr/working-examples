@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import jackson.serialize.LocalDateTimeDeserializer;
+import jackson.serialize.LocalDateTimeSerializer;
+
 @JsonDeserialize(as=InterfaceImplementation.class)
 public interface Interface
 {

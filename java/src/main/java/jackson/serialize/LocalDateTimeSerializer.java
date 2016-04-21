@@ -1,4 +1,4 @@
-package jackson;
+package jackson.serialize;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
