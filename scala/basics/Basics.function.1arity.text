@@ -1,0 +1,72 @@
+// Functions that take only 1 parameter
+//
+
+// Normal call
+//
+util.echo("Hello")
+
+// Can omit parenthesis
+//
+util.echo "Hello"
+
+// Or use braces
+//
+util.echo { "Hello" }
+
+// Dot not required
+// Looks like data
+//
+// NOT working for me in the REPL
+//
+util echo "Hello"
+
+
+// Function Type definitions
+// a) number and type of params
+// b) return type
+//
+Int => Int
+
+// Specify the type of the function you want to define with
+// ...
+//
+val addOne: Int => Int = ...
+
+val concat: (Int, Int) => String = ...
+
+// 
+//     A       B       C     D       E
+//  |-----|  |---|    |-|   |-|    |---|
+val add_one: (Int) => Int = (x) => x + 1
+
+// add_one is A
+// 
+// constant which
+// (A)   is named "add_one"
+// 
+// and is a function type. The function type has these characteristics
+// 
+// (B)   takes a single parameter of type Int
+// (C)   returns an Int
+//
+// The implementation of the function is as follows
+//
+// (D)   the single paramter will be named "x"
+// (E)   it will return the result of x + 1
+
+
+When you do this:
+
+val squareIt: Int => Int = x => x * x
+
+Scala converts it to this:
+
+val squareIt = new Function1[Int, Int]() 
+{
+	def apply (x:Int): Int = x * x
+}
+
+
+
+
+

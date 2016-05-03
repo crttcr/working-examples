@@ -1,0 +1,61 @@
+// Access a property
+//
+obj.someProp
+
+
+// Equivalent Getter
+//
+def someProp:String = 
+{
+	// Getter code
+	//
+}
+
+
+// Set a property
+//
+obj.someProp = someVal
+
+// Equivalent Setter
+//
+// Although there is some sort of _ that's required to tell scala
+// you want the setter generated (or something)
+//
+def someProp(someValue:Setring) =
+{
+	// Setter code
+	//
+}
+
+// Declare a variable, v
+//
+val v:SomeType = someVal
+
+
+// Minimal Class
+//
+class SomeClass(arg1:SomeType)
+
+// Can be instantiated
+//
+// However doesn't do much because value not exposed
+// to the outside world. Cant read or assign a value
+//
+new SomeClass(someVal)
+
+// case class
+//
+// Get a getter for free
+//
+// Companion object provides a factory method
+//
+case class SomeClass(a:String)
+
+new SomeClass("Hello").a
+val v10 = SomeClass("no new required if it's a case class!")
+
+
+// Defining a function on a class
+//
+def someFunc(a1:SomeType, ...): SomeReturnType = {}
+

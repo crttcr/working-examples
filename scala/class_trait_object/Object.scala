@@ -23,10 +23,18 @@ class Car
 //
 object Car
 {
+	var count: Int = 0
+
 	// Acts like a static method
 	//
-	def countOfInstances() = 
+	def countOfInstances(): Int =
 	{
+		return count
+	}
+
+	def increment: Unit =
+	{
+		count += 1
 	}
 }
 

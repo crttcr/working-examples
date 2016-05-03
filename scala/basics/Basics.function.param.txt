@@ -1,0 +1,27 @@
+// Call by name
+//
+def transaction(code: => Boolean) = 
+{
+	// connect to db ...
+   // grab connection ...
+   // start transaction ...
+
+	// execute code from parameter
+	code
+
+	// if things are good, commit
+	// else rollback
+}
+
+// Call it like this
+//
+// where the {} is the code block
+//
+transaction 
+{
+	val ok = execute("INSERT INTO SOME_TABLE ...")
+
+	ok
+}
+
+

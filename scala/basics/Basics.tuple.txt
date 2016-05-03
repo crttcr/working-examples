@@ -1,0 +1,20 @@
+// Tuple
+//
+// Lightweight, fixed sized
+//
+// Fundamental Scala data type
+// Part of the syntax
+// Class + Instantiation
+// 
+// Bento
+// (Sashimi, Onigiri)
+
+val bento:(Sushi, Sushi) = (new Sashimi, new Onigiri)
+val bento:Tuple2[Sushi, Sushi] = (new Sashimi, new Onigiri)
+val magoo = ("Magoo", 14)
+
+bento_1
+
+var(first, second) = bento
+
+// Tuple class from 0-22
