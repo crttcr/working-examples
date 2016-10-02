@@ -3,6 +3,15 @@ package lombok;
 import java.time.LocalDate;
 import lombok.Data;
 
+/**
+ * Person example class.
+ * 
+ * Uses @Data annotation from Lombok.
+ * @Data = @ToString + @EqualsAndHashCode, @Getter, @Setter
+ * 
+ * 
+ * @author reid.dev
+ */
 @Data
 public class Person
 {
