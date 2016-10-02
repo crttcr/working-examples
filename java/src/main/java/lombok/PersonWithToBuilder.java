@@ -14,14 +14,14 @@ public class PersonWithToBuilder
 	
 	// Runs a simple example and produces this output:
 	//
-	// PersonWithToBuilder(firstName=Joe, lastName=Smith, nicknames=[Jake, Slick])
-	// PersonWithToBuilder(firstName=Sue, lastName=Smith, nicknames=[SusieQ])
+	// PersonWithToBuilder(firstName=Joe, lastName=Smith, nicknames=[Smitty, Jake, Slick])
+	// PersonWithToBuilder(firstName=Sue, lastName=Smith, nicknames=[Smitty, SusieQ])
 	//
 	//
 	public static void main(String[] args)
 	{
 		PersonWithToBuilderBuilder b = new PersonWithToBuilderBuilder();
-		PersonWithToBuilder    smith = b.lastName("Smith").build();
+		PersonWithToBuilder    smith = b.lastName("Smith").nickname("Smitty").build();
 		PersonWithToBuilder      joe = smith.toBuilder().firstName("Joe").nickname("Jake").nickname("Slick").build();
 		PersonWithToBuilder      sue = smith.toBuilder().firstName("Sue").nickname("SusieQ").build();
 		
