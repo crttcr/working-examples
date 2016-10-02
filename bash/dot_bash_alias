@@ -1,0 +1,48 @@
+## Directory changes
+##
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+
+## Convenience commands
+## 
+alias cls=clear
+alias ls='ls -CGF'
+alias lsl='ls -lhGFA | less'
+alias sl='ls'
+alias ll='ls -lfG'
+alias la='ls -aG'
+alias h=history
+alias ff='find . -name '
+alias gr='gradle'
+
+## Possibly the most useful alias since sliced bread
+##
+alias hg="history | grep"
+
+## System utils
+##
+alias df='df -Tha --total'
+alias du='du -ach | sort -h'
+alias free='free -mt'
+alias ps='ps aux'
+alias psg="/bin/ps aux | grep -v grep | grep -i -e VSZ -e"
+
+## Various tools
+##
+alias antlr='java -Xmx500M -cp "$CLASSPATH" org.antlr.v4.Tool'
+alias grun='java org.antlr.v4.gui.TestRig'
+
+
+## Serve current directory via http
+##
+alias http="http-server ."
+
+## If there is a local set of aliases, source them.
+##
+if [[ -e ~/.alias_local ]]; then
+	source ~/.alias_local
+fi
