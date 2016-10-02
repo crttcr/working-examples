@@ -6,10 +6,9 @@ import lombok.Data;
 @Data
 public class Person
 {
-	private final String firstName;
-	private final String lastName;
+	private final String      firstName;
+	private final String       lastName;
 	private final LocalDate dateOfBirth;
-
 	
 	public static void main(String[] args)
 	{
