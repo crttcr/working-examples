@@ -1,6 +1,9 @@
+.cache-main
+.cache-tests
 .project
 .classpath
 .settings
+.factorypath
 .apt_generated/
 /.apt_generated/
 /lucene_index/
