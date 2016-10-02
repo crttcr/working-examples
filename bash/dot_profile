@@ -1,0 +1,129 @@
+## Command History
+## 
+export HISTFILESIZE=999999
+export HISTSIZE=999999
+export HISTCONTROL=ignoredups:ignorespace
+shopt -s histappend
+shopt -s checkwinsize
+shopt -s progcomp
+
+## update history at every command
+##
+## Not sure I want to do this. I like having separate history
+## in each window.
+##
+## export PROMPT_COMMAND="history -a; history -n;"
+
+## ANTLR
+##
+export ANTLR_JAR="/usr/local/Cellar/antlr/latest/antlr4.jar"
+export CLASSPATH=".:$ANTLR_JAR:$CLASSPATH"
+
+export GROOVY_HOME="/usr/local/opt/groovy/libexec"
+
+## !! sets vi mode for shell
+##
+set -o vi
+
+if [ -f ~/.profile_local ]; then
+	. ~/.profile_local
+fi
+
+if [ -f ~/.bash_env ]; then
+	. ~/.bash_env
+fi
+
+if [ -f ~/.bash_alias ]; then
+	. ~/.bash_alias
+fi
+
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+	. /etc/bash_completion
+fi
+
+export RABBITMQ_HOME=~/Applications/rabbitmq/sbin
+export PATH=/usr/local/git/bin:~/Applications/rabbitmq/sbin:$PATH
+
+## sbt path
+##
+#export PATH=$SBT_HOME/bin:$PATH
+
+
+export JAVA_HOME=$(/usr/libexec/java_home)
+
+## No maven work at present
+##
+export M2_HOME=/usr/local/Cellar/maven/3.3.3/libexec
+
+##
+#export M2_HOME=/usr/local/apache-maven
+#export M2_HOME=/usr/local/Cellar/maven/3.1.1/libexec
+#export M2_HOME=/usr/local/opt/maven/libexec
+#export M2=$M2_HOME/bin
+#export MAVEN_OPTS="-Xms256m -Xmx512m"
+#export PATH=$PATH:$M2
+
+export start_date=`date +"%Y_%m_%d"`
+export NODE_PATH=/usr/local/lib/node_modules
+
+## Snapshot a file to create one with today's date and time
+##
+## snapshot foo ; ls ; foo foo.2015_02_08_284278482
+##
+function snapshot 
+{ 
+	for item in "$@" ; do 
+		cp $item $item.$(date +"%Y_%m_%d_%s"); 
+	done; 
+}
+
+
+## Snapshot a file and edit it in one shot
+##
+function snapedit 
+{ 
+	for item in "$@" ; do 
+		cp $item $item.$(date +"%Y_%m_%d_%s") 
+		vi $item;
+	done; 
+}
+
+
+## print only column x of output
+##
+function col 
+{
+	  awk -v col=$1 '{print $col}'
+}
+
+# Setting PATH for Python 3.4
+# The orginal version is saved in .profile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
+export PATH
+
+# Setting PATH for Python 2.7
+# The orginal version is saved in .profile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+export PATH
+
+# Setting PATH for Python 3.5
+# The orginal version is saved in .profile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/3.5/bin:${PATH}"
+export PATH
+
+## PS1='\u@\h: \W \$'
+PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+## 
+LS_COLORS=$LS_COLORS:'di=0;35"'
+export LS_COLORS
+
+export BREW_PREFIX=$(brew --prefix)
+export GIT_PROMPT_SCRIPT="$BREW_PREFIX/opt/bash-git-prompt/share/gitprompt.sh"
+
+if [ -f $GIT_PROMPT_SCRIPT ]; then
+	source "$GIT_PROMPT_SCRIPT"
+fi
+
+GIT_PROMPT_ONLY_IN_REPO=1
+
