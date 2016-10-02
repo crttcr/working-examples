@@ -1,2 +1,8 @@
-/lucene_index/
+.project
+.classpath
+.settings
+.apt_generated/
 /.apt_generated/
+/lucene_index/
+
+

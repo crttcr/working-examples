@@ -4,11 +4,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
-import com.sun.istack.internal.Nullable;
 
 /** 
  * Example class that uses both AutoValue and Jackson.
@@ -32,7 +33,7 @@ public abstract class BookInfo
 	
 	// Use this Annotation for optional properties
 	//
-	@Nullable
+//	@Nullable
 	@JsonProperty("isnb")
 	public abstract String isbn();
 
@@ -45,6 +46,7 @@ public abstract class BookInfo
 		@JsonProperty("title")
 		public abstract Builder title(String title);
 
+//		@Nullable
 		@JsonProperty("isbn")
 		public abstract Builder isbn(String isbn);
 
