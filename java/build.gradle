@@ -93,7 +93,7 @@ dependencies
 	// tag::actuator[]
 	compile("org.springframework.boot:spring-boot-starter-actuator")
 	// end::actuator[]
-
+	testCompile("org.springframework.boot:spring-boot-starter-test")
 
 	// StringTemplate Templating
 	//
