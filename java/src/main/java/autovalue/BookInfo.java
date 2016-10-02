@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -33,7 +31,7 @@ public abstract class BookInfo
 	
 	// Use this Annotation for optional properties
 	//
-//	@Nullable
+	@Nullable
 	@JsonProperty("isnb")
 	public abstract String isbn();
 
@@ -46,7 +44,7 @@ public abstract class BookInfo
 		@JsonProperty("title")
 		public abstract Builder title(String title);
 
-//		@Nullable
+		@Nullable
 		@JsonProperty("isbn")
 		public abstract Builder isbn(String isbn);
 
