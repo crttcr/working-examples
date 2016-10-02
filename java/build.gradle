@@ -18,6 +18,10 @@ jar {
 	version  = '0.1.0'
 }
 
+springBoot {
+	mainClass = "springboot.hello.Application"
+}
+
 repositories 
 {
 	mavenCentral()
