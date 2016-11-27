@@ -2,12 +2,14 @@
 
 ################################################################################
 ##                                                                            ##
-## This script captures a sequence of steps to create a pull request          ##
+## This "script" captures a sequence of steps to create a pull request        ##
 ## for a feature branch that has all intermediate commits squashed            ##
 ## into a single commit on a PR-specific branch.                              ##
 ##                                                                            ##
 ## It also incorporates a rebase onto the main development branch which       ##
 ## has presumably advanced while the feature has been under development.      ##
+##                                                                            ##
+## This isn't really a script, but is formatted like one to show the steps.   ##
 ##                                                                            ##
 ################################################################################
 
@@ -16,6 +18,7 @@
 ## Name of branch where feature development has occured
 ##
 export BRANCH=f/some-feature
+export PR_BRANCH=pr-${BRANCH}
 
 ## Update your local master branch to incoroprate all changes from remote
 ##
@@ -26,21 +29,21 @@ git pull
 ## Then create a new branch off of that for your PR
 ##
 git checkout ${BRANCH}
-git checkout -b PR-${BRANCH}
+git checkout -t -b ${PR_BRANCH}
 
 ## Look at the commit history to see how far back to branch.
 ## Make note of the HASH of the first commit
 ## Then rebase using SQUASH option for all but the first commit.
 ##
 git log --oneline
-git rebase  -i ${HASH}
+git rebase -i <HASH_OF_DESIRED_COMMIT>
 git commit --amend -m "Feature implementation ..."
 
 ## Pushing your new branch to remote serves as a checkpoint so you don't
 ## have to redo all of the previous steps if you want to restart.
 ## The -u options sets this branch to have a tracking branch.
 ##
-git push -u origin pr-${BRANCH}
+git push -u origin ${PR_BRANCH}
 git fetch
 git rebase origin/master
 git status
