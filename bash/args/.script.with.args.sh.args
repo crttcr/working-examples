@@ -1,0 +1,41 @@
+## Argument processing for script.with.args.sh
+##
+
+
+## Default values
+##
+SOCKET=sock.default
+
+
+
+USAGE="$0 -f file [-h]"
+
+function process_args()
+{
+	while getopts :f:t:h opt; do
+		case $opt in
+		f)
+			FILE=$OPTARG
+			;;
+		t)
+			TOPIC=$OPTARG
+			;;
+		h)
+			usage "$USAGE"
+		;;
+		*)
+			usage "$USAGE" "Invalid option -$OPTARG" >&2
+		;;
+		esac
+	done
+
+	## Enforce argument constraints
+	##
+	if [ -z "$FILE" ]; then
+		usage "$USAGE" "File is a required option that was not found."
+	else
+		if [ ! -r "$FILE" ]; then
+			usage "$USAGE" "File [$FILE] is not readable"
+		fi
+	fi
+}
