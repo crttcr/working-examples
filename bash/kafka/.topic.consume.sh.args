@@ -1,0 +1,54 @@
+## Argument processing for topic.console.sh
+##
+
+## Default values
+##
+ENV=dev
+SHOW_KEY=true
+SHOW_TIMESTAMP=false
+REWIND=false
+
+
+## -r = rewind topic to 0 offset
+## -k = don't show key in result
+##
+USAGE="USAGE: $0 -t topic [-e env] [-r] [-s] [-k]"
+
+
+function process_args()
+{
+	while getopts :t:e:rskh opt; do
+		case $opt in
+		t)
+			TOPIC=$OPTARG
+			;;
+		e)
+			ENV=$OPTARG
+			;;
+		r)
+			REWIND=true
+			;;
+		s)
+			SHOW_TIMESTAMP=true
+			;;
+		k)
+			SHOW_KEY=false
+			;;
+		h)
+			usage "$USAGE"
+			;;
+		*)
+			usage "$USAGE" "Invalid option -$OPTARG" >&2
+			;;
+		esac
+	done
+
+	## Enforce argument constraints
+	##
+	if [ -z "$TOPIC" ]; then
+		usage "$USAGE" "A topic was not specified. Cannot consume."
+	fi
+	if [ -z "$ENV" ]; then
+			usage "$USAGE" "An environment specification was not provided."
+	fi
+}
