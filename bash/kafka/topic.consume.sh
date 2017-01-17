@@ -13,6 +13,7 @@ LIBDIR=~/bin/lib
 . $LIBDIR/f_env.sh
 . $LIBDIR/f_usage.sh
 . $LIBDIR/f_interact.sh
+. $LIBDIR/f_string.sh
 . $SRCDIR/.$(basename $0).args
 unset SRCDIR
 unset LIBDIR
@@ -55,21 +56,10 @@ cmd="kafka-console-consumer.sh ^rewind ^timestamp ^printkey \
 	--topic $TOPIC --zookeeper $__ZOOKEEPER                  \
    --property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer"
 
-if [ "$REWIND" = true ]; then
-	cmd=${cmd/^rewind/--from-beginning}
-else
-	cmd=${cmd/^rewind/}
-fi
-if [ "$SHOW_KEY" = true ]; then
-	cmd=${cmd/^printkey/--propery print.key=true}
-else
-	cmd=${cmd/^printkey/}
-fi
-if [ "$SHOW_TIMESTAMP" = true ]; then
-	cmd=${cmd/^timestamp/--propery print.timestamp=true}
-else
-	cmd=${cmd/^timestamp/}
-fi
+cmd=$(replaceTokenIfTrue "$cmd" ^rewind    $REWIND          "--from-beginning"               )
+cmd=$(replaceTokenIfTrue "$cmd" ^printkey  $SHOW_KEY        "--property print.key=true"      )
+cmd=$(replaceTokenIfTrue "$cmd" ^timestamp $SHOW_TIMESTAMP  "--property print.timestamp=true")
+
 
 echo "[------Command text----------]"
 echo $cmd
