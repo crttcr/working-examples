@@ -29,7 +29,23 @@ function confirmOrExit()
 		echo "Confirmation received."
 	else
 		printf "%sABORT.%s\n" "$COLOR_FAIL" "$COLOR_STOP"
+		exit 0
 	fi
 }
 
+function promptForRequiredString()
+{
+	local prompt=$1
 
+	if [ -z "$prompt" ]; then
+		prompt="Enter a string value: "
+	fi
+
+	unset __REPLY
+	until [ -n "$__REPLY" ]; do
+		read -p "$prompt" __REPLY
+	done
+
+	echo "$__REPLY"
+}
+	
