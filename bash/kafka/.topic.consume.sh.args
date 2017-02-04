@@ -15,6 +15,25 @@ REWIND=false
 USAGE="USAGE: $0 -t topic [-e env] [-r] [-s] [-k]"
 
 
+function _ensure_topic()
+{
+	if [ -z "$TOPIC" ]; then
+		prompt="The name of the [topic] to consume is required: "
+		TOPIC=$(promptForRequiredString "$prompt")
+	fi
+}
+
+function _ensure_environment()
+{
+	if [ -z "$ENV" ]; then
+		choices=(dev qa stage prod)
+		prompt="Environment is required. Valid choices $choices: "
+		read -p "$prompt" ENV
+		echo "Using env $ENV"
+	fi
+}
+
+
 function process_args()
 {
 	while getopts :t:e:rskh opt; do
@@ -43,12 +62,8 @@ function process_args()
 		esac
 	done
 
-	## Enforce argument constraints
+	## Gather any missing information and validate arguments
 	##
-	if [ -z "$TOPIC" ]; then
-		usage "$USAGE" "A topic was not specified. Cannot consume."
-	fi
-	if [ -z "$ENV" ]; then
-			usage "$USAGE" "An environment specification was not provided."
-	fi
+	_ensure_topic
+	_ensure_environment
 }
