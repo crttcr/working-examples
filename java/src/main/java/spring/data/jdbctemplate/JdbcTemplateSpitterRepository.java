@@ -15,22 +15,32 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import spring.data.domain.Spitter;
-import spring.data.jdbc.SpitterRepository;
 
+/**
+ * SpitterRepository implemented using JdbcTemplate.
+ *
+ * Spitter example drawn from Spring in Action 4th Edition by Craig Walls and Manning Publications Co.
+ */
 @Repository
-public class JdbcSpitterRepository
+public class JdbcTemplateSpitterRepository
 implements SpitterRepository
 {
-	private static final String SQL_FIND_ALL = "SELECT id, username, password, fullname FROM Spitter ORDER by id";
-	private static final String SQL_FIND_BY_ID = "SELECT id, username, password, fullname FROM Spitter WHERE id = ?";
-	private static final String SQL_FIND_BY_USERNAME = "SELECT id, username, password, fullname FROM Spitter WHERE username = ?";
-	private static final String SQL_COUNT = "SELECT count(id) FROM Spitter";
-	private static final String SQL_UPDATE = "UPDATE Spitter set username=?, password=?, fullname=? WHERE id = ?";
+	private static final String DB_TABLE_NAME     = "Spitter";
+	private static final String DB_FIELD_ID       = "id";
+	private static final String DB_FIELD_USERNAME = "username";
+	private static final String DB_FIELD_PASSWORD = "password";
+	private static final String DB_FIELD_FULLNAME = "fullname";
 
+	private static final String SQL_FIND_ALL         = "SELECT id, username, password, fullname FROM Spitter ORDER by id";
+	private static final String SQL_FIND_BY_ID       = "SELECT id, username, password, fullname FROM Spitter WHERE id=?";
+	private static final String SQL_FIND_BY_USERNAME = "SELECT id, username, password, fullname FROM Spitter WHERE username=?";
+	private static final String SQL_COUNT            = "SELECT count(id) FROM Spitter";
+	private static final String SQL_UPDATE           = "UPDATE Spitter set username=?, password=?, fullname=? WHERE id=?";
 
 	private JdbcTemplate jdbc;
+
 	@Inject
-	public JdbcSpitterRepository(JdbcTemplate jdbc)
+	public JdbcTemplateSpitterRepository(JdbcTemplate jdbc)
 	{
 		this.jdbc = jdbc;
 	}
@@ -74,10 +84,10 @@ implements SpitterRepository
 		}
 		else {
 			jdbc.update(SQL_UPDATE,
-					spitter.getUsername(),
-					spitter.getPassword(),
-					spitter.getFullname(),
-					id);
+				spitter.getUsername(),
+				spitter.getPassword(),
+				spitter.getFullname(),
+				id);
 		}
 
 		return spitter;
@@ -85,8 +95,8 @@ implements SpitterRepository
 
 	private long insertSpitterAndReturnId(Spitter spitter)
 	{
-		SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbc).withTableName("Spitter");
-		insert.setGeneratedKeyName("id");
+		SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbc).withTableName(DB_TABLE_NAME);
+		insert.setGeneratedKeyName(DB_FIELD_ID);
 		Map<String, Object> map = mapFromSpitter(spitter);
 
 		long id = insert.executeAndReturnKey(map).longValue();
@@ -96,10 +106,10 @@ implements SpitterRepository
 	private Map<String, Object> mapFromSpitter(Spitter spitter)
 	{
 		Map<String, Object> map = new HashMap<>();
-		map.put("username",  spitter.getUsername());
-		map.put("password",  spitter.getPassword());
-		map.put("fullname",  spitter.getFullname());
-		map.put("id",        spitter.getId());
+		map.put(DB_FIELD_ID,       spitter.getId());
+		map.put(DB_FIELD_USERNAME, spitter.getUsername());
+		map.put(DB_FIELD_PASSWORD, spitter.getPassword());
+		map.put(DB_FIELD_FULLNAME, spitter.getFullname());
 
 		return map;
 	}
@@ -109,12 +119,12 @@ implements SpitterRepository
 	{
 		@Override
 		public Spitter mapRow(ResultSet rs, int rowNum)
-				throws SQLException
+			throws SQLException
 		{
-			long id = rs.getLong("id");
-			String u = rs.getString("username");
-			String p = rs.getString("password");
-			String f = rs.getString("fullname");
+			long  id = rs.getLong(DB_FIELD_ID);
+			String u = rs.getString(DB_FIELD_USERNAME);
+			String p = rs.getString(DB_FIELD_PASSWORD);
+			String f = rs.getString(DB_FIELD_FULLNAME);
 
 			return new Spitter(id, u, p, f);
 		}

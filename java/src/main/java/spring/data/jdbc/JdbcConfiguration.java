@@ -12,6 +12,12 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jndi.JndiObjectFactoryBean;
 
+/**
+ * Spring configuration class for raw JDBC interaction.
+ * Demonstrates profile-based configuration.
+ *
+ * Spitter example drawn from Spring in Action 4th Edition by Craig Walls and Manning Publications Co.
+ */
 @Configuration
 @ComponentScan(basePackageClasses={RawJdbcQuery.class,RawJdbcInsert.class})
 public class JdbcConfiguration

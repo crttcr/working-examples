@@ -17,6 +17,8 @@ import spring.data.domain.Spitter;
  * straight JDBC. To drive home how much boilerplate code is required
  * and how often it is repeated, two queries are defined. However,
  * a couple of helper methods make it a little less insane.
+ *
+ * Spitter example drawn from Spring in Action 4th Edition by Craig Walls and Manning Publications Co.
  */
 @Slf4j
 public class RawJdbcQuery

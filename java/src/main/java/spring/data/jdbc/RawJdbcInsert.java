@@ -14,6 +14,7 @@ import spring.data.domain.Spitter;
 /**
  * Simple class to demonstrate the code required for a simple insert with JDBC
  *
+ * Spitter example drawn from Spring in Action 4th Edition by Craig Walls and Manning Publications Co.
  */
 @Slf4j
 public class RawJdbcInsert

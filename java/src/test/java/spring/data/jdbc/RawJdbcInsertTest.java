@@ -15,6 +15,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import spring.data.domain.Spitter;
 
+/**
+ * Test class for RawJdbcInsert
+ *
+ * Spitter example drawn from Spring in Action 4th Edition by Craig Walls and Manning Publications Co.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=JdbcConfiguration.class)
 @ActiveProfiles("dev")
