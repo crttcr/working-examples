@@ -1,4 +1,4 @@
-package spring.data.jdbc;
+package spring.data.jdbc.raw;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

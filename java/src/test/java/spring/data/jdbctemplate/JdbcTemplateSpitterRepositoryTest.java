@@ -15,6 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import spring.data.domain.Spitter;
+import spring.data.jdbc.template.JdbcTemplateConfiguration;
+import spring.data.jdbc.template.JdbcTemplateSpitterRepository;
+import spring.data.jdbc.template.SpitterRepository;
 
 /**
  * Test class for JdbcSpitterRepository

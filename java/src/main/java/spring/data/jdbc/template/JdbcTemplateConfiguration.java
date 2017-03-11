@@ -1,4 +1,4 @@
-package spring.data.jdbctemplate;
+package spring.data.jdbc.template;
 
 import javax.sql.DataSource;
 

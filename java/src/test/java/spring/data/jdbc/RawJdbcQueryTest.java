@@ -14,6 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import spring.data.domain.Spitter;
+import spring.data.jdbc.raw.JdbcConfiguration;
+import spring.data.jdbc.raw.RawJdbcQuery;
 
 /**
  * Test class for RawJdbcQuery
