@@ -1,0 +1,1 @@
+INSERT INTO Spitter (username, password, fullname) VALUES ('Job', '***', 'Suffering Job');
