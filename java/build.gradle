@@ -91,12 +91,11 @@ dependencies
 //	compile 'org.slf4j:slf4j-simple:1.7.7'
 //	compile 'org.slf4j:slf4j-jdk14:1.7.14'
 
-	// Spring + SpringBoot
+	// Spring + SpringBoot + starters Mongo
 	//
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
-//	compile 'org.springframework.boot:spring-boot-starter-jpa'
-//	compile 'org.springframework.boot:spring-boot-starter-mongo'
-	compile 'org.springframework.boot:spring-boot-starter-redis'
+	compile 'org.springframework.boot:spring-boot-starter-data-mongodb:1.5.2.RELEASE'
+//	compile 'org.springframework.boot:spring-boot-starter-redis'
 	
 	// tag::jetty[]
 	//

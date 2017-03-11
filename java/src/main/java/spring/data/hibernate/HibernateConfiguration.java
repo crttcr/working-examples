@@ -4,9 +4,11 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -43,4 +45,11 @@ public class HibernateConfiguration
 		return sfb;
 	}
 
+	// Enable translation of exceptions to Spring standard runtime exceptions
+	//
+	@Bean
+	public BeanPostProcessor persistenceTranslation()
+	{
+		return new PersistenceExceptionTranslationPostProcessor();
+	}
 }
