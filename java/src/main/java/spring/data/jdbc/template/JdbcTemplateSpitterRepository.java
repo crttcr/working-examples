@@ -58,11 +58,43 @@ implements SpitterRepository
 		return jdbc.query(SQL_FIND_ALL, new SpitterRowMapper());
 	}
 
+	// The initial implementation of findOne uses a RowMapper class
+	//
 	@Override
 	public Spitter findOne(Long id)
 	{
 		SpitterRowMapper rm = new SpitterRowMapper();
 		return jdbc.queryForObject(SQL_FIND_BY_ID, rm, id);
+	}
+
+	// Another implementation of findOne using an embedded lamba expression.
+	// I find this to be the most inscrutable and least desirable. Only with
+	// a lot of alignment formatting effort does it become clear what that the
+	// queryForObject method is still receiving 3 paramters.
+	//
+	public Spitter findOneLambda(Long id)
+	{
+		return jdbc.queryForObject(
+			SQL_FIND_BY_ID,
+			(rs, rowNum) ->
+			{
+				return new Spitter(
+					rs.getLong(DB_FIELD_ID),
+					rs.getString(DB_FIELD_USERNAME),
+					rs.getString(DB_FIELD_PASSWORD),
+					rs.getString(DB_FIELD_FULLNAME)
+					);
+			},
+			id);
+	}
+
+	// A better alternative than the embedded lambda is to reference a function
+	// that does the same thing as {@see SpitterRowMapper}
+	//
+	public Spitter findOneMethodReference(Long id)
+	{
+		return jdbc.queryForObject(SQL_FIND_BY_ID, this::mapSpitter, id);
+
 	}
 
 	@Override
@@ -112,6 +144,20 @@ implements SpitterRepository
 		map.put(DB_FIELD_FULLNAME, spitter.getFullname());
 
 		return map;
+	}
+
+	// The mapSpitter method and SpitterRowMapper class perform the same function,
+	// converting the current record in a ResultSet to a domain object.
+	//
+	private Spitter mapSpitter(ResultSet rs, int row)
+		throws SQLException
+	{
+		long   id = rs.getLong(DB_FIELD_ID);
+		String  u = rs.getString(DB_FIELD_USERNAME);
+		String  p = rs.getString(DB_FIELD_PASSWORD);
+		String  f = rs.getString(DB_FIELD_FULLNAME);
+
+		return new Spitter(id, u, p, f);
 	}
 
 	private static final class SpitterRowMapper

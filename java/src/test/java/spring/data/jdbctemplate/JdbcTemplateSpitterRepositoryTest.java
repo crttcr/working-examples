@@ -1,6 +1,7 @@
 package spring.data.jdbctemplate;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
@@ -99,6 +100,44 @@ public class JdbcTemplateSpitterRepositoryTest
 	}
 
 	@Test
+	public void testFindOneLambda()
+	{
+		// Arrange
+		//
+		JdbcTemplateSpitterRepository repo = new JdbcTemplateSpitterRepository(jdbc);
+		Spitter sp = new Spitter(null, "Barney", "sxc3950F", "Baker Crow");
+
+		// Act
+		//
+		Spitter saved = repo.save(sp);
+		Spitter found = repo.findOneLambda(saved.getId());
+
+		// Assert
+		//
+		assertNotNull(found);
+		assertEquals("Baker Crow", found.getFullname());
+	}
+
+	@Test
+	public void testFindOneMethodReference()
+	{
+		// Arrange
+		//
+		JdbcTemplateSpitterRepository repo = new JdbcTemplateSpitterRepository(jdbc);
+		Spitter sp = new Spitter(null, "Cooter", "sxc3509E", "Coots Crow");
+
+		// Act
+		//
+		Spitter saved = repo.save(sp);
+		Spitter found = repo.findOneLambda(saved.getId());
+
+		// Assert
+		//
+		assertNotNull(found);
+		assertEquals("Coots Crow", found.getFullname());
+	}
+
+	@Test
 	public void testFind()
 	{
 		// Arrange + Act
@@ -108,7 +147,7 @@ public class JdbcTemplateSpitterRepositoryTest
 		// Assert
 		//
 		assertNotNull(found);
-		assertEquals(3, found.size());
+		assertFalse(found.isEmpty());
 	}
 
 	@Test
