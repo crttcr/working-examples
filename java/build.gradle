@@ -78,6 +78,10 @@ dependencies
 	compile 'com.github.jknack:handlebars:4.0.4'
 	compile 'com.github.jknack:handlebars-jackson2:4.0.4'
 	
+	// Hibernate + Spring Data
+//	compile group: 'org.springframework.data', name: 'spring-data-commons', version: '2.0.0.M1'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.5.2.RELEASE'	
+	compile 'org.hibernate:hibernate-core'
 	
 	// Logging
 	//

@@ -1,4 +1,4 @@
-package spring.data.jdbc.template;
+package spring.data;
 
 import java.util.List;
 
