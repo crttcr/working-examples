@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@Ignore("You need to have mongod running on localhost:27017 before running this test.")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=MongoConfiguration.class)
 public class MongoOrderRepositoryTest
@@ -86,11 +88,12 @@ public class MongoOrderRepositoryTest
 		//
 		assertNotNull(found);
 		assertFalse(found.isEmpty());
-		assertEquals("Benji", found.get(0).getCustomer());
+		assertEquals(order.getCustomer(), result.getCustomer());
+		assertEquals(order.getCustomer(), found.get(0).getCustomer());
 	}
 
 	@Test
-	public void testFindOneExampleOfS()
+	public void testFindOneExampleOf()
 	{
 		// Arrange
 		//
@@ -115,5 +118,31 @@ public class MongoOrderRepositoryTest
 		//
 		assertNotNull(found);
 		assertEquals("D", found.getCustomer());
+	}
+
+	// Testing the custom method derived from the interface by the Spring Data DSL.
+	//
+	@Test
+	public void testFindByCustomerName()
+	{
+		// Arrange
+		//
+		String[] customers = {"A", "B", "C", "D", "E" };
+		for (String s: customers)
+		{
+			Order order = new Order();
+			order.setCustomer(s);
+			@SuppressWarnings("unused")
+			Order result = subject.save(order);
+		}
+
+		// Act
+		//
+		Order found = subject.findByCustomer("C");
+
+		// Assert
+		//
+		assertNotNull(found);
+		assertEquals("C", found.getCustomer());
 	}
 }
