@@ -145,4 +145,32 @@ public class MongoOrderRepositoryTest
 		assertNotNull(found);
 		assertEquals("C", found.getCustomer());
 	}
+
+	// Testing the custom method derived from the interface by the Spring Data DSL.
+	//
+	@Test
+	public void testFindByCustomerNameLike()
+	{
+		// Arrange
+		//
+		String[] customers = {"A", "Bob", "Cob", "Dub", "Eob" };
+		for (String s: customers)
+		{
+			Order order = new Order();
+			order.setCustomer(s);
+			@SuppressWarnings("unused")
+			Order result = subject.save(order);
+		}
+
+		// Act
+		//
+		List<Order> found = subject.findByCustomerLike("ob");
+
+		// Assert
+		//
+		assertNotNull(found);
+		assertEquals(3, found.size());
+		System.out.println(found);
+	}
+
 }
