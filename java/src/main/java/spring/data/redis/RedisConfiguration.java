@@ -39,6 +39,13 @@ public class RedisConfiguration
 	}
 
 	@Bean
+	public RedisTemplate<?, ?> redisTemplate() {
+
+		RedisTemplate<byte[], byte[]> template = new RedisTemplate<byte[], byte[]>();
+		return template;
+	}
+
+	@Bean
 	public RedisConnectionFactory redisConnectionFactory()
 	{
 		JedisConnectionFactory cf = new JedisConnectionFactory();

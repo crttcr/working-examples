@@ -2,6 +2,9 @@ package spring.data.redis;
 
 import java.io.Serializable;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RedisHash("Accounts") // Required for RedisRepository
 public class Account
 implements Serializable
 {
@@ -17,6 +21,7 @@ implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Id // Required for RedisRepository
 	private String id;
 
 	private String username;

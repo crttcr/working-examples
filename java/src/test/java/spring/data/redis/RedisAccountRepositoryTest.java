@@ -4,33 +4,38 @@ import static org.junit.Assert.assertEquals;
 
 import javax.inject.Inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=RedisConfiguration.class)
-public class RedisSpitterTest
+public class RedisAccountRepositoryTest
 {
-	@Inject
-	RedisConnectionFactory rcf;
+	@Inject AccountRepository repo;
 
-	@Inject
-	private RedisTemplate<String, Account> spitterTemplate;
+	@Before
+	public void setUp()
+	{
+	}
 
 	@Test
 	public void testSave()
 	{
+		// Arrange
+		//
 		String id = "123";
 		Account s = new Account(id, "B", "C");
 
-		spitterTemplate.opsForValue().set(id, s);
+		// Act
+		//
+		repo.save(s);
+		Account t = repo.findOne(id);
 
-		Account t = spitterTemplate.opsForValue().get(id);
-
+		// Assert
+		//
 		assertEquals(s, t);
 	}
 }
