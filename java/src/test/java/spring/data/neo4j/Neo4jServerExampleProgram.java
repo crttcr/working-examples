@@ -11,7 +11,7 @@ import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 
-public class ExampleNeoProgram
+public class Neo4jServerExampleProgram
 {
 	public static void main(String[] args) {
 
