@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
+
 @Configuration
 @EnableRedisRepositories
 public class RedisConfiguration
@@ -30,9 +31,9 @@ public class RedisConfiguration
 	}
 
 	@Bean
-	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory cf)
+	public RedisTemplate<String, Account> redisTemplate(RedisConnectionFactory cf)
 	{
-		RedisTemplate<String, Object> rv = new RedisTemplate<>();
+		RedisTemplate<String, Account> rv = new RedisTemplate<>();
 		rv.setConnectionFactory(cf);
 		return rv;
 	}

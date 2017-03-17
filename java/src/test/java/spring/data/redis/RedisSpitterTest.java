@@ -1,6 +1,6 @@
 package spring.data.redis;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import javax.inject.Inject;
 
@@ -11,10 +11,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=RedisConfiguration.class)
-public class RedisConfigurationTest
+public class RedisSpitterTest
 {
 	@Inject
 	RedisConnectionFactory rcf;
@@ -23,9 +22,15 @@ public class RedisConfigurationTest
 	private RedisTemplate<String, Account> spitterTemplate;
 
 	@Test
-	public void testConfiguration()
+	public void testSave()
 	{
-		assertNotNull(rcf);
-		assertNotNull(spitterTemplate);
+		String id = "123";
+		Account s = new Account(id, "B", "C");
+
+		spitterTemplate.opsForValue().set(id, s);
+
+		Account t = spitterTemplate.opsForValue().get(id);
+
+		assertEquals(s, t);
 	}
 }
