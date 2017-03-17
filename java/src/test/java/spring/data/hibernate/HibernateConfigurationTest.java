@@ -27,5 +27,4 @@ public class HibernateConfigurationTest
 		assertNotNull(ds);
 		assertNotNull(lsfb);
 	}
-
 }
