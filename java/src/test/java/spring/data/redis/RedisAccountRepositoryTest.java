@@ -14,7 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(classes=RedisConfiguration.class)
 public class RedisAccountRepositoryTest
 {
-	@Inject AccountRepository repo;
+	@Inject
+	AccountRepository repo;
 
 	@Before
 	public void setUp()
