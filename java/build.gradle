@@ -91,15 +91,16 @@ dependencies
 //	compile 'org.slf4j:slf4j-simple:1.7.7'
 //	compile 'org.slf4j:slf4j-jdk14:1.7.14'
 
-	// Spring + SpringBoot + starters Mongo + Neo4j
+	// Spring + SpringBoot + starters Mongo + Neo4j + redis
 	//
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
 	compile 'org.springframework.boot:spring-boot-starter-data-mongodb:1.5.2.RELEASE'
 	compile 'org.springframework.boot:spring-boot-starter-data-neo4j:1.5.2.RELEASE'
+	compile 'org.springframework.boot:spring-boot-starter-data-redis:1.5.2.RELEASE'
 //	compile 'org.springframework.boot:spring-boot-starter-redis'
 
-// NEO Driver
-compile 'org.neo4j.driver:neo4j-java-driver:1.2.0'
+	// NEO Driver
+	compile 'org.neo4j.driver:neo4j-java-driver:1.2.0'
 	
 	// tag::jetty[]
 	//
