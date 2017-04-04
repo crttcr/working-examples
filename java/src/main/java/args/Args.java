@@ -150,11 +150,6 @@ public class Args
 		return IntegerArgumentMarshaller.getValue(m);
 	}
 
-	public String getErrorString()
-	{
-		return "";
-	}
-
 	public boolean has(char arg)
 	{
 		return argsFound.contains(arg);
