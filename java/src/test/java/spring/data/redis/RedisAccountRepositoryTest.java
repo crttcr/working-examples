@@ -20,6 +20,7 @@ public class RedisAccountRepositoryTest
 	@Before
 	public void setUp()
 	{
+		repo.deleteAll();
 	}
 
 	@Test
