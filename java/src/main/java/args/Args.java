@@ -2,6 +2,7 @@ package args;
 
 import static args.ErrorCode.INVALID_ARGUMENT_FORMAT;
 import static args.ErrorCode.INVALID_ARGUMENT_NAME;
+import static args.ErrorCode.NO_SCHEMA;
 import static args.ErrorCode.UNEXPECTED_ARGUMENT;
 
 import java.util.Arrays;
@@ -33,6 +34,11 @@ public class Args
 	private void parseSchema(String schema)
 		throws ArgsException
 	{
+		if (schema == null)
+		{
+			throw new ArgsException(NO_SCHEMA);
+		}
+
 		for (String s: schema.split(","))
 		{
 			if (s.length() > 0)
@@ -88,7 +94,7 @@ public class Args
 		}
 		catch (ArgsException e)
 		{
-			e.setErrorArgumentId(c);
+			e.setErrorId(c);
 			throw e;
 		}
 	}

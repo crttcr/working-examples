@@ -3,6 +3,7 @@ package args;
 public enum ErrorCode
 {
 	OK("Error code says 'OK' but errorMessage called."),
+	NO_SCHEMA("Argument processing requires a schema, but none was provided."),
 	UNEXPECTED_ARGUMENT("Argument -%c unexpected. Not in schema definition."),
 	MISSING_STRING("Could not find string parameter for -%c."),
 	MISSING_INTEGER("Could not find integer parameter for -%c"),
@@ -18,22 +19,44 @@ public enum ErrorCode
 		this.fmt = fmt;
 	}
 
-	public String format()
+	public String errorText(char errorId, String param)
+	{
+		switch(this)
+		{
+		case OK:
+			return format();
+		case MISSING_STRING:
+		case MISSING_INTEGER:
+		case MISSING_DOUBLE:
+		case INVALID_ARGUMENT_NAME:
+		case UNEXPECTED_ARGUMENT:
+			return format(errorId);
+		case INVALID_INTEGER:
+		case INVALID_DOUBLE:
+			return format(errorId, param);
+		case INVALID_ARGUMENT_FORMAT:
+			return format(param);
+		default:
+			return "Somehow you reached an error code that is not accounted for: " + this;
+		}
+	}
+
+	private String format()
 	{
 		return fmt;
 	}
 
-	public String format(char c)
+	private String format(char c)
 	{
 		return String.format(fmt, c);
 	}
 
-	public String format(String s)
+	private String format(String s)
 	{
 		return String.format(fmt, s);
 	}
 
-	public String format(char c, String s)
+	private String format(char c, String s)
 	{
 		return String.format(fmt, c, s);
 	}
