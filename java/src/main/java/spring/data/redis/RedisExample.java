@@ -11,11 +11,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class RedisExample
 {
 	// inject the actual template
+	//
 	@Autowired
 	private RedisTemplate<String, String> template;
 
 	// inject the template as ListOperations
 	// can also inject as Value, Set, ZSet, and HashOperations
+	//
 	@Resource(name="redisTemplate")
 	private ListOperations<String, String> listOps;
 
