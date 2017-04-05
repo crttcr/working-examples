@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import args.marshall.OptionEvaluator;
 import args.marshall.BooleanOptionEvaluator;
 import args.marshall.IntegerOptionEvaluator;
+import args.marshall.OptionEvaluator;
 import args.marshall.StringOptionEvaluator;
 
 public class Args
@@ -70,6 +70,8 @@ public class Args
 			}
 			else
 			{
+				// Current implementation forces options to appear before arguments
+				//
 				currentArgument.previous();
 				break;
 			}
