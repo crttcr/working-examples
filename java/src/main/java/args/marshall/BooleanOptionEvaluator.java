@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import args.ArgsException;
 
-public class BooleanArgumentMarshaller extends ArgumentMarshallerBase<Boolean>
+public class BooleanOptionEvaluator extends OptionEvaluatorBase<Boolean>
 {
 	private boolean value = false;
 
@@ -14,11 +14,11 @@ public class BooleanArgumentMarshaller extends ArgumentMarshallerBase<Boolean>
 		value = true;
 	}
 
-	public static boolean getValue(ArgumentMarshaller am)
+	public static boolean getValue(OptionEvaluator am)
 	{
-		if (am != null && am instanceof BooleanArgumentMarshaller)
+		if (am != null && am instanceof BooleanOptionEvaluator)
 		{
-			return ((BooleanArgumentMarshaller) am).value;
+			return ((BooleanOptionEvaluator) am).value;
 		}
 
 		return false;

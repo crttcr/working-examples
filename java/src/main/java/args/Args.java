@@ -14,14 +14,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import args.marshall.ArgumentMarshaller;
-import args.marshall.BooleanArgumentMarshaller;
-import args.marshall.IntegerArgumentMarshaller;
-import args.marshall.StringArgumentMarshaller;
+import args.marshall.OptionEvaluator;
+import args.marshall.BooleanOptionEvaluator;
+import args.marshall.IntegerOptionEvaluator;
+import args.marshall.StringOptionEvaluator;
 
 public class Args
 {
-	private Map<Character, ArgumentMarshaller> marshallers = new ConcurrentHashMap<>();
+	private Map<Character, OptionEvaluator> evaluators = new ConcurrentHashMap<>();
 	private Set<Character> argsFound = new HashSet<Character>();
 	private ListIterator<String> currentArgument;
 
@@ -89,7 +89,7 @@ public class Args
 	private void parseArgumentCharacter(char c)
 		throws ArgsException
 	{
-		ArgumentMarshaller m = marshallers.get(c);
+		OptionEvaluator m = evaluators.get(c);
 		if (m == null)
 		{
 			throw new ArgsException(UNEXPECTED_ARGUMENT, c, null);
@@ -115,17 +115,17 @@ public class Args
 
 		if (tail.length() == 0)
 		{
-			marshallers.put(elementId, new BooleanArgumentMarshaller());
+			evaluators.put(elementId, new BooleanOptionEvaluator());
 			return;
 		}
 
 		switch (tail)
 		{
 		case "*":
-			marshallers.put(elementId, new StringArgumentMarshaller());
+			evaluators.put(elementId, new StringOptionEvaluator());
 			break;
 		case "#":
-			marshallers.put(elementId, new IntegerArgumentMarshaller());
+			evaluators.put(elementId, new IntegerOptionEvaluator());
 			break;
 		case "##":
 			break;
@@ -147,20 +147,20 @@ public class Args
 
 	public boolean getBoolean(char arg)
 	{
-		ArgumentMarshaller m = marshallers.get(arg);
-		return BooleanArgumentMarshaller.getValue(m);
+		OptionEvaluator m = evaluators.get(arg);
+		return BooleanOptionEvaluator.getValue(m);
 	}
 
 	public String getString(char arg)
 	{
-		ArgumentMarshaller m = marshallers.get(arg);
-		return StringArgumentMarshaller.getValue(m);
+		OptionEvaluator m = evaluators.get(arg);
+		return StringOptionEvaluator.getValue(m);
 	}
 
 	public int getInteger(char arg)
 	{
-		ArgumentMarshaller m = marshallers.get(arg);
-		return IntegerArgumentMarshaller.getValue(m);
+		OptionEvaluator m = evaluators.get(arg);
+		return IntegerOptionEvaluator.getValue(m);
 	}
 
 	public boolean has(char arg)

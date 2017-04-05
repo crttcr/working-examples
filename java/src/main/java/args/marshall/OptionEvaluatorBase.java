@@ -4,8 +4,8 @@ import java.util.Iterator;
 
 import args.ArgsException;
 
-public abstract class ArgumentMarshallerBase<T>
-implements ArgumentMarshaller
+public abstract class OptionEvaluatorBase<T>
+implements OptionEvaluator
 {
 	private int count = 0;
 

@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 
 import args.ArgsException;
 
-public class StringArgumentMarshaller extends ArgumentMarshallerBase<String>
+public class StringOptionEvaluator extends OptionEvaluatorBase<String>
 {
 	private String value = "";
 
@@ -25,11 +25,11 @@ public class StringArgumentMarshaller extends ArgumentMarshallerBase<String>
 		}
 	}
 
-	public static String getValue(ArgumentMarshaller am)
+	public static String getValue(OptionEvaluator am)
 	{
-		if (am != null && am instanceof StringArgumentMarshaller)
+		if (am != null && am instanceof StringOptionEvaluator)
 		{
-			return ((StringArgumentMarshaller) am).value;
+			return ((StringOptionEvaluator) am).value;
 		}
 
 		return "";

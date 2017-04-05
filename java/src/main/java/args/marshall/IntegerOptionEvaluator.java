@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 
 import args.ArgsException;
 
-public class IntegerArgumentMarshaller extends ArgumentMarshallerBase<Integer>
+public class IntegerOptionEvaluator extends OptionEvaluatorBase<Integer>
 {
 	private int value = 0;
 
@@ -32,11 +32,11 @@ public class IntegerArgumentMarshaller extends ArgumentMarshallerBase<Integer>
 		}
 	}
 
-	public static Integer getValue(ArgumentMarshaller am)
+	public static Integer getValue(OptionEvaluator am)
 	{
-		if (am != null && am instanceof IntegerArgumentMarshaller)
+		if (am != null && am instanceof IntegerOptionEvaluator)
 		{
-			return ((IntegerArgumentMarshaller) am).value;
+			return ((IntegerOptionEvaluator) am).value;
 		}
 
 		return 0;
