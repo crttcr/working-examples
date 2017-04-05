@@ -4,12 +4,12 @@ import java.util.Iterator;
 
 import args.ArgsException;
 
-public class BooleanArgumentMarshaller implements ArgumentMarshaller
+public class BooleanArgumentMarshaller extends ArgumentMarshallerBase<Boolean>
 {
 	private boolean value = false;
 
 	@Override
-	public void set(Iterator<String> currentArgument) throws ArgsException
+	protected void doSet(Iterator<String> currentArgument) throws ArgsException
 	{
 		value = true;
 	}
@@ -22,5 +22,11 @@ public class BooleanArgumentMarshaller implements ArgumentMarshaller
 		}
 
 		return false;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Boolean[called = " + count() + ", value = " + value + "]";
 	}
 }

@@ -8,12 +8,12 @@ import java.util.NoSuchElementException;
 
 import args.ArgsException;
 
-public class IntegerArgumentMarshaller implements ArgumentMarshaller
+public class IntegerArgumentMarshaller extends ArgumentMarshallerBase<Integer>
 {
 	private int value = 0;
 
 	@Override
-	public void set(Iterator<String> currentArgument) throws ArgsException
+	protected void doSet(Iterator<String> currentArgument) throws ArgsException
 	{
 		String parameter = null;
 
@@ -41,4 +41,11 @@ public class IntegerArgumentMarshaller implements ArgumentMarshaller
 
 		return 0;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Integer[called = " + count() + ", value = " + value + "]";
+	}
+
 }

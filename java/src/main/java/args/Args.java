@@ -3,6 +3,7 @@ package args;
 import static args.ErrorCode.INVALID_ARGUMENT_FORMAT;
 import static args.ErrorCode.INVALID_ARGUMENT_NAME;
 import static args.ErrorCode.NO_SCHEMA;
+import static args.ErrorCode.NULL_ARGUMENT_ARRAY;
 import static args.ErrorCode.UNEXPECTED_ARGUMENT;
 
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class Args
 		throws ArgsException
 	{
 		parseSchema(schema);
-		parseCommandLine(Arrays.asList(args));
+		parseCommandLine(args);
 	}
 
 	private void parseSchema(String schema)
@@ -49,10 +50,17 @@ public class Args
 		}
 	}
 
-	private void parseCommandLine(List<String> args)
+	private void parseCommandLine(String[] args)
 		throws ArgsException
 	{
-		for (currentArgument = args.listIterator(); currentArgument.hasNext(); )
+		if (args == null)
+		{
+			throw new ArgsException(NULL_ARGUMENT_ARRAY);
+		}
+
+		List<String> argList = Arrays.asList(args);
+
+		for (currentArgument = argList.listIterator(); currentArgument.hasNext(); )
 		{
 			String argString = currentArgument.next();
 			if (argString.startsWith("-"))
@@ -135,7 +143,6 @@ public class Args
 		{
 			throw new ArgsException(INVALID_ARGUMENT_NAME, elementId, null);
 		}
-
 	}
 
 	public boolean getBoolean(char arg)
@@ -164,5 +171,10 @@ public class Args
 	public int nextArgument()
 	{
 		return currentArgument.nextIndex();
+	}
+
+	public String getArgument(int i)
+	{
+		return null;
 	}
 }

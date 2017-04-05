@@ -7,12 +7,12 @@ import java.util.NoSuchElementException;
 
 import args.ArgsException;
 
-public class StringArgumentMarshaller implements ArgumentMarshaller
+public class StringArgumentMarshaller extends ArgumentMarshallerBase<String>
 {
 	private String value = "";
 
 	@Override
-	public void set(Iterator<String> currentArgument) throws ArgsException
+	protected void doSet(Iterator<String> currentArgument) throws ArgsException
 	{
 		try
 		{
@@ -33,5 +33,11 @@ public class StringArgumentMarshaller implements ArgumentMarshaller
 		}
 
 		return "";
+	}
+
+	@Override
+	public String toString()
+	{
+		return "String[called = " + count() + ", value = " + value + "]";
 	}
 }

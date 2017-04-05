@@ -1,9 +1,13 @@
 package args;
 
+// NOTE: When adding a new ENUM, add an appropriate case to the switch
+// statement in the @{link errorText()} method.
+//
 public enum ErrorCode
 {
 	OK("Error code says 'OK' but errorMessage called."),
 	NO_SCHEMA("Argument processing requires a schema, but none was provided."),
+	NULL_ARGUMENT_ARRAY("Argument processing failed because a null value was provided as the argument list instead of an empty array."),
 	UNEXPECTED_ARGUMENT("Argument -%c unexpected. Not in schema definition."),
 	MISSING_STRING("Could not find string parameter for -%c."),
 	MISSING_INTEGER("Could not find integer parameter for -%c"),
@@ -24,6 +28,8 @@ public enum ErrorCode
 		switch(this)
 		{
 		case OK:
+		case NO_SCHEMA:
+		case NULL_ARGUMENT_ARRAY:
 			return format();
 		case MISSING_STRING:
 		case MISSING_INTEGER:
@@ -36,9 +42,11 @@ public enum ErrorCode
 			return format(errorId, param);
 		case INVALID_ARGUMENT_FORMAT:
 			return format(param);
-		default:
-			return "Somehow you reached an error code that is not accounted for: " + this;
 		}
+
+		String fmt = "Programmer error. The format routine does not handle error code %s";
+		String msg = String.format(fmt, this);
+		return msg;
 	}
 
 	private String format()

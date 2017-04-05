@@ -28,7 +28,9 @@ public class Application
 
 	private static void run(String directory, int port, boolean logging)
 	{
-		System.out.printf("Application running with dir=%s, port=%d, %s\n", directory, port, logging ? "LOGGING" : "NOLOG");
+		String fmt = "Application running with dir=%s, port=%d, logging=%s\n";
+		String msg = String.format(fmt, directory, port, logging ? "ENABLED" : "DISABLED");
+		System.out.printf(msg);
 	}
 
 }
