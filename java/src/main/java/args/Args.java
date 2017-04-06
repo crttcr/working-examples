@@ -92,7 +92,7 @@ public class Args
 			throw new ArgsException(UNEXPECTED_ARGUMENT, c, null);
 		}
 
-		OptEvaluator<?> eval = item.getOe();
+		OptEvaluator<?> eval = item.getEval();
 		argsFound.add(c);
 		try
 		{
@@ -107,7 +107,7 @@ public class Args
 
 	public <T> T getValue(char c) {
 		Item<T> item = schema.getItem(c);
-		OptEvaluator<T> eval = item.getOe();
+		OptEvaluator<T> eval = item.getEval();
 		T rv = eval.getValue();
 		return rv;
 	}

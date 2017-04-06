@@ -6,7 +6,7 @@ import args.schema.SchemaBuilder;
 
 /**
  * Example application to run the Args command line processor
- * highly inspired by Robert C. Martin's Clean Code, chapter 14.
+ * inspired by Robert C. Martin's Clean Code, chapter 14.
  */
 public class Application
 {
