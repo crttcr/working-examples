@@ -1,4 +1,4 @@
-package args;
+package args.error;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

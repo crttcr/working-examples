@@ -1,10 +1,13 @@
 package args;
 
-/**
- * Command line processor highly inspired by Robert C. Martin's Clean Code, chapter 14.
- *
- */
+import args.error.ArgsException;
+import args.schema.Schema;
+import args.schema.SchemaBuilder;
 
+/**
+ * Example application to run the Args command line processor
+ * highly inspired by Robert C. Martin's Clean Code, chapter 14.
+ */
 public class Application
 {
 	public static void main(String[] args)
@@ -12,13 +15,14 @@ public class Application
 		try
 		{
 			String[] defs = { "-d", "/tmp/foo", "-l", "-p", "8080" };
-			Args arg = new Args("l,p#,d*", args.length == 0 ? defs : args);
+			Schema schema = SchemaBuilder.parseSchema("l,p#,d*");
+			Args arg = new Args(schema, args.length == 0 ? defs : args);
 
-			boolean logging = arg.getBoolean('l');
-			int port = arg.getInteger('p');
-			String directory = arg.getString('d');
+			String path = arg.getValue('d');
+			Integer port = arg.getValue('p');
+			Boolean logging = arg.getValue('l');
 
-			run(directory, port, logging);
+			run(path, port, logging);
 		}
 		catch (ArgsException e)
 		{

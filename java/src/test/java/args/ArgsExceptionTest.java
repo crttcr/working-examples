@@ -4,6 +4,9 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import args.error.ArgsException;
+import args.error.ErrorCode;
+
 public class ArgsExceptionTest
 {
 	@Test

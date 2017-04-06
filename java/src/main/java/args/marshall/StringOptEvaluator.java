@@ -1,15 +1,17 @@
 package args.marshall;
 
-import static args.ErrorCode.MISSING_STRING;
+import static args.error.ErrorCode.MISSING_STRING;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import args.ArgsException;
+import args.error.ArgsException;
+import lombok.Getter;
 
-public class StringOptionEvaluator extends OptionEvaluatorBase<String>
+public class StringOptEvaluator extends OptEvaluatorBase<String>
 {
-	private String value = "";
+	@Getter
+	private String value = null;
 
 	@Override
 	protected void doSet(Iterator<String> currentArgument) throws ArgsException
@@ -21,18 +23,7 @@ public class StringOptionEvaluator extends OptionEvaluatorBase<String>
 		catch (NoSuchElementException e)
 		{
 			throw new ArgsException(MISSING_STRING);
-
 		}
-	}
-
-	public static String getValue(OptionEvaluator am)
-	{
-		if (am != null && am instanceof StringOptionEvaluator)
-		{
-			return ((StringOptionEvaluator) am).value;
-		}
-
-		return "";
 	}
 
 	@Override

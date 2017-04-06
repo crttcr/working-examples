@@ -7,6 +7,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import args.error.ArgsException;
+import args.schema.Schema;
+import args.schema.SchemaBuilder;
+
 public class ArgsTest
 {
 	@Test(expected=ArgsException.class)
@@ -20,7 +24,7 @@ public class ArgsTest
 	@Test(expected=ArgsException.class)
 	public void testConstructWithEmptySchema() throws Exception
 	{
-		String schema = "";
+		Schema schema = SchemaBuilder.parseSchema("");
 		String[] args = {"-x", "radio"};
 		@SuppressWarnings("unused")
 		Args arg = new Args(schema, args);
@@ -29,7 +33,7 @@ public class ArgsTest
 	@Test(expected=ArgsException.class)
 	public void testConstructWithNullArgList() throws Exception
 	{
-		String schema = "x";
+		Schema schema = SchemaBuilder.parseSchema("x");
 		@SuppressWarnings("unused")
 		Args arg = new Args(schema, null);
 	}
@@ -39,7 +43,7 @@ public class ArgsTest
 	{
 		// Arrange & Act
 		//
-		String schema = "x";
+		Schema schema = SchemaBuilder.parseSchema("x");
 		String[] args = {};
 		Args arg = new Args(schema, args);
 
@@ -53,13 +57,13 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		String schema = "x";
+		Schema schema = SchemaBuilder.parseSchema("x");
 		String[] args = {"-x", "radio"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		boolean isSet = arg.getBoolean('x');
+		Boolean isSet = arg.getValue('x');
 
 		// Assert
 		//
@@ -71,13 +75,13 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		String schema = "x";
+		Schema schema = SchemaBuilder.parseSchema("x");
 		String[] args = {"radio"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		boolean isSet = arg.getBoolean('x');
+		Boolean isSet = arg.getValue('x');
 
 		// Assert
 		//
@@ -89,13 +93,13 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		String schema = "x*";
+		Schema schema = SchemaBuilder.parseSchema("x*");
 		String[] args = {"-x", "radio"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		String s = arg.getString('x');
+		String s = arg.getValue('x');
 
 		// Assert
 		//
@@ -108,13 +112,13 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		String schema = "x*,y#";
+		Schema schema = SchemaBuilder.parseSchema("x*,y#");
 		String[] args = {"-y", "239"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		Integer i = arg.getInteger('y');
+		Integer i = arg.getValue('y');
 
 		// Assert
 		//
@@ -127,7 +131,7 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		String schema = "x";
+		Schema schema = SchemaBuilder.parseSchema("x");
 		String[] args = {"radio"};
 		Args arg = new Args(schema, args);
 
@@ -145,7 +149,7 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		String schema = "x";
+		Schema schema = SchemaBuilder.parseSchema("x*,y#");
 		String[] args = {};
 		Args arg = new Args(schema, args);
 
@@ -159,18 +163,18 @@ public class ArgsTest
 	}
 
 	@Test
-	public void testNextArgumentWithOne() throws Exception
+	public void testNextArgumentWithOneArgumentNoOptions() throws Exception
 	{
 		// Arrange
 		//
-		String schema = "x";
+		Schema schema = SchemaBuilder.parseSchema("x*,y#");
 		String[] args = {"file.a"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
 		int na = arg.nextArgument();
-		String s = arg.getArgument(0);
+		String s = arg.getArgument(na);
 
 		// Assert
 		//

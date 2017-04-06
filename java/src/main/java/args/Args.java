@@ -1,53 +1,46 @@
 package args;
 
-import static args.ErrorCode.INVALID_ARGUMENT_FORMAT;
-import static args.ErrorCode.INVALID_ARGUMENT_NAME;
-import static args.ErrorCode.NO_SCHEMA;
-import static args.ErrorCode.NULL_ARGUMENT_ARRAY;
-import static args.ErrorCode.UNEXPECTED_ARGUMENT;
+import static args.error.ErrorCode.NO_SCHEMA;
+import static args.error.ErrorCode.NULL_ARGUMENT_ARRAY;
+import static args.error.ErrorCode.UNEXPECTED_ARGUMENT;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
-import args.marshall.BooleanOptionEvaluator;
-import args.marshall.IntegerOptionEvaluator;
-import args.marshall.OptionEvaluator;
-import args.marshall.StringOptionEvaluator;
+import args.error.ArgsException;
+import args.marshall.OptEvaluator;
+import args.schema.Item;
+import args.schema.Schema;
 
+/**
+ * Example application to run the Args command line processor
+ * inspired by Robert C. Martin's Clean Code, chapter 14.
+ */
 public class Args
 {
-	private Map<Character, OptionEvaluator> evaluators = new ConcurrentHashMap<>();
 	private Set<Character> argsFound = new HashSet<Character>();
 	private ListIterator<String> currentArgument;
+	private final Schema schema;
 
-	public Args(String schema, String[] args)
-		throws ArgsException
-	{
-		parseSchema(schema);
-		parseCommandLine(args);
-	}
-
-	private void parseSchema(String schema)
+	public Args(Schema schema, String[] args)
 		throws ArgsException
 	{
 		if (schema == null)
 		{
 			throw new ArgsException(NO_SCHEMA);
 		}
+		this.schema = schema;
+		parseCommandLine(args);
+		validateCommandLine();
+	}
 
-		for (String s: schema.split(","))
-		{
-			if (s.length() > 0)
-			{
-				String t = s.trim();
-				parseSchemaElement(t);
-			}
-		}
+
+	private void validateCommandLine()
+	{
+		// TODO Auto-generated method stub
 	}
 
 	private void parseCommandLine(String[] args)
@@ -70,7 +63,8 @@ public class Args
 			}
 			else
 			{
-				// Current implementation forces options to appear before arguments
+				// Current implementation forces options to appear before arguments.
+				// As soon as the first non option appears, the processing is done.
 				//
 				currentArgument.previous();
 				break;
@@ -91,16 +85,18 @@ public class Args
 	private void parseArgumentCharacter(char c)
 		throws ArgsException
 	{
-		OptionEvaluator m = evaluators.get(c);
-		if (m == null)
+		Item<?> item = schema.getItem(c);
+
+		if (item == null)
 		{
 			throw new ArgsException(UNEXPECTED_ARGUMENT, c, null);
 		}
 
+		OptEvaluator<?> eval = item.getOe();
 		argsFound.add(c);
 		try
 		{
-			m.set(currentArgument);
+			eval.set(currentArgument);
 		}
 		catch (ArgsException e)
 		{
@@ -109,65 +105,16 @@ public class Args
 		}
 	}
 
-	private void parseSchemaElement(String element) throws ArgsException
-	{
-		char elementId = element.charAt(0);
-		String tail = element.substring(1);
-		validateSchemaElementId(elementId);
-
-		if (tail.length() == 0)
-		{
-			evaluators.put(elementId, new BooleanOptionEvaluator());
-			return;
-		}
-
-		switch (tail)
-		{
-		case "*":
-			evaluators.put(elementId, new StringOptionEvaluator());
-			break;
-		case "#":
-			evaluators.put(elementId, new IntegerOptionEvaluator());
-			break;
-		case "##":
-			break;
-		case "[*]":
-			break;
-		default:
-			throw new ArgsException(INVALID_ARGUMENT_FORMAT, elementId, null);
-		}
-
+	public <T> T getValue(char c) {
+		Item<T> item = schema.getItem(c);
+		OptEvaluator<T> eval = item.getOe();
+		T rv = eval.getValue();
+		return rv;
 	}
 
-	private void validateSchemaElementId(char elementId) throws ArgsException
+	public boolean has(char c)
 	{
-		if (! Character.isLetter(elementId))
-		{
-			throw new ArgsException(INVALID_ARGUMENT_NAME, elementId, null);
-		}
-	}
-
-	public boolean getBoolean(char arg)
-	{
-		OptionEvaluator m = evaluators.get(arg);
-		return BooleanOptionEvaluator.getValue(m);
-	}
-
-	public String getString(char arg)
-	{
-		OptionEvaluator m = evaluators.get(arg);
-		return StringOptionEvaluator.getValue(m);
-	}
-
-	public int getInteger(char arg)
-	{
-		OptionEvaluator m = evaluators.get(arg);
-		return IntegerOptionEvaluator.getValue(m);
-	}
-
-	public boolean has(char arg)
-	{
-		return argsFound.contains(arg);
+		return argsFound.contains(c);
 	}
 
 	public int nextArgument()

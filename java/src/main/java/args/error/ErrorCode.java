@@ -1,4 +1,4 @@
-package args;
+package args.error;
 
 // NOTE: When adding a new ENUM, add an appropriate case to the switch
 // statement in the @{link errorText()} method.
@@ -6,6 +6,7 @@ package args;
 public enum ErrorCode
 {
 	OK("Error code says 'OK' but errorMessage called."),
+	EMPTY_SCHEMA("Argument processing requires a schema, however an empty one was provided."),
 	NO_SCHEMA("Argument processing requires a schema, but none was provided."),
 	NULL_ARGUMENT_ARRAY("Argument processing failed because a null value was provided as the argument list instead of an empty array."),
 	UNEXPECTED_ARGUMENT("Argument -%c unexpected. Not in schema definition."),
@@ -28,6 +29,7 @@ public enum ErrorCode
 		switch(this)
 		{
 		case OK:
+		case EMPTY_SCHEMA:
 		case NO_SCHEMA:
 		case NULL_ARGUMENT_ARRAY:
 			return format();

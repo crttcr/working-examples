@@ -2,10 +2,10 @@ package args.marshall;
 
 import java.util.Iterator;
 
-import args.ArgsException;
+import args.error.ArgsException;
 
-public abstract class OptionEvaluatorBase<T>
-implements OptionEvaluator
+public abstract class OptEvaluatorBase<T>
+implements OptEvaluator<T>
 {
 	private int count = 0;
 
