@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 public class ArgsException
 extends Exception
 {
-	private char errorId = '\0';
+	private String option = "";
 	private String errorParameter = null;
 	private ErrorCode code = ErrorCode.OK;
 
@@ -31,16 +31,16 @@ extends Exception
 		this.errorParameter = parameter;
 	}
 
-	public ArgsException(ErrorCode code, char elementId, String param)
+	public ArgsException(ErrorCode code, String option, String param)
 	{
 		this.code = code;
-		this.errorId = elementId;
+		this.option = option;
 		this.errorParameter = param;
 	}
 
 	public String errorMessage()
 	{
-		return code.errorText(errorId, errorParameter);
+		return code.errorText(option, errorParameter);
 	}
 
 }

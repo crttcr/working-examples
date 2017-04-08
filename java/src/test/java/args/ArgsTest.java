@@ -3,6 +3,7 @@ package args;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class ArgsTest
 	@Test(expected=ArgsException.class)
 	public void testConstructWithEmptySchema() throws Exception
 	{
-		Schema schema = SchemaBuilder.parseSchema("");
+		Schema schema = new SchemaBuilder("Test").build("");
 		String[] args = {"-x", "radio"};
 		@SuppressWarnings("unused")
 		Args arg = new Args(schema, args);
@@ -33,7 +34,7 @@ public class ArgsTest
 	@Test(expected=ArgsException.class)
 	public void testConstructWithNullArgList() throws Exception
 	{
-		Schema schema = SchemaBuilder.parseSchema("x");
+		Schema schema = new SchemaBuilder("Test").build("x");
 		@SuppressWarnings("unused")
 		Args arg = new Args(schema, null);
 	}
@@ -43,7 +44,7 @@ public class ArgsTest
 	{
 		// Arrange & Act
 		//
-		Schema schema = SchemaBuilder.parseSchema("x");
+		Schema schema = new SchemaBuilder("Test").build("x");
 		String[] args = {};
 		Args arg = new Args(schema, args);
 
@@ -57,13 +58,13 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		Schema schema = SchemaBuilder.parseSchema("x");
+		Schema schema = new SchemaBuilder("Test").build("x");
 		String[] args = {"-x", "radio"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		Boolean isSet = arg.getValue('x');
+		Boolean isSet = arg.getValue("x");
 
 		// Assert
 		//
@@ -75,17 +76,17 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		Schema schema = SchemaBuilder.parseSchema("x");
+		Schema schema = new SchemaBuilder("Test").build("x");
 		String[] args = {"radio"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		Boolean isSet = arg.getValue('x');
+		Boolean isSet = arg.getValue("x");
 
 		// Assert
 		//
-		assertFalse(isSet);
+		assertNull(isSet);
 	}
 
 	@Test
@@ -93,13 +94,13 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		Schema schema = SchemaBuilder.parseSchema("x*");
+		Schema schema = new SchemaBuilder("Test").build("x*");
 		String[] args = {"-x", "radio"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		String s = arg.getValue('x');
+		String s = arg.getValue("x");
 
 		// Assert
 		//
@@ -112,13 +113,13 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		Schema schema = SchemaBuilder.parseSchema("x*,y#");
+		Schema schema = new SchemaBuilder("Test").build("x*,y#");
 		String[] args = {"-y", "239"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		Integer i = arg.getValue('y');
+		Integer i = arg.getValue("y");
 
 		// Assert
 		//
@@ -131,13 +132,13 @@ public class ArgsTest
 	{
 		// Arrange
 		//
-		Schema schema = SchemaBuilder.parseSchema("x");
+		Schema schema = new SchemaBuilder("Test").build("x");
 		String[] args = {"radio"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		boolean isSet = arg.has('x');
+		boolean isSet = arg.has("x");
 
 		// Assert
 		//
@@ -145,41 +146,39 @@ public class ArgsTest
 	}
 
 	@Test
-	public void testNextArgumentWhenNoneProvided() throws Exception
+	public void testArgCountWhenNoneProvided() throws Exception
 	{
 		// Arrange
 		//
-		Schema schema = SchemaBuilder.parseSchema("x*,y#");
+		Schema schema = new SchemaBuilder("Test").build("x*,y#");
 		String[] args = {};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		int na = arg.nextArgument();
+		int count = arg.argumentCount();
 
 		// Assert
 		//
-		assertEquals(0, na);
+		assertEquals(0, count);
 	}
 
 	@Test
-	public void testNextArgumentWithOneArgumentNoOptions() throws Exception
+	public void testArgCountWithOneArgumentNoOptions() throws Exception
 	{
 		// Arrange
 		//
-		Schema schema = SchemaBuilder.parseSchema("x*,y#");
+		Schema schema = new SchemaBuilder("Test").build("x*,y#");
 		String[] args = {"file.a"};
 		Args arg = new Args(schema, args);
 
 		// Act
 		//
-		int na = arg.nextArgument();
-		String s = arg.getArgument(na);
+		int count = arg.argumentCount();
 
 		// Assert
 		//
-		assertNotNull(s);
-		assertEquals(args[0], s);
+		assertEquals(1, count);
 	}
 
 

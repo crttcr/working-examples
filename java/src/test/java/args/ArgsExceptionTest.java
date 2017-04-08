@@ -40,7 +40,7 @@ public class ArgsExceptionTest
 	{
 		// Arrange & Act
 		//
-		ArgsException ex = new ArgsException(ErrorCode.INVALID_ARGUMENT_FORMAT, '^', "Banana");
+		ArgsException ex = new ArgsException(ErrorCode.INVALID_ARGUMENT_FORMAT, "^", "Banana");
 
 		// Assert
 		//

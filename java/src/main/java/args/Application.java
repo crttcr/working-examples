@@ -15,12 +15,12 @@ public class Application
 		try
 		{
 			String[] defs = { "-d", "/tmp/foo", "-l", "-p", "8080" };
-			Schema schema = SchemaBuilder.parseSchema("l,p#,d*");
+			Schema schema = new SchemaBuilder("Application").build("l,p#,d*");
 			Args arg = new Args(schema, args.length == 0 ? defs : args);
 
-			String path = arg.getValue('d');
-			Integer port = arg.getValue('p');
-			Boolean logging = arg.getValue('l');
+			String path = arg.getValue("d");
+			Integer port = arg.getValue("p");
+			Boolean logging = arg.getValue("l");
 
 			run(path, port, logging);
 		}

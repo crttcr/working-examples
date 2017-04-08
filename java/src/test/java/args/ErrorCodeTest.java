@@ -20,7 +20,7 @@ public class ErrorCodeTest
 	{
 		// Arrange
 		//
-		char errorId = 'x';
+		String option = "x";
 		String param = "brick";
 		ErrorCode[] codes = ErrorCode.values();
 
@@ -28,7 +28,7 @@ public class ErrorCodeTest
 		//
 		for (ErrorCode code: codes)
 		{
-			String err = code.errorText(errorId, param);
+			String err = code.errorText(option, param);
 			assertNotNull(err);
 		}
 	}
@@ -38,7 +38,7 @@ public class ErrorCodeTest
 	{
 		// Arrange
 		//
-		char errorId = 'x';
+		String option = "x";
 		String param = null;
 		ErrorCode[] codes = ErrorCode.values();
 
@@ -46,7 +46,7 @@ public class ErrorCodeTest
 		//
 		for (ErrorCode code: codes)
 		{
-			String err = code.errorText(errorId, param);
+			String err = code.errorText(option, param);
 			assertNotNull(err);
 		}
 	}
@@ -56,7 +56,7 @@ public class ErrorCodeTest
 	{
 		// Arrange
 		//
-		char errorId = Character.toChars(0x2202)[0];
+		String option = Character.toChars(0x2202).toString();
 		String param = "blimp";
 		ErrorCode[] codes = ErrorCode.values();
 
@@ -64,7 +64,7 @@ public class ErrorCodeTest
 		//
 		for (ErrorCode code: codes)
 		{
-			String err = code.errorText(errorId, param);
+			String err = code.errorText(option, param);
 			assertNotNull(err);
 		}
 	}

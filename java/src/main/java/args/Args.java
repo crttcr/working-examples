@@ -2,8 +2,9 @@ package args;
 
 import static args.error.ErrorCode.NO_SCHEMA;
 import static args.error.ErrorCode.NULL_ARGUMENT_ARRAY;
-import static args.error.ErrorCode.UNEXPECTED_ARGUMENT;
+import static args.error.ErrorCode.UNEXPECTED_OPTION;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -11,18 +12,25 @@ import java.util.ListIterator;
 import java.util.Set;
 
 import args.error.ArgsException;
+import args.error.ErrorCode;
 import args.marshall.OptEvaluator;
 import args.schema.Item;
 import args.schema.Schema;
 
 /**
- * Example application to run the Args command line processor
- * inspired by Robert C. Martin's Clean Code, chapter 14.
+ * Argument and options command line processor inspired by
+ * Robert C. Martin's Clean Code, chapter 14.
+ *
+ * However, this class no longer is responsible for parsing
+ * the definition of the program options and processing the command line.
+ *
+ * Option definition is handled by the classes in the schema package.
  */
 public class Args
 {
-	private Set<Character> argsFound = new HashSet<Character>();
-	private ListIterator<String> currentArgument;
+	private Set<String> optionsFound = new HashSet<String>();
+	private ListIterator<String> argumentIterator;
+	private final List<String> arguments = new ArrayList<>();
 	private final Schema schema;
 
 	public Args(Schema schema, String[] args)
@@ -53,79 +61,92 @@ public class Args
 
 		List<String> argList = Arrays.asList(args);
 
-		for (currentArgument = argList.listIterator(); currentArgument.hasNext(); )
+		for (argumentIterator = argList.listIterator(); argumentIterator.hasNext(); )
 		{
-			String argString = currentArgument.next();
+			String argString = argumentIterator.next();
+			if (argString.startsWith("--"))
+			{
+				String rest = argString.substring(2);
+				parseLongFormOption(rest, argumentIterator);
+			}
 			if (argString.startsWith("-"))
 			{
 				String rest = argString.substring(1);
-				parseArgumentCharacters(rest);
+				handleShortFormOption(rest, argumentIterator);
 			}
 			else
 			{
-				// Current implementation forces options to appear before arguments.
-				// As soon as the first non option appears, the processing is done.
-				//
-				currentArgument.previous();
-				break;
+				arguments.add(argString);
 			}
 		}
 	}
 
-	private void parseArgumentCharacters(String chars)
-		throws ArgsException
+	private void parseLongFormOption(String option, ListIterator<String> args)
 	{
-		for (int i = 0; i < chars.length(); i++)
-		{
-			char c = chars.charAt(i);
-			parseArgumentCharacter(c);
-		}
+		// TODO Auto-generated method stub
+
 	}
 
-	private void parseArgumentCharacter(char c)
+
+	private void handleShortFormOption(String stripped, ListIterator<String> args)
 		throws ArgsException
 	{
-		Item<?> item = schema.getItem(c);
+		if (stripped.length() < 1)
+		{
+			throw new ArgsException(ErrorCode.MISSING_OPTION_NAME);
+		}
+
+		String option = stripped.substring(0, 1);
+
+		Item<?> item = schema.getItem(option);
 
 		if (item == null)
 		{
-			throw new ArgsException(UNEXPECTED_ARGUMENT, c, null);
+			throw new ArgsException(UNEXPECTED_OPTION, option, null);
 		}
 
 		OptEvaluator<?> eval = item.getEval();
-		argsFound.add(c);
+		optionsFound.add(option);
 		try
 		{
-			eval.set(currentArgument);
+			eval.set(argumentIterator);
 		}
 		catch (ArgsException e)
 		{
-			e.setErrorId(c);
+			e.setOption(option);
 			throw e;
 		}
 	}
 
-	public <T> T getValue(char c) {
-		Item<T> item = schema.getItem(c);
+	public <T> T getValue(String option) {
+		Item<T> item = schema.getItem(option);
 		OptEvaluator<T> eval = item.getEval();
 		T rv = eval.getValue();
 		return rv;
 	}
 
-	public boolean has(char c)
+	public boolean has(String opt)
 	{
-		return argsFound.contains(c);
+		if (opt == null)
+		{
+			return false;
+		}
+
+		return optionsFound.contains(opt);
 	}
 
-	public int nextArgument()
+	public int argumentCount()
 	{
-		return currentArgument.nextIndex();
+		return argumentIterator.nextIndex();
 	}
 
 	public String getArgument(int i)
 	{
-		// FIXME: Need to support positional arguments in addition to command line options
-		//
-		return null;
+		if (i < 0 || i >= arguments.size())
+		{
+			return null;
+		}
+
+		return arguments.get(i);
 	}
 }
