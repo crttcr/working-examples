@@ -3,12 +3,11 @@ package args.schema;
 import static args.error.ErrorCode.INVALID_ARGUMENT_FORMAT;
 import static args.error.ErrorCode.NO_SCHEMA;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import args.error.ArgsException;
+import args.error.ErrorCode;
 import args.marshall.BooleanOptEvaluator;
 import args.marshall.IntegerOptEvaluator;
 import args.marshall.OptEvaluator;
@@ -18,13 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SchemaBuilder
 {
-	public static final String	  DEFAULT_NAME					 = "[Name not defined]";
-	private static final String  EXTENDED_FORMAT_SEPARATOR = "=";
+	public static final String			 DEFAULT_NAME					= "[Name not defined]";
+	public static final String			 EXTENDED_FORMAT_SEPARATOR	= "=";
 
-	private Map<String, Item<?>> opts							 = new ConcurrentHashMap<>();
+	private Map<String, Item<?>>		 opts								= new ConcurrentHashMap<>();
+	private Map<String, Item.Builder<?>> builders					= new ConcurrentHashMap<>();
 
-	private final String			  name;
-	private String					  def;
+	private final String					 name;
+	private String							 def;
 
 	public SchemaBuilder(String name) throws ArgsException
 	{
@@ -40,61 +40,105 @@ public class SchemaBuilder
 
 		opts.clear();
 		this.def = def.trim();
-		createDefinitions(this.def);
+		createDefinitions();
 
 		return new Schema(name, opts);
 	}
 
-	private void createDefinitions(String def) throws ArgsException
+	private void createDefinitions() throws ArgsException
 	{
 		if (isSimpleDefinition())
 		{
-			String[] defs = def.split(",");
-			for (String s : defs)
-			{
-				String t = s.trim();
-				if (t.length() == 0)
-				{
-					log.warn("Schema definition {} contains an empty element.", def);
-					continue;
-				}
-
-				Item<?> item = getObjectFromSimpleDefinition(s);
-				String option = item.getName();
-
-				opts.put(option, item);
-			}
+			buildItemsFromShortDefinition();
 		}
 		else
 		{
-			getItemsFromExtendedDefinition();
+			buildItemsFromExtendedDefinition();
 		}
 	}
 
-	private List<Item<?>> getItemsFromExtendedDefinition()
+	private void buildItemsFromShortDefinition() throws ArgsException
 	{
-		List<Item<?>> rv = new ArrayList<>();
+		String[] defs = def.split(",");
+		for (String s : defs)
+		{
+			String t = s.trim();
+			if (t.length() == 0)
+			{
+				log.warn("Schema definition {} contains an empty element.", def);
+				continue;
+			}
 
+			Item<?> item = getObjectFromSimpleDefinition(s);
+			String option = item.getName();
+
+			opts.put(option, item);
+		}
+	}
+
+	private void buildItemsFromExtendedDefinition() throws ArgsException
+	{
 		String[] lines = def.split("\n");
 		for (String line : lines)
 		{
 			line = line.trim();
+			if (line.length() == 0 || line.startsWith("#"))
+			{
+				continue;
+			}
+
 			if (!line.contains(EXTENDED_FORMAT_SEPARATOR))
 			{
 				log.warn("Schema definition line {} missing separator {}.", line, EXTENDED_FORMAT_SEPARATOR);
 				continue;
 			}
-			String[] parts = def.split(EXTENDED_FORMAT_SEPARATOR, 2);
-			if (parts.length != 2)
+			LongFormData data = LongFormData.processDefinitionLine(line);
+			String key = data.getKey();
+
+			Item.Builder<?> builder = builders.get(key);
+			if (builder == null)
 			{
-				continue;
+				builder = new Item.Builder<>();
+				builders.put(key, builder);
 			}
 
-			Item<?> item = null;
-			rv.add(item);
+			callBuilderMethod(builder, data);
 		}
 
-		return rv;
+		for (Item.Builder<?> builder : builders.values())
+		{
+			Item<?> item = builder.build();
+			String key = item.getName();
+			opts.put(key, item);
+		}
+	}
+
+	private void callBuilderMethod(Item.Builder<?> builder, LongFormData data) throws ArgsException
+	{
+		String field = data.getField();
+		String value = data.getValue();
+
+		switch (field)
+		{
+		case "name":
+			builder.name(value);
+			break;
+		case "type":
+			OptionType type = OptionType.valueOf(value.toUpperCase());
+			builder.type(type);
+			break;
+		case "dv":
+			Object dv = null;
+			// FIXME: builder.dv(dv);
+			break;
+		case "required":
+			boolean required = Boolean.valueOf(value);
+			builder.required(required);
+			break;
+		default:
+			throw new ArgsException(ErrorCode.INVALID_ARGUMENT_FORMAT);
+		}
+
 	}
 
 	private Item<?> getObjectFromSimpleDefinition(String s) throws ArgsException
@@ -113,43 +157,7 @@ public class SchemaBuilder
 
 	private boolean isSimpleDefinition()
 	{
-		return !def.contains(EXTENDED_FORMAT_SEPARATOR);
-	}
-
-	private void parseSchemaElement(String element) throws ArgsException
-	{
-		String option = element.substring(0, 1);
-		String tail = element.substring(1);
-		validateSchemaElementId(option);
-
-		if (tail.length() == 0)
-		{
-			OptEvaluator<Boolean> ev = new BooleanOptEvaluator();
-			Item<Boolean> item = new Item<Boolean>(option, OptionType.BOOLEAN, ev);
-			opts.put(option, item);
-			return;
-		}
-
-		switch (tail)
-		{
-		case "*":
-			OptEvaluator<String> stringEv = new StringOptEvaluator();
-			Item<String> stringItem = new Item<String>(option, OptionType.STRING, stringEv);
-			opts.put(option, stringItem);
-			break;
-		case "#":
-			OptEvaluator<Integer> ev = new IntegerOptEvaluator();
-			Item<Integer> item = new Item<Integer>(option, OptionType.INTEGER, ev);
-			opts.put(option, item);
-			break;
-		case "##":
-			break;
-		case "[*]":
-			break;
-		default:
-			throw new ArgsException(INVALID_ARGUMENT_FORMAT, option, null);
-		}
-
+		return ! def.contains(EXTENDED_FORMAT_SEPARATOR);
 	}
 
 	private Item<?> processSimpleItem(String opt, String modifier) throws ArgsException

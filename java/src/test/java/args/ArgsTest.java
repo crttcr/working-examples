@@ -53,6 +53,14 @@ public class ArgsTest
 		assertNotNull(arg);
 	}
 
+	@Test(expected=ArgsException.class)
+	public void testNakedDashThrows() throws Exception
+	{
+		Schema schema = new SchemaBuilder("Test").build("x");
+		String[] args = {"-", "radio"};
+		new Args(schema, args);
+	}
+
 	@Test
 	public void testGetBooleanSuccessWhenSet() throws Exception
 	{
@@ -146,6 +154,24 @@ public class ArgsTest
 	}
 
 	@Test
+	public void testHasNull() throws Exception
+	{
+		// Arrange
+		//
+		Schema schema = new SchemaBuilder("Test").build("x");
+		String[] args = {"radio"};
+		Args arg = new Args(schema, args);
+
+		// Act
+		//
+		boolean isSet = arg.has(null);
+
+		// Assert
+		//
+		assertFalse(isSet);
+	}
+
+	@Test
 	public void testArgCountWhenNoneProvided() throws Exception
 	{
 		// Arrange
@@ -179,6 +205,48 @@ public class ArgsTest
 		// Assert
 		//
 		assertEquals(1, count);
+	}
+
+	@Test
+	public void testGetArgumentWhenNoneProvided() throws Exception
+	{
+		// Arrange
+		//
+		Schema schema = new SchemaBuilder("Test").build("x*,y#");
+		String[] args = {};
+		Args arg = new Args(schema, args);
+
+		// Act
+		//
+		String s = arg.getArgument(0);
+		String t = arg.getArgument(-1);
+
+		// Assert
+		//
+		assertNull(s);
+		assertNull(t);
+	}
+
+	@Test
+	public void testGetArgumentWithOneArgumentNoOptions() throws Exception
+	{
+		// Arrange
+		//
+		Schema schema = new SchemaBuilder("Test").build("x*,y#");
+		String[] args = {"file.a"};
+		Args arg = new Args(schema, args);
+
+		// Act
+		//
+		String s = arg.getArgument(0);
+		String t = arg.getArgument(-1);
+		String u = arg.getArgument(1);
+
+		// Assert
+		//
+		assertEquals(args[0], s);
+		assertNull(t);
+		assertNull(u);
 	}
 
 

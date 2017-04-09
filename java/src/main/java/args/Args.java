@@ -69,7 +69,7 @@ public class Args
 				String rest = argString.substring(2);
 				parseLongFormOption(rest, argumentIterator);
 			}
-			if (argString.startsWith("-"))
+			else if (argString.startsWith("-"))
 			{
 				String rest = argString.substring(1);
 				handleShortFormOption(rest, argumentIterator);

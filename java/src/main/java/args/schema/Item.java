@@ -1,16 +1,25 @@
 package args.schema;
 
+import args.marshall.BooleanOptEvaluator;
+import args.marshall.IntegerOptEvaluator;
 import args.marshall.OptEvaluator;
-import lombok.Data;
+import args.marshall.StringOptEvaluator;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@Getter
+@ToString
 public class Item<T>
 {
-	private final String name;
-	private final OptionType type;
-	private final Boolean required;
-	private final OptEvaluator<T> eval;
-	private final T dv;
+	private String name;
+	private OptionType type;
+	private Boolean required;
+	private OptEvaluator<T> eval;
+	private T dv;
+
+	private Item()
+	{
+	}
 
 	public Item(String name, OptionType type, OptEvaluator<T> eval)
 	{
@@ -39,5 +48,86 @@ public class Item<T>
 		this.dv = null;
 	}
 
+	public Item(String name, OptionType type, boolean required, OptEvaluator<T> eval, T dv)
+	{
+		this.name = name;
+		this.type = type;
+		this.eval = eval;
+		this.required = required;
+		this.dv = null;
+	}
 
+	public <U> Builder<U> builder()
+	{
+		Builder<U> rv = new Builder<>();
+		return rv;
+	}
+
+	public static class Builder<T>
+	{
+		// If you were to make this field final, you can't reuse the builder with a new object.
+		// That would permit you to potentially leak changes to the object if the caller holds on
+		// to your builder.
+		//
+		private final Item<T> instance;
+
+		public Builder()
+		{
+			instance = new Item<T>();
+		}
+
+		public Builder<T> name(String name)
+		{
+			this.instance.name = name;
+			return this;
+		}
+
+		public Builder<T> type(OptionType type)
+		{
+			this.instance.type = type;
+			return this;
+		}
+
+		public Builder<T> required(boolean b)
+		{
+			this.instance.required = b;
+			return this;
+		}
+
+		@SuppressWarnings("unchecked")
+		public Item<T> build()
+		{
+			assertValid();
+
+			switch(instance.type)
+			{
+			case BOOLEAN:
+				instance.eval = (OptEvaluator<T>) new BooleanOptEvaluator();
+				break;
+			case INTEGER:
+				instance.eval = (OptEvaluator<T>) new IntegerOptEvaluator();
+				break;
+			case STRING:
+				instance.eval = (OptEvaluator<T>) new StringOptEvaluator();
+				break;
+
+			default:
+				throw new RuntimeException("Barf");
+
+			}
+
+			Item<T> result = instance;
+			return result;
+		}
+
+		private void assertValid()
+		{
+			// TODO: Implmement
+			if (instance.type == null)
+			{
+				throw new RuntimeException("Barf");
+			}
+
+		}
+	}
 }

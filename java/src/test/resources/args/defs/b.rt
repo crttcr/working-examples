@@ -1,0 +1,6 @@
+## A single boolean option that is required.
+##
+b.name=b
+b.type=BOOLEAN
+b.required=true
+
