@@ -1,6 +1,7 @@
 package args.schema;
 
 import args.error.ArgsException;
+import args.error.ErrorCode;
 import args.marshall.BooleanOptEvaluator;
 import args.marshall.IntegerOptEvaluator;
 import args.marshall.OptEvaluator;
@@ -58,7 +59,7 @@ public class Item<T>
 		this.dv = null;
 	}
 
-	public <U> Builder<U> builder()
+	public static <U> Builder<U> builder()
 	{
 		Builder<U> rv = new Builder<>();
 		return rv;
@@ -86,6 +87,18 @@ public class Item<T>
 		public Builder<T> type(OptionType type)
 		{
 			this.instance.type = type;
+			return this;
+		}
+
+		public Builder<T> eval(OptEvaluator<T> eval)
+		{
+			this.instance.eval = eval;
+			return this;
+		}
+
+		public Builder<T> dv(T dv)
+		{
+			this.instance.dv = dv;
 			return this;
 		}
 
@@ -125,17 +138,17 @@ public class Item<T>
 			if (instance.name == null)
 			{
 				String msg = String.format("Items require a valid name: [%s]", instance);
-				throw new RuntimeException(msg);
+				throw new ArgsException(ErrorCode.INVALID_SCHEMA_ELEMENT, msg);
 			}
 			if (instance.type == null)
 			{
 				String msg = String.format("Items require a valid type: [%s]", instance);
-				throw new RuntimeException(msg);
+				throw new ArgsException(ErrorCode.INVALID_SCHEMA_ELEMENT, msg);
 			}
 			if (instance.eval == null)
 			{
 				String msg = String.format("Items require a valid evaluator: [%s]", instance);
-				throw new RuntimeException(msg);
+				throw new ArgsException(ErrorCode.INVALID_SCHEMA_ELEMENT, msg);
 			}
 		}
 	}

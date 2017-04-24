@@ -15,6 +15,7 @@ public enum ErrorCode
 	MISSING_DOUBLE("Could not find double parameter for -%s"),
 	INVALID_ARGUMENT_FORMAT("'%s' is not a valid argument format."),
 	INVALID_ARGUMENT_NAME("'%s' is not a valid argument name."),
+	INVALID_SCHEMA_ELEMENT("Schema element not valid -%s"),
 	MISSING_OPTION_NAME("Options staring with - or -- must be followed by a character, not blank"),
 	INVALID_INTEGER("Argument -%s expects an integer, but was '%s'."),
 	INVALID_DOUBLE("Argument -%s expects a double, but was '%s'."),
@@ -39,6 +40,7 @@ public enum ErrorCode
 		case MISSING_INTEGER:
 		case MISSING_DOUBLE:
 		case INVALID_ARGUMENT_NAME:
+		case INVALID_SCHEMA_ELEMENT:
 		case UNEXPECTED_OPTION:
 			return format(option);
 		case INVALID_INTEGER:

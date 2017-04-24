@@ -6,8 +6,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import args.error.ArgsException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+@EqualsAndHashCode(callSuper=false)
 public class StringOptEvaluator extends OptEvaluatorBase<String>
 {
 	@Getter
