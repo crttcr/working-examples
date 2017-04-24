@@ -126,7 +126,8 @@ public class Item<T>
 				break;
 
 			default:
-				throw new RuntimeException("Barf");
+				String msg = String.format("Unable to handle OptionType [%s] in builder", instance.type);
+				throw new ArgsException(ErrorCode.INVALID_SCHEMA_ELEMENT, msg);
 			}
 
 			Item<T> result = instance;
