@@ -1,5 +1,6 @@
 package args.schema;
 
+import args.error.ArgsException;
 import args.marshall.BooleanOptEvaluator;
 import args.marshall.IntegerOptEvaluator;
 import args.marshall.OptEvaluator;
@@ -95,7 +96,7 @@ public class Item<T>
 		}
 
 		@SuppressWarnings("unchecked")
-		public Item<T> build()
+		public Item<T> build() throws ArgsException
 		{
 			assertValid();
 
@@ -113,21 +114,29 @@ public class Item<T>
 
 			default:
 				throw new RuntimeException("Barf");
-
 			}
 
 			Item<T> result = instance;
 			return result;
 		}
 
-		private void assertValid()
+		private void assertValid() throws ArgsException
 		{
-			// TODO: Implmement
+			if (instance.name == null)
+			{
+				String msg = String.format("Items require a valid name: [%s]", instance);
+				throw new RuntimeException(msg);
+			}
 			if (instance.type == null)
 			{
-				throw new RuntimeException("Barf");
+				String msg = String.format("Items require a valid type: [%s]", instance);
+				throw new RuntimeException(msg);
 			}
-
+			if (instance.eval == null)
+			{
+				String msg = String.format("Items require a valid evaluator: [%s]", instance);
+				throw new RuntimeException(msg);
+			}
 		}
 	}
 }
