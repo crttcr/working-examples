@@ -16,23 +16,23 @@ throw an ArgsException error, then the instance can be used to access program ar
 name. Here is the simple usage example that does not use advanced the features.
 
 ```
-	public static void main(String[] args)
-	{
-		try
-		{
-			Args arg = new Args("l,p#,d*", args);
+   public static void main(String[] args)
+   {
+      try
+      {
+         Args arg = new Args("l,p#,d*", args);
 
-			String path = arg.getValue("d");
-			Integer port = arg.getValue("p");
-			Boolean logging = arg.getValue("l");
+         String path = arg.getValue("d");
+         Integer port = arg.getValue("p");
+         Boolean logging = arg.getValue("l");
 
-			run(path, port, logging);
-		}
-		catch (ArgsException e)
-		{
-			System.out.printf("Argument error: %s\n", e.errorMessage());
-		}
-	}
+         run(path, port, logging);
+      }
+      catch (ArgsException e)
+      {
+         System.out.printf("Argument error: %s\n", e.errorMessage());
+      }
+   }
 
 ```
 
@@ -46,8 +46,8 @@ The tests that come with the library source can be run vi [JUnit](http://http://
 
 ## Built With
 
-* [Java 8[(http://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html) 
-* [Lombok]](https://projectlombok.org/) - Taking some of the pain out of Java
+* [Java 8](http://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html) 
+* [Lombok](https://projectlombok.org/) - Taking some of the pain out of Java
 
 ## Contributing
 
