@@ -1,6 +1,7 @@
 # Args - Simple, overachieving option/argument processing
 
-This is yet another library for processing program arguments. Inspired by Robert C. Martin's Clean Code, 
+This is yet another library for processing program arguments. Inspired by Robert C. Martin's 
+[Clean Code|https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882], 
 chapter 14, this library keeps the simple one-character + modifier specification string for cases
 where advanced capabilities are overkill. In addition, by providing a more detailed specification,
 it's possible to provide descriptions, default values, environment variable lookup, and validatation
