@@ -82,8 +82,8 @@ public class SchemaBuilderShortFormTest
 		//
 		Schema schema = subject.build(fmt);
 		Item<Boolean> i1 = schema.getItem("b");
-		Item<Boolean> i2 = schema.getItem("s");
-		Item<Boolean> i3 = schema.getItem("i");
+		Item<String>  i2 = schema.getItem("s");
+		Item<Integer> i3 = schema.getItem("i");
 
 		// Assert
 		//

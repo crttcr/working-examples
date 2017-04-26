@@ -3,16 +3,13 @@ package args.schema;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.StringJoiner;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import args.TestUtil;
 
 public class SchemaBuilderLongFormTest
 {
@@ -25,12 +22,12 @@ public class SchemaBuilderLongFormTest
 	}
 
 	@Test
-	public void testSchemaBuilderBooleanRequiredNoDefault() throws Exception
+	public void testSchemaBuilderBooleanNoRequiredNoDefault() throws Exception
 	{
 		// Arrange
 		//
 		String name = "x";
-		String defs = createDefs(name, OptionType.BOOLEAN, true, null);
+		String defs = createDefs(name, OptionType.BOOLEAN, null, null);
 
 		// Act
 		//
@@ -39,14 +36,14 @@ public class SchemaBuilderLongFormTest
 
 		// Assert
 		//
-		assertItemForm(item, name, OptionType.BOOLEAN, true, null);
+		assertItemForm(item, name, OptionType.BOOLEAN, null, null);
 	}
 	@Test
 	public void testSchemaBuilderBooleanWithDefaultTrue() throws Exception
 	{
 		// Arrange
 		//
-		String defs = readFromTestResourceFile("b.rt");
+		String defs = TestUtil.readFromTestResourceFile("b.rt");
 
 		// Act
 		//
@@ -63,49 +60,29 @@ public class SchemaBuilderLongFormTest
 	// Helper Methods //
 	///////////////////////////////
 
-	private void assertItemForm(Item<?> item, String name, OptionType type, boolean required, Object dv)
+	private void assertItemForm(Item<?> item, String name, OptionType type, Boolean required, Object dv)
 	{
 		assertNotNull(item);
 		assertEquals(name, item.getName());
-		assertNull(item.getRequired());
+		assertEquals(required, item.getRequired());
 		assertNull(item.getDv());
 		assertEquals(type, item.getType());
 		assertNotNull(item.getEval());
 	}
 
-	private String createDefs(String name, OptionType type, boolean required, String dv)
+	private String createDefs(String name, OptionType type, Boolean required, String dv)
 	{
 		StringJoiner sj = new StringJoiner("\n");
 
 		sj.add(name + ".name=" + name);
 		sj.add(name + ".type=" + type);
 
+		if (required != null)
+		{
+			sj.add(name + ".required=" + required);
+		}
+
 		return sj.toString();
-	}
-
-	private String readFromTestResourceFile(String file)
-	{
-		Path path = Paths.get("src/test/resources/args/defs", file);
-
-		System.out.println(path.toAbsolutePath().toString());
-
-		if (! Files.exists(path))
-		{
-			fail("Missing test resource file: " + path);
-		}
-
-		byte[] bytes = {};
-		try
-		{
-			bytes = Files.readAllBytes(path);
-		}
-		catch (IOException e)
-		{
-			fail("Error reading test resource file: " + path + ". Error: " + e.getLocalizedMessage());
-		}
-		String content = new String(bytes);
-
-		return content;
 	}
 
 }

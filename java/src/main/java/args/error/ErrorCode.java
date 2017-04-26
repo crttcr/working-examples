@@ -1,7 +1,6 @@
 package args.error;
 
-// NOTE: When adding a new ENUM, add an appropriate case to the switch
-// statement in the @{link errorText()} method.
+// NOTE: When adding a new ENUM, add an appropriate case to the switch // statement in the @{link errorText()} method.
 //
 public enum ErrorCode
 {
@@ -13,6 +12,7 @@ public enum ErrorCode
 	MISSING_STRING("Could not find string parameter for -%s."),
 	MISSING_INTEGER("Could not find integer parameter for -%s"),
 	MISSING_DOUBLE("Could not find double parameter for -%s"),
+	MISSING_ENVIRONMENT_VARIABLE("Environment variable [%s] does not have an established value."),
 	INVALID_ARGUMENT_FORMAT("'%s' is not a valid argument format."),
 	INVALID_ARGUMENT_NAME("'%s' is not a valid argument name."),
 	INVALID_SCHEMA_ELEMENT("Schema element not valid -%s"),
@@ -35,6 +35,7 @@ public enum ErrorCode
 		case NO_SCHEMA:
 		case NULL_ARGUMENT_ARRAY:
 		case MISSING_OPTION_NAME:
+		case MISSING_ENVIRONMENT_VARIABLE:
 			return format();
 		case MISSING_STRING:
 		case MISSING_INTEGER:

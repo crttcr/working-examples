@@ -1,0 +1,8 @@
+## A String option that should come from an environment variable
+##
+home.name=home
+home.type=STRING
+home.required=true
+home.ev=HOME
+
+

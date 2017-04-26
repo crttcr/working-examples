@@ -42,8 +42,8 @@ public class ItemTest
 
 		// Act
 		//
-		Item<Boolean> itemTrue = new Item<Boolean>(name, type, eval, Boolean.TRUE);
-		Item<Boolean> itemFalse = new Item<Boolean>(name, type, eval, Boolean.FALSE);
+		Item<Boolean> itemTrue = new Item<Boolean>(name, type, eval, Boolean.TRUE, null, null);
+		Item<Boolean> itemFalse = new Item<Boolean>(name, type, eval, Boolean.FALSE, null, null);
 
 		// Assert
 		//
@@ -63,8 +63,8 @@ public class ItemTest
 
 		// Act
 		//
-		Item<Boolean> itemTrue = new Item<Boolean>(name, type, eval, true);
-		Item<Boolean> itemFalse = new Item<Boolean>(name, type, eval, false);
+		Item<Boolean> itemTrue = new Item<Boolean>(name, type, eval, true, null, null);
+		Item<Boolean> itemFalse = new Item<Boolean>(name, type, eval, false, null, null);
 
 		// Assert
 		//
@@ -81,10 +81,12 @@ public class ItemTest
 	{
 		assertNotNull(item);
 		assertEquals(name, item.getName());
-		assertFalse(item.getRequired());
-		assertNull(item.getDv());
 		assertEquals(type, item.getType());
 		assertNotNull(item.getEval());
+		assertFalse(item.getRequired());
+		assertNull(item.getDescription());
+		assertNull(item.getEv());
+		assertNull(item.getDv());
 	}
 
 }

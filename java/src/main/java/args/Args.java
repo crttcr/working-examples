@@ -7,6 +7,7 @@ import static args.error.ErrorCode.UNEXPECTED_OPTION;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -42,7 +43,36 @@ public class Args
 		}
 		this.schema = schema;
 		parseCommandLine(args);
+		addMissingEnvironmentVariables();
 		validateCommandLine();
+	}
+
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void addMissingEnvironmentVariables() throws ArgsException
+	{
+		List<Item> items = schema.requiredWithEnvironments();
+
+		for (Item i : items)
+		{
+			OptEvaluator eval =  i.getEval();
+			Object o = eval.getValue();
+			if (o != null)
+			{
+				continue;
+			}
+
+			String ev = i.getEv();
+
+			String prop = System.getenv(ev);
+			if (prop == null)
+			{
+				throw new ArgsException(ErrorCode.MISSING_ENVIRONMENT_VARIABLE, ev);
+			}
+
+			Iterator<String> it = Arrays.asList(prop).iterator();
+			eval.set(it);
+		}
 	}
 
 

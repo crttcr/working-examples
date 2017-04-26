@@ -117,7 +117,7 @@ public class SchemaTest
 		// Act
 		//
 		boolean ok = subject.allRequiredOptionsHaveValues();
-	
+
 		// Assert
 		//
 		assertTrue(ok);
@@ -133,7 +133,7 @@ public class SchemaTest
 	private Item<Integer> createRequiredIntegerItem(String name)
 	{
 		OptEvaluator<Integer> eval = new IntegerOptEvaluator();
-		Item<Integer> item = new Item<>(name, OptionType.INTEGER, eval, true);
+		Item<Integer> item = new Item<>(name, OptionType.INTEGER, eval, true, null, null);
 		return item;
 	}
 

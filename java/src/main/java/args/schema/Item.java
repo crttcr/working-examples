@@ -1,10 +1,14 @@
 package args.schema;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import args.error.ArgsException;
 import args.error.ErrorCode;
 import args.marshall.BooleanOptEvaluator;
 import args.marshall.IntegerOptEvaluator;
 import args.marshall.OptEvaluator;
+import args.marshall.OptEvaluatorBase;
 import args.marshall.StringOptEvaluator;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,11 +17,20 @@ import lombok.ToString;
 @ToString
 public class Item<T>
 {
-	private String name;
-	private OptionType type;
-	private Boolean required;
-	private OptEvaluator<T> eval;
-	private T dv;
+	public final static String	NAME			= "name";
+	public final static String	TYPE			= "type";
+	public final static String	ENV_VAR		= "ev";
+	public final static String	DESCRIPTION	= "description";
+	public final static String	DEFAULT		= "dv";
+	public final static String	REQUIRED		= "required";
+
+	private String					name;
+	private OptionType			type;
+	private OptEvaluator<T>		eval;
+	private Boolean				required;
+	private String					description;
+	private String					ev;
+	private T						dv;
 
 	private Item()
 	{
@@ -29,24 +42,30 @@ public class Item<T>
 		this.type = type;
 		this.eval = eval;
 		this.required = Boolean.FALSE;
+		this.description = null;
+		this.ev = null;
 		this.dv = null;
 	}
 
-	public Item(String name, OptionType type, OptEvaluator<T> eval, T defaultValue)
+	public Item(String name, OptionType type, OptEvaluator<T> eval, T defaultValue, String description, String ev)
 	{
 		this.name = name;
 		this.type = type;
 		this.eval = eval;
 		this.required = Boolean.FALSE;
+		this.description = description;
+		this.ev = ev;
 		this.dv = defaultValue;
 	}
 
-	public Item(String name, OptionType type, OptEvaluator<T> eval, boolean required)
+	public Item(String name, OptionType type, OptEvaluator<T> eval, boolean required, String description, String ev)
 	{
 		this.name = name;
 		this.type = type;
 		this.eval = eval;
 		this.required = required;
+		this.description = description;
+		this.ev = ev;
 		this.dv = null;
 	}
 
@@ -65,6 +84,31 @@ public class Item<T>
 		return rv;
 	}
 
+	public static <U> Builder<U> builder(Map<String, String> args) throws ArgsException
+	{
+		Builder<U> rv = new Builder<>();
+
+		if (args == null)
+		{
+			return rv;
+		}
+
+		for (Entry<String, String> e: args.entrySet())
+		{
+			String k = e.getKey();
+			String v = e.getValue();
+			Builder.callBuilderMethod(rv, k, v);
+		}
+
+		OptionType type = rv.type();
+		if (type != null)
+		{
+			rv.eval(OptEvaluatorBase.getEvaluatorForType(type));
+		}
+
+		return rv;
+	}
+
 	public static class Builder<T>
 	{
 		// If you were to make this field final, you can't reuse the builder with a new object.
@@ -76,6 +120,11 @@ public class Item<T>
 		public Builder()
 		{
 			instance = new Item<T>();
+		}
+
+		public OptionType type()
+		{
+			return this.instance.getType();
 		}
 
 		public Builder<T> name(String name)
@@ -96,6 +145,18 @@ public class Item<T>
 			return this;
 		}
 
+		public Builder<T> description(String description)
+		{
+			this.instance.description = description;
+			return this;
+		}
+
+		public Builder<T> ev(String ev)
+		{
+			this.instance.ev = ev;
+			return this;
+		}
+
 		public Builder<T> dv(T dv)
 		{
 			this.instance.dv = dv;
@@ -113,7 +174,7 @@ public class Item<T>
 		{
 			assertValid();
 
-			switch(instance.type)
+			switch (instance.type)
 			{
 			case BOOLEAN:
 				instance.eval = (OptEvaluator<T>) new BooleanOptEvaluator();
@@ -150,6 +211,36 @@ public class Item<T>
 			{
 				String msg = String.format("Items require a valid evaluator: [%s]", instance);
 				throw new ArgsException(ErrorCode.INVALID_SCHEMA_ELEMENT, msg);
+			}
+		}
+
+		public static void callBuilderMethod(Item.Builder<?> builder, String field, String value) throws ArgsException
+		{
+			switch (field)
+			{
+			case NAME:
+				builder.name(value);
+				break;
+			case TYPE:
+				OptionType type = OptionType.valueOf(value.toUpperCase());
+				builder.type(type);
+				break;
+			case ENV_VAR:
+				builder.ev(value);
+				break;
+			case DESCRIPTION:
+				builder.description(value);
+				break;
+			case DEFAULT:
+				Object dv = null;
+				// FIXME: builder.dv(dv);
+				break;
+			case REQUIRED:
+				boolean required = Boolean.valueOf(value);
+				builder.required(required);
+				break;
+			default:
+				throw new ArgsException(ErrorCode.INVALID_ARGUMENT_FORMAT);
 			}
 		}
 	}

@@ -22,15 +22,16 @@ implements OptEvaluator<T>
 
 	public int count() { return count; }
 
-	public static OptEvaluator<?> getEvaluatorForType(OptionType type)
+	@SuppressWarnings("unchecked")
+	public static <T> OptEvaluator<T> getEvaluatorForType(OptionType type)
 	{
 		Objects.requireNonNull(type);
 
 		switch (type)
 		{
-		case BOOLEAN: return new BooleanOptEvaluator();
-		case STRING: return new StringOptEvaluator();
-		case INTEGER: return new IntegerOptEvaluator();
+		case BOOLEAN: return (OptEvaluator<T>) new BooleanOptEvaluator();
+		case STRING:  return (OptEvaluator<T>) new StringOptEvaluator();
+		case INTEGER: return (OptEvaluator<T>) new IntegerOptEvaluator();
 		default: throw new IllegalArgumentException("Not implemented: " + type);
 		}
 	}
