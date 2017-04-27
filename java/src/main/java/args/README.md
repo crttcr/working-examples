@@ -2,7 +2,7 @@
 
 This is yet another library for processing program arguments. Inspired by Robert C. Martin's 
 [Clean Code](http://www.amazon.com/Clean-Code-Handbook-Software-Craftmanship/dp/0132350882"),
-chapter 14, this library keeps the simple **one-character + optional modifier** specification string for cases
+chapter 14, this library keeps the simple **one-character + optional modifier** specification for cases
 where advanced capabilities are overkill. Additionally, by providing a more detailed specification,
 it's possible to provide descriptions, default values, environment variable lookup, and validatation
 to ensure programs are started in a consistent state.
