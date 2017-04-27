@@ -10,7 +10,7 @@ to ensure programs are started in a consistent state.
 
 ## Getting Started
 
-To use this code, simply add the sources or a jar file to your project, describe the program 
+To use this code, simply add the sources or jar file to your project, describe the program 
 options, and pass the program arguments to the Args constructor. If the constructor does not
 throw an ArgsException error, then the instance can be used to access program arguments by
 name. Here is the simple usage example that does not use advanced the features.

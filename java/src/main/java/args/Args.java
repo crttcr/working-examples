@@ -25,8 +25,10 @@ import args.schema.SchemaBuilder;
  *
  * However, this class no longer is responsible for parsing
  * the definition of the program options and processing the command line.
+ * Seems like two different things.
  *
- * Option definition is handled by the classes in the schema package.
+ * Parsing and maintaining option definitions is the responsibility
+ * of the Schema and SchemaBuilder objects.
  */
 public class Args
 {
