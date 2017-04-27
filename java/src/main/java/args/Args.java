@@ -95,11 +95,6 @@ public class Args
 	}
 
 
-	private void validateCommandLine()
-	{
-		// TODO Auto-generated method stub
-	}
-
 	private void parseCommandLine(String[] args)
 		throws ArgsException
 	{
@@ -116,7 +111,7 @@ public class Args
 			if (argString.startsWith("--"))
 			{
 				String rest = argString.substring(2);
-				parseLongFormOption(rest, argumentIterator);
+				handleLongFormOption(rest, argumentIterator);
 			}
 			else if (argString.startsWith("-"))
 			{
@@ -130,10 +125,32 @@ public class Args
 		}
 	}
 
-	private void parseLongFormOption(String option, ListIterator<String> args)
+	private void handleLongFormOption(String option, ListIterator<String> args) throws ArgsException
 	{
-		// TODO Auto-generated method stub
+		if (option.length() < 1)
+		{
+			throw new ArgsException(ErrorCode.MISSING_OPTION_NAME);
+		}
 
+		Item<?> item = schema.getItem(option);
+
+		if (item == null)
+		{
+			throw new ArgsException(UNEXPECTED_OPTION, option, null);
+		}
+
+		OptEvaluator<?> eval = item.getEval();
+		optionsFound.add(option);
+
+		try
+		{
+			eval.set(argumentIterator);
+		}
+		catch (ArgsException e)
+		{
+			e.setOption(option);
+			throw e;
+		}
 	}
 
 
@@ -165,6 +182,11 @@ public class Args
 			e.setOption(option);
 			throw e;
 		}
+	}
+
+	private void validateCommandLine()
+	{
+		// TODO Auto-generated method stub
 	}
 
 	public <T> T getValue(String option) {
