@@ -17,6 +17,7 @@ import args.error.ErrorCode;
 import args.marshall.OptEvaluator;
 import args.schema.Item;
 import args.schema.Schema;
+import args.schema.SchemaBuilder;
 
 /**
  * Argument and options command line processor inspired by
@@ -42,6 +43,23 @@ public class Args
 			throw new ArgsException(NO_SCHEMA);
 		}
 		this.schema = schema;
+		initialize(args);
+	}
+
+	public Args(String defs, String[] args)
+		throws ArgsException
+	{
+		if (defs == null)
+		{
+			throw new ArgsException(NO_SCHEMA);
+		}
+
+		this.schema = new SchemaBuilder("No_name").build(defs);
+		initialize(args);
+	}
+
+	private void initialize(String[] args) throws ArgsException
+	{
 		parseCommandLine(args);
 		addMissingEnvironmentVariables();
 		validateCommandLine();
@@ -62,12 +80,13 @@ public class Args
 				continue;
 			}
 
+			String opt = i.getName();
 			String ev = i.getEv();
 
 			String prop = System.getenv(ev);
 			if (prop == null)
 			{
-				throw new ArgsException(ErrorCode.MISSING_ENVIRONMENT_VARIABLE, ev);
+				throw new ArgsException(ErrorCode.MISSING_ENVIRONMENT_VARIABLE, opt, ev);
 			}
 
 			Iterator<String> it = Arrays.asList(prop).iterator();

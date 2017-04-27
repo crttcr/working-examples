@@ -12,7 +12,7 @@ public enum ErrorCode
 	MISSING_STRING("Could not find string parameter for -%s."),
 	MISSING_INTEGER("Could not find integer parameter for -%s"),
 	MISSING_DOUBLE("Could not find double parameter for -%s"),
-	MISSING_ENVIRONMENT_VARIABLE("Environment variable [%s] does not have an established value."),
+	MISSING_ENVIRONMENT_VARIABLE("Environment variable [%s] does not have an established value to define option [%s]."),
 	INVALID_ARGUMENT_FORMAT("'%s' is not a valid argument format."),
 	INVALID_ARGUMENT_NAME("'%s' is not a valid argument name."),
 	INVALID_SCHEMA_ELEMENT("Schema element not valid -%s"),
@@ -35,7 +35,6 @@ public enum ErrorCode
 		case NO_SCHEMA:
 		case NULL_ARGUMENT_ARRAY:
 		case MISSING_OPTION_NAME:
-		case MISSING_ENVIRONMENT_VARIABLE:
 			return format();
 		case MISSING_STRING:
 		case MISSING_INTEGER:
@@ -49,6 +48,8 @@ public enum ErrorCode
 			return format(option, param);
 		case INVALID_ARGUMENT_FORMAT:
 			return format(param);
+		case MISSING_ENVIRONMENT_VARIABLE:
+			return format(param, option);
 		}
 
 		String fmt = "Programmer error. The format routine does not handle error code %s";

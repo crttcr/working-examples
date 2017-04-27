@@ -1,0 +1,23 @@
+## Options for the ApplicationLongForm example
+##
+port.name=port
+port.description=The port the server uses to listen for connections
+port.type=INTEGER
+port.required=true
+port.ev=SERVER_PORT
+
+server.name=server
+server.description=The server's IP address or DNS name
+server.type=STRING
+server.required=true
+server.ev=SERVER_NAME
+
+path.name=path
+path.description=The file path for output
+path.type=STRING
+path.required=true
+
+file.name=file
+file.description=The file for output
+file.type=STRING
+file.required=true

@@ -15,11 +15,23 @@ import args.schema.SchemaBuilder;
 public class ArgsTest
 {
 	@Test(expected=ArgsException.class)
+	public void testConstructWithNullStringDefs() throws Exception
+	{
+		String[] args = {"-x", "radio"};
+		String defs = null;
+		@SuppressWarnings("unused")
+
+		Args arg = new Args(defs, args);
+	}
+
+	@Test(expected=ArgsException.class)
 	public void testConstructWithNullSchema() throws Exception
 	{
 		String[] args = {"-x", "radio"};
+		Schema schema = null;
 		@SuppressWarnings("unused")
-		Args arg = new Args(null, args);
+
+		Args arg = new Args(schema, args);
 	}
 
 	@Test(expected=ArgsException.class)
