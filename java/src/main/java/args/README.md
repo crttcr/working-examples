@@ -38,7 +38,7 @@ name. Here is the simple usage example that does not use advanced the features.
 
 ### Prerequisites
 
-None, other than adding the sources or jar to your project.
+None, other than adding the source or jar to your project.
 
 ## Running the tests
 
