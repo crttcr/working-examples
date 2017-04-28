@@ -3,6 +3,7 @@ package args.schema;
 import static args.error.ErrorCode.INVALID_ARGUMENT_FORMAT;
 import static args.error.ErrorCode.NO_SCHEMA;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -170,12 +171,16 @@ public class SchemaBuilder
 			return stringItem;
 		case "#":
 			OptEvaluator<Integer> ev = OptEvaluatorBase.getEvaluatorForType(OptionType.INTEGER);
-			Item<Integer> item = new Item<Integer>(opt, OptionType.INTEGER, ev);
-			return item;
+			Item<Integer> iItem = new Item<Integer>(opt, OptionType.INTEGER, ev);
+			return iItem;
 		case "##":
-			return null;
+			OptEvaluator<Double> dv = OptEvaluatorBase.getEvaluatorForType(OptionType.DOUBLE);
+			Item<Double> dub = new Item<Double>(opt, OptionType.DOUBLE, dv);
+			return dub;
 		case "[*]":
-			return null;
+			OptEvaluator<List<String>> sleval = OptEvaluatorBase.getEvaluatorForType(OptionType.STRING_LIST);
+			Item<List<String>> slitem = new Item<List<String>>(opt, OptionType.STRING_LIST, sleval);
+			return slitem;
 		default:
 			throw new ArgsException(INVALID_ARGUMENT_FORMAT, opt, null);
 		}

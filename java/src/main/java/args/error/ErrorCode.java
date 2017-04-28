@@ -10,6 +10,7 @@ public enum ErrorCode
 	NULL_ARGUMENT_ARRAY("Argument processing failed because a null value was provided as the argument list instead of an empty array."),
 	UNEXPECTED_OPTION("Argument -%s unexpected. Not in schema definition."),
 	MISSING_STRING("Could not find string parameter for -%s."),
+	MISSING_STRING_LIST("Could not find string parameters for -%s."),
 	MISSING_INTEGER("Could not find integer parameter for -%s"),
 	MISSING_DOUBLE("Could not find double parameter for -%s"),
 	MISSING_ENVIRONMENT_VARIABLE("Environment variable [%s] does not have an established value to define option [%s]."),
@@ -37,6 +38,7 @@ public enum ErrorCode
 		case MISSING_OPTION_NAME:
 			return format();
 		case MISSING_STRING:
+		case MISSING_STRING_LIST:
 		case MISSING_INTEGER:
 		case MISSING_DOUBLE:
 		case INVALID_ARGUMENT_NAME:

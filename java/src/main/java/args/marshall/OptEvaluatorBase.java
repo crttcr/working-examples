@@ -20,6 +20,7 @@ implements OptEvaluator<T>
 		doSet(currentArgument);
 	}
 
+	@Override
 	public int count() { return count; }
 
 	@SuppressWarnings("unchecked")
@@ -29,9 +30,12 @@ implements OptEvaluator<T>
 
 		switch (type)
 		{
-		case BOOLEAN: return (OptEvaluator<T>) new BooleanOptEvaluator();
-		case STRING:  return (OptEvaluator<T>) new StringOptEvaluator();
-		case INTEGER: return (OptEvaluator<T>) new IntegerOptEvaluator();
+		case BOOLEAN:      return (OptEvaluator<T>) new BooleanOptEvaluator();
+		case STRING:       return (OptEvaluator<T>) new StringOptEvaluator();
+		case STRING_LIST:  return (OptEvaluator<T>) new StringListOptEvaluator();
+		case INTEGER:      return (OptEvaluator<T>) new IntegerOptEvaluator();
+		case DOUBLE:       return (OptEvaluator<T>) new DoubleOptEvaluator();
+
 		default: throw new IllegalArgumentException("Not implemented: " + type);
 		}
 	}

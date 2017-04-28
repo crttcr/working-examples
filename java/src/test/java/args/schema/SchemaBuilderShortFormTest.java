@@ -5,8 +5,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import args.marshall.OptEvaluator;
 
 public class SchemaBuilderShortFormTest
 {
@@ -51,6 +55,42 @@ public class SchemaBuilderShortFormTest
 		// Assert
 		//
 		assertSimpleItemForm(item, opt, OptionType.STRING);
+	}
+
+	@Test
+	public void testSchemaBuilderOneDouble() throws Exception
+	{
+		// Arrange
+		//
+		String opt = "d";
+		String fmt = "d##";
+
+		// Act
+		//
+		Schema schema = subject.build(fmt);
+		Item<Double> item = schema.getItem(opt);
+
+		// Assert
+		//
+		assertSimpleItemForm(item, opt, OptionType.DOUBLE);
+	}
+
+	@Test
+	public void testSchemaBuilderOneStringList() throws Exception
+	{
+		// Arrange
+		//
+		String opt = "l";
+		String fmt = "l[*]";
+
+		// Act
+		//
+		Schema schema = subject.build(fmt);
+		Item<List<String>> item = schema.getItem(opt);
+
+		// Assert
+		//
+		assertSimpleItemForm(item, opt, OptionType.STRING_LIST);
 	}
 
 	@Test
@@ -124,6 +164,10 @@ public class SchemaBuilderShortFormTest
 		assertFalse(item.getRequired());
 		assertNull(item.getDv());
 		assertEquals(type, item.getType());
-		assertNotNull(item.getEval());
+
+		OptEvaluator<?> eval = item.getEval();
+		assertNotNull(eval);
+		assertEquals(0, eval.count());
+		assertNull(eval.getValue());
 	}
 }
