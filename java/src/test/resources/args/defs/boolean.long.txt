@@ -1,0 +1,13 @@
+## Boolean options
+##
+verbose.name=verbose
+verbose.description=Displays additional information on standard output
+verbose.type=BOOLEAN
+verbose.dv=false
+
+
+quiet.name=quiet
+quiet.description=Eliminates all output from standard out
+quiet.type=BOOLEAN
+quiet.required=false
+quiet.dv=false

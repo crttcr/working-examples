@@ -6,9 +6,11 @@ import java.util.Map.Entry;
 import args.error.ArgsException;
 import args.error.ErrorCode;
 import args.marshall.BooleanOptEvaluator;
+import args.marshall.DoubleOptEvaluator;
 import args.marshall.IntegerOptEvaluator;
 import args.marshall.OptEvaluator;
 import args.marshall.OptEvaluatorBase;
+import args.marshall.StringListOptEvaluator;
 import args.marshall.StringOptEvaluator;
 import lombok.Getter;
 import lombok.ToString;
@@ -182,8 +184,14 @@ public class Item<T>
 			case INTEGER:
 				instance.eval = (OptEvaluator<T>) new IntegerOptEvaluator();
 				break;
+			case DOUBLE:
+				instance.eval = (OptEvaluator<T>) new DoubleOptEvaluator();
+				break;
 			case STRING:
 				instance.eval = (OptEvaluator<T>) new StringOptEvaluator();
+				break;
+			case STRING_LIST:
+				instance.eval = (OptEvaluator<T>) new StringListOptEvaluator();
 				break;
 
 			default:

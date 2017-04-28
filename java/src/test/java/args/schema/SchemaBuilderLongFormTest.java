@@ -22,6 +22,44 @@ public class SchemaBuilderLongFormTest
 	}
 
 	@Test
+	public void testSchemaBuilderDouble() throws Exception
+	{
+		// Arrange
+		//
+		String defs = TestUtil.readFromTestResourceFile("double.long.txt");
+
+		// Act
+		//
+		Schema schema = subject.build(defs);
+		Item<Double> latitude  = schema.getItem("latitude");
+		Item<Double> longitude = schema.getItem("longitude");
+
+		// Assert
+		//
+		assertItemForm(latitude,  "latitude",  OptionType.DOUBLE, null, null);
+		assertItemForm(longitude, "longitude", OptionType.DOUBLE, true, 10.5);
+	}
+
+	@Test
+	public void testSchemaBuilderBoolean() throws Exception
+	{
+		// Arrange
+		//
+		String defs = TestUtil.readFromTestResourceFile("boolean.long.txt");
+
+		// Act
+		//
+		Schema schema = subject.build(defs);
+		Item<Boolean> v = schema.getItem("verbose");
+		Item<Boolean> q = schema.getItem("quiet");
+
+		// Assert
+		//
+		assertItemForm(v, "verbose", OptionType.BOOLEAN, null, null);
+		assertItemForm(q, "quiet",   OptionType.BOOLEAN, false, false);
+	}
+
+	@Test
 	public void testSchemaBuilderBooleanNoRequiredNoDefault() throws Exception
 	{
 		// Arrange
@@ -38,6 +76,7 @@ public class SchemaBuilderLongFormTest
 		//
 		assertItemForm(item, name, OptionType.BOOLEAN, null, null);
 	}
+
 	@Test
 	public void testSchemaBuilderBooleanWithDefaultTrue() throws Exception
 	{
@@ -54,6 +93,8 @@ public class SchemaBuilderLongFormTest
 		//
 		assertItemForm(item, "b", OptionType.BOOLEAN, true, null);
 	}
+
+
 
 
 	///////////////////////////////

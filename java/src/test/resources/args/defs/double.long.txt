@@ -1,0 +1,13 @@
+## Double Options
+##
+latitude.name=latitude
+latitude.description=Longitude coordinate
+latitude.type=DOUBLE
+latitude.ev=100.04
+
+
+longitude.name=longitude
+longitude.description=Longitude coordinate
+longitude.type=DOUBLE
+longitude.required=true
+longitude.dv=10.5
