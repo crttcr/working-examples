@@ -2,7 +2,7 @@
 
 This is yet another library for processing program arguments. Inspired by Robert C. Martin's 
 [Clean Code](http://www.amazon.com/Clean-Code-Handbook-Software-Craftmanship/dp/0132350882"),
-chapter 14, this library keeps the simple **one-character + optional modifier** specification for cases
+chapter 14, this library keeps the simple **one-character \[+ optional modifier]** specification for cases
 where advanced capabilities are overkill. Additionally, by providing a more detailed specification,
 it's possible to provide descriptions, default values, environment variable lookup, and validatation
 to ensure programs are started in a consistent state.
@@ -10,7 +10,7 @@ to ensure programs are started in a consistent state.
 
 ## Getting Started
 
-To use this code, simply add the sources or jar file to your project, describe the program 
+To use this code, simply add the source code or jar file to your project, describe the program 
 options, and pass the program arguments to the Args constructor. If the constructor does not
 throw an ArgsException error, then the instance can be used to access program arguments by
 name. Here is the simple usage example that does not use advanced the features.
@@ -20,11 +20,11 @@ name. Here is the simple usage example that does not use advanced the features.
    {
       try
       {
-         Args arg = new Args("l,p#,d*", args);
+         Args        arg = new Args("s*,p#,v", args);
 
-         String path = arg.getValue("d");
-         Integer port = arg.getValue("p");
-         Boolean logging = arg.getValue("l");
+         String   server = arg.getValue("s");
+         Integer    port = arg.getValue("p");
+         Boolean verbose = arg.getValue("v");
 
          run(path, port, logging);
       }
