@@ -3,13 +3,16 @@ package args.schema;
 import static args.error.ErrorCode.INVALID_ARGUMENT_FORMAT;
 import static args.error.ErrorCode.NO_SCHEMA;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import args.error.ArgsException;
+import args.error.CompositeException;
 import args.error.ErrorCode;
+import args.error.ErrorStrategy;
 import args.marshall.OptEvaluator;
 import args.marshall.OptEvaluatorBase;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +28,18 @@ public class SchemaBuilder
 
 	private final String					 name;
 	private String							 def;
+	private ErrorStrategy             es = ErrorStrategy.FAIL_FAST;
+	private List<ArgsException>       errors;
 
-	public SchemaBuilder(String name) throws ArgsException
+	public SchemaBuilder(String name)
 	{
 		this.name = name == null ? DEFAULT_NAME : name;
+	}
+
+	public SchemaBuilder errorStrategy(ErrorStrategy es)
+	{
+		this.es = es;
+		return this;
 	}
 
 	public Schema build(String def) throws ArgsException
@@ -45,6 +56,7 @@ public class SchemaBuilder
 		return new Schema(name, opts);
 	}
 
+
 	private void createDefinitions() throws ArgsException
 	{
 		if (isSimpleDefinition())
@@ -59,7 +71,17 @@ public class SchemaBuilder
 
 	private void buildItemsFromShortDefinition() throws ArgsException
 	{
-		String[] defs = def.split(",");
+		char firstChar = def.charAt(0);
+		ErrorStrategy declaredStrategy = ErrorStrategy.strategyForCode(firstChar);
+
+		String shortDefs = def;
+		if (declaredStrategy != null)
+		{
+			es = declaredStrategy;
+			shortDefs = def.substring(1);
+		}
+
+		String[] defs = shortDefs.split(",");
 		for (String s : defs)
 		{
 			String t = s.trim();
@@ -70,9 +92,19 @@ public class SchemaBuilder
 			}
 
 			Item<?> item = getObjectFromSimpleDefinition(s);
+			if (item == null)
+			{
+				return;
+			}
+
 			String option = item.getName();
 
 			opts.put(option, item);
+		}
+
+		if (errors != null)
+		{
+			throw new CompositeException(errors);
 		}
 	}
 
@@ -144,9 +176,20 @@ public class SchemaBuilder
 			return null;
 		}
 
-		String opt = t.substring(0, 1);
+		String  opt = t.substring(0, 1);
 		String rest = length > 1 ? t.substring(1) : null;
-		return processSimpleItem(opt, rest);
+		Item<?>  rv = null;
+
+		try
+		{
+			rv = processSimpleItem(opt, rest);
+		}
+		catch (ArgsException e)
+		{
+			handleException(e);
+		}
+
+		return rv;
 	}
 
 	private boolean isSimpleDefinition()
@@ -187,4 +230,23 @@ public class SchemaBuilder
 
 	}
 
+	private void handleException(ArgsException e) throws ArgsException
+	{
+		switch (es)
+		{
+		case FAIL_FAST:
+			throw e;
+		case FAIL_SLOW:
+			errors = errors == null ? new ArrayList<>() : errors;
+			errors.add(e);
+		case WARN_AND_IGNORE:
+			String msg = String.format("Ignoring schema definition error:  %s", e.getMessage());
+			log.warn(msg);
+			break;
+		default:
+			String err = String.format("Program error: ErrorStrategy (%s) not supported. Continuing.", es);
+			log.warn(err);
+			break;
+		}
+	}
 }

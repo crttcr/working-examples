@@ -4,20 +4,31 @@ package args.error;
 //
 public enum ErrorCode
 {
+	// Common Codes
+	//
 	OK("Error code says 'OK' but errorMessage called."),
-	EMPTY_SCHEMA("Argument processing requires a schema, however an empty one was provided."),
+	COMPOSITE_ERROR("Composite errors"),
+
+	// Schema Codes
+	//
 	NO_SCHEMA("Argument processing requires a schema, but none was provided."),
+	EMPTY_SCHEMA("Argument processing requires a schema, however an empty one was provided."),
+	INVALID_SCHEMA_ELEMENT("Schema element not valid %s"),
+	MISSING_OPTION_NAME("Options staring with - or -- must be followed by a character, not blank"),
+
+
+	// Argument Processing Codes
+	//
 	NULL_ARGUMENT_ARRAY("Argument processing failed because a null value was provided as the argument list instead of an empty array."),
 	UNEXPECTED_OPTION("Argument -%s unexpected. Not in schema definition."),
-	MISSING_STRING("Could not find string parameter for -%s."),
-	MISSING_STRING_LIST("Could not find string parameters for -%s."),
-	MISSING_INTEGER("Could not find integer parameter for -%s"),
-	MISSING_DOUBLE("Could not find double parameter for -%s"),
+	MISSING_STRING("Could not find string parameter for option %s."),
+	MISSING_STRING_LIST("Could not find string parameters for option %s."),
+	MISSING_INTEGER("Could not find integer parameter for option %s"),
+	MISSING_DOUBLE("Could not find double parameter for option %s"),
 	MISSING_ENVIRONMENT_VARIABLE("Environment variable [%s] does not have an established value to define option [%s]."),
+
 	INVALID_ARGUMENT_FORMAT("'%s' is not a valid argument format."),
 	INVALID_ARGUMENT_NAME("'%s' is not a valid argument name."),
-	INVALID_SCHEMA_ELEMENT("Schema element not valid -%s"),
-	MISSING_OPTION_NAME("Options staring with - or -- must be followed by a character, not blank"),
 	INVALID_INTEGER("Argument -%s expects an integer, but was '%s'."),
 	INVALID_DOUBLE("Argument -%s expects a double, but was '%s'."),
 	;
@@ -32,6 +43,7 @@ public enum ErrorCode
 		switch(this)
 		{
 		case OK:
+		case COMPOSITE_ERROR:
 		case EMPTY_SCHEMA:
 		case NO_SCHEMA:
 		case NULL_ARGUMENT_ARRAY:

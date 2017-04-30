@@ -13,13 +13,6 @@ extends Exception
 	private String errorParameter = null;
 	private ErrorCode code = ErrorCode.OK;
 
-	//	public ArgsException() { }
-	//
-	//	public ArgsException(String message)
-	//	{
-	//		super(message);
-	//	}
-
 	public ArgsException(ErrorCode code)
 	{
 		this.code = code;
