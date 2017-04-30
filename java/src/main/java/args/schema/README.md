@@ -15,6 +15,23 @@ String def = "~h*,p#,v,t";
 Schema schema = new SchemaBuilder("MyProgram").build(defs);
 ```
 
+Note that the Args contructor will handle the simple construction for you so
+all that is required of your program with this approach is to pass in the definition
+string like this:
+
+```
+public void main(String[] args) 
+{
+	Args arg = new Args("~h*,p#,v,t", args);
+...
+}
+```
+
+Option definition and argument processing can generate errors, so the above code must
+handle ArgsException.
+
+
+
 The schema show above defines four program options
 * -h a string
 * -p an integer
