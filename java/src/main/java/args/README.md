@@ -1,3 +1,6 @@
+# NOTE: This program has moved to a separate GITHUB Repo
+# GOTO: [Args Repo](https://github.com/crttcr/Args)
+
 # Args - Simple, overachieving option/argument processing
 
 This is yet another library for processing program arguments. Inspired by Robert C. Martin's 
