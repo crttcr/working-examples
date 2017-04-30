@@ -1,5 +1,6 @@
 # NOTE: This program has moved to a separate GITHUB Repo
 # GOTO: [Args Repo](https://github.com/crttcr/Args)
+## This version is not being maintained and will likey go away.
 
 # Args - Simple, overachieving option/argument processing
 
