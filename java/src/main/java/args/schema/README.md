@@ -22,14 +22,13 @@ string like this:
 ```
 public void main(String[] args) 
 {
-   Args arg = new Args("~h*,p#,v,t", args);
+   Args arg = new Args("~h*,p#,v,x", args);
    ...
 }
 ```
 
 Option definition and argument processing can generate errors, so the above code must
-handle ArgsException.
-
+handle ArgsException. 
 
 
 The schema show above defines four program options
@@ -37,6 +36,9 @@ The schema show above defines four program options
 * -p an integer
 * -v a boolean
 * -x another boolean
+
+So calling the above main method from java like this `java main -v -h localhost -p 8080`
+will result in the "arg" variable being bound with the option values provided on the command line.
 
 In addition, it uses the `FAIL_SLOW` error strategy, as indicated by the leading '~' character.
 For this strategy, all exceptions encountered while processing the schema are combined and 
