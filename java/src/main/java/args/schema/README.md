@@ -22,8 +22,8 @@ string like this:
 ```
 public void main(String[] args) 
 {
-	Args arg = new Args("~h*,p#,v,t", args);
-...
+   Args arg = new Args("~h*,p#,v,t", args);
+   ...
 }
 ```
 
