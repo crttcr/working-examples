@@ -1,5 +1,6 @@
 package validate.jsr380;
 
+import static java.lang.annotation.ElementType.FIELD;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Set;
@@ -9,6 +10,10 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.hibernate.validator.HibernateValidator;
+import org.hibernate.validator.HibernateValidatorConfiguration;
+import org.hibernate.validator.cfg.ConstraintMapping;
+import org.hibernate.validator.cfg.defs.NotNullDef;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -114,10 +119,41 @@ public class ValidatedDTOTest
 		//
 		Set<ConstraintViolation<ValidatedDTO>> violations = validator.validate( subject );
 
-
 		// Assert
 		//
 		assertEquals(3, violations.size());
+	}
+
+	@Test
+	public void testSettingValidationProgrammatically()
+	{
+		// Arrange
+		//
+		HibernateValidatorConfiguration configuration = Validation
+		.byProvider( HibernateValidator.class )
+		.configure();
+
+		ConstraintMapping mapping = configuration.createConstraintMapping();
+
+		mapping
+		.type( ValidatedDTO.class )
+		.property( "email", FIELD )
+		.constraint( new NotNullDef() );
+
+		Validator v = configuration.addMapping( mapping )
+		.buildValidatorFactory()
+		.getValidator();
+
+		subject = getPopulatedEmail();
+		subject.setEmail(null);
+
+		// Act
+		//
+		Set<ConstraintViolation<ValidatedDTO>> violations = v.validate( subject );
+
+		// Assert
+		//
+		assertEquals(1, violations.size());
 	}
 
 
