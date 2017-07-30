@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 
 /**
  * In this example, the scope of the prefix is set by the lexical location of the definition
- * of the function. The variable pgen is a function that given a string returns a predicate
- * that uses that string as the prefix in the String.startsWith(prefix) method.
+ * of the function. The variable pgen is reference to a function that given a string returns
+ * a predicate which uses that string as the prefix in the String.startsWith(prefix) method.
  *
- * The lexical scope is the second filter's parameter to the apply method, and the definition
- * of pgen closes over this scope to use the (effectively final) argument value within the function body.
+ * The lexical scope second call to filter(), and the definition of pgen closes over this
+ * scope to use the (effectively final) argument value within the function body.
  *
  */
 public class LexicalScopingExample
