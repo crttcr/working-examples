@@ -17,7 +17,7 @@ public class UpperCaseAndJoin
 		final String out =
 			list.stream()
 				.map(String::toUpperCase)
-				.collect(joining(", "));
+				.collect(joining("-*-"));
 
 		System.out.println("UP: " + out);
 	}
