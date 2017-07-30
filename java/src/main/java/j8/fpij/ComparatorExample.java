@@ -1,12 +1,18 @@
 package j8.fpij;
 
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Note the static import of {@codeCollectors.joining}
@@ -33,15 +39,24 @@ public class ComparatorExample
 		.sorted(ComparatorExample.Point::lengthCompare)
 		.collect(Collectors.toList());
 
-		short2long.forEach(System.out::println);
-		System.out.println("");
-		short2long2.forEach(System.out::println);
+		Point.printPoints("Sorted short to long using comparator variable", short2long);
+		Point.printPoints("Sorted short to long using compararison function", short2long2);
+		Point.printPoints("Sorted x, y using comparator chaining ",
+			points
+				.stream()
+				.sorted(comparing(Point.byX).thenComparing(Point.byY))
+				.collect(toList())
+				);
 	}
 
 
 	@Data
+	@Accessors(fluent = true)
 	public static class Point
 	{
+		public static Function<Point, Double> byX = p -> p.x();
+		public static Function<Point, Double> byY = p -> p.y();
+
 		private final double x;
 		private final double y;
 
@@ -59,16 +74,25 @@ public class ComparatorExample
 
 			return delta < 0 ? -1: delta > 0 ? 1 : 0;
 		}
+
+		public static void printPoints(String msg, List<Point> points)
+		{
+			Objects.requireNonNull(msg);
+			Objects.requireNonNull(points);
+
+			System.out.println(msg);
+			points.forEach(System.out::println);
+		}
 	}
 
 	public static List<Point> randomPoints()
 	{
 		Random r = new Random();
 		List<Point> rv = Arrays.asList(
-		new Point(r.nextDouble(), r.nextDouble()),
-		new Point(r.nextDouble(), r.nextDouble()),
-		new Point(r.nextDouble(), r.nextDouble()),
-		new Point(r.nextDouble(), r.nextDouble())
+         new Point(r.nextDouble(), r.nextDouble()),
+         new Point(r.nextDouble(), r.nextDouble()),
+         new Point(r.nextDouble(), r.nextDouble()),
+         new Point(r.nextDouble(), r.nextDouble())
 			);
 
 		return rv;
