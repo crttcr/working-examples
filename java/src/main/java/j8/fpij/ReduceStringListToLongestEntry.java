@@ -14,15 +14,12 @@ public class ReduceStringListToLongestEntry
 		final Optional<String> longest =
 			list.stream()
 				.filter(s -> s != null)
-				.reduce((s, ax) ->
-			  s.length() >= ax.length() ? s : ax);
-
+				.reduce((s, ax) -> s.length() >= ax.length() ? s : ax);
 
 		longest.ifPresent(s ->
 		{
          final String msg = String.format("The longest string: %s", s);
          System.out.println(msg);
-		}
-		);
+		});
 	}
 }
