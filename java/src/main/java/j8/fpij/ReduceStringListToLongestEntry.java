@@ -6,7 +6,6 @@ import java.util.Optional;
 
 public class ReduceStringListToLongestEntry
 {
-
 	public static void main(String[] args)
 	{
 		List<String> list = Arrays.asList("The", "people", "of", "Venezuela", "continue", "to", "suffer", ".");
