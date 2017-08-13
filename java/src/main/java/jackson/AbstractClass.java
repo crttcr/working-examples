@@ -18,25 +18,26 @@ public abstract class AbstractClass
 {
 	@JsonProperty("id")
 	abstract String id();
-	
+
 	@JsonProperty("name")
 	abstract String name();
-	
+
    @JsonSerialize(using = LocalDateTimeSerializer.class)
    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	abstract LocalDateTime birthday();
-	
-   public String toString()
+
+   @Override
+	public String toString()
    {
    	String msg = String.format("AbstractClass.toString() -> id = %s, name = %s", id(), name());
    	return msg;
    }
-   
+
 	public final String toJson()
 	{
 		StringWriter string_w = new StringWriter();
 		ObjectMapper   mapper = new ObjectMapper();
-		
+
 		try
 		{
 			mapper.writeValue(string_w, this);
@@ -45,19 +46,19 @@ public abstract class AbstractClass
 		{
 			e.printStackTrace();
 		}
-		
-		
+
+
 		String s = string_w.toString();
 
 		return s;
 	}
-	
+
 	public final static AbstractClass fromJson(String json)
 	{
 		ObjectMapper    mapper = new ObjectMapper();
-		ObjectReader    reader = mapper.reader(AbstractClass.class);
+		ObjectReader    reader = mapper.readerFor(AbstractClass.class);
 		AbstractClass hydrated = null;
-		
+
 		try
 		{
 			hydrated = reader.readValue(json);
@@ -66,8 +67,8 @@ public abstract class AbstractClass
 		{
 			e.printStackTrace();
 		}
-		
-		
+
+
 		System.out.println(hydrated);
 
 		return hydrated;
