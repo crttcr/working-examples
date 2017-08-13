@@ -25,6 +25,7 @@ public class Person
 
 	// Empty constructor is required as of Neo4j API 2.0.5
 	//
+	@SuppressWarnings("unused")
 	private Person()
 	{
 	}
