@@ -17,6 +17,7 @@ object MapMerge
 		x.merge_value_exists__fn_returns_null
 		x.merge_value_exists__fn_throws_exception
 		x.merge_value_missing_fn_returns_int
+		x.merge_value_missing_replacement_value_null
 		x.merge_value_missing_fn_returns_null
 		x.merge_value_missing_fn_throws_exception
 
@@ -116,6 +117,20 @@ class MapMerge
 		println
 	}
 
+	def merge_value_missing_replacement_value_null: Unit =
+	{
+		val f = fixture
+		val mf: BIF = (a, b) => { a * b }
+		val n: java.lang.Integer = null
+
+		println("merge_value_missing_replacement_value_null")
+		before(f.map)
+		f.map.merge(f.key, n, mf)
+		after(f.map)
+		println("NOTE: Scala implicits are turning this null into a 0 before the merge call!!!")
+		println("NOTE: None of the arguments can be null in the underlying call to java.util.Map.merge()")
+		println
+	}
 
 	def merge_value_missing_fn_returns_null: Unit =
 	{
