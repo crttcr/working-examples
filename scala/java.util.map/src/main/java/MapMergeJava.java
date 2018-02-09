@@ -75,23 +75,71 @@ public class MapMergeJava
 		before(map);
 		map.merge(key, 2, (a, b) -> null );
 		after(map);
-		System.out.println("");	}
+		System.out.println("");
+	}
 
 	private void merge_value_exists__fn_throws_exception()
 	{
+		String key = "Apple";
+		Map<String, Integer> map = new ConcurrentHashMap<>();
+
+		map.put(key, 10);
+
+		System.out.println("merge_value_exists__fn_throws_exception");
+		before(map);
+		try
+		{
+			map.merge(key, 2, (a, b) -> { throw new RuntimeException("Bang!"); } );
+		}
+		catch(Exception e)
+		{
+			System.out.println("Caught Exception: " + e.getLocalizedMessage());
+		}
+		after(map);
+		System.out.println("");
 	}
 
 	private void merge_value_missing_fn_returns_int()
 	{
+		String key = "Apple";
+		Map<String, Integer> map = new ConcurrentHashMap<>();
+
+		System.out.println("merge_value_missing_fn_returns_int");
+		before(map);
+		map.merge(key, 2, (a, b) -> a + b );
+		after(map);
+		System.out.println("");
 	}
 
 	private void merge_value_missing_fn_returns_null()
 	{
+		String key = "Apple";
+		Map<String, Integer> map = new ConcurrentHashMap<>();
+
+		System.out.println("merge_value_missing_fn_returns_null");
+		before(map);
+		map.merge(key, 2, (a, b) -> null );
+		after(map);
+		System.out.println("");
 	}
 
 	private void merge_value_missing_fn_throws_exception()
 	{
-	}
+		String key = "Apple";
+		Map<String, Integer> map = new ConcurrentHashMap<>();
 
+		System.out.println("merge_value_missing_fn_throws_exception");
+		before(map);
+		try
+		{
+			map.merge(key, 2, (a, b) -> { throw new RuntimeException("Bang!"); } );
+		}
+		catch(Exception e)
+		{
+			System.out.println("Caught Exception: " + e.getLocalizedMessage());
+		}
+		after(map);
+		System.out.println("");
+	}
 
 }
