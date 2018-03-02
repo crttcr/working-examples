@@ -71,7 +71,7 @@ public class MapMergeJava
 
 		map.put(key, 10);
 
-		System.out.println("merge_value_exists__fn_returns_null");
+		System.out.println("merge_value_exists__fn_returns_nonconditional_null");
 		before(map);
 		map.merge(key, 2, (a, b) -> null );
 		after(map);

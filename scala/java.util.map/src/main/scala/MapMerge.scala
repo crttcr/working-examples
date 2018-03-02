@@ -15,6 +15,7 @@ object MapMerge
 		x.merge_value_exists__fn_returns_int
 		x.merge_value_exists__replacement_value_null
 		x.merge_value_exists__fn_returns_null
+		x.merge_value_exists__using_java_lambda
 		x.merge_value_exists__fn_throws_exception
 		x.merge_value_missing_fn_returns_int
 		x.merge_value_missing_replacement_value_null
@@ -82,6 +83,20 @@ class MapMerge
 		before(f.map)
 		f.map.merge(f.key, 2, mf)
 		after(f.map)
+		println
+	}
+
+	def merge_value_exists__using_java_lambda: Unit =
+	{
+		val key = "Cherry"
+		val map = new java.util.concurrent.ConcurrentHashMap[String, java.lang.Integer]()
+
+		map.put(key, 10)
+
+		println("merge_value_exists__using_java_lambda")
+		println("Before: " + map.toString)
+		map.merge(key, 2, StaticFunctions.nf)
+		println("After : " + map.toString)
 		println
 	}
 
