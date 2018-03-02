@@ -11,7 +11,7 @@ apply from: '/Users/reid/Coding/gradle/common/deps.gradle'
 def vScala = '2.12'
 
 task run(type: JavaExec, dependsOn: classes) {
-	main = 'Main'
+	main = 'io.example.cp.Main'
 	classpath sourceSets.main.runtimeClasspath
 	classpath configurations.runtime
 }
@@ -27,6 +27,7 @@ dependencies {
 	compile 'org.postgresql:postgresql:42.1.4'
 
 	compile 'org.slf4j:slf4j-api:1.7.5'
+	compile 'org.slf4j:slf4j-simple:1.8.0-beta1'
 
 	testCompile 'junit:junit:4.12'
 	testCompile 'org.scalatest:scalatest_2.12:3.0.4'
