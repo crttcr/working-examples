@@ -40,7 +40,9 @@ trait UserDAO
      def save(u: User)   = table.insertOrUpdate(u)
      def insert(u: User) = table += u
      
+     def count           = table.length.result
    }
+   
    
    ///////////////////////////////////
    // Public Interface              //

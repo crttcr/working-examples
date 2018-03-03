@@ -5,7 +5,7 @@ import slick.jdbc.H2Profile
 import org.apache.commons.lang3.time.StopWatch
 import io.example.datagen.Generator
 
-object TimedUserAdd extends App
+object TimedUserAddPooled extends App
 {
   val ONE_K = 100000
   
@@ -21,7 +21,7 @@ object TimedUserAdd extends App
   {
     val ux: User = generator.user(i)
     val insert = db_layer.User.insert(ux)    
-    val r2 = SlickHelper.h2_exec(insert)
+    val r2 = SlickHelper.hp_exec(insert)
   }
 
   val split = w.getNanoTime

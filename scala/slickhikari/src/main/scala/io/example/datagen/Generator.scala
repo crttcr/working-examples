@@ -2,6 +2,7 @@ package io.example.datagen
 
 import io.example.cp.DTO.User
 
+
 object Generator 
 {
   val first = Array(
@@ -43,7 +44,7 @@ class Generator {
     s"$first.$last@$d"
   }
   
-  def user(id: Int) = 
+  def user(id: Int): User = 
   {
     val (f, l) = name()
     val      e = email(f, l)
