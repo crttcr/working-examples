@@ -34,6 +34,7 @@ trait UserDAO
    {
      def  table = TableQuery[UserTable]
      def create = table.schema.create
+     def   drop = table.schema.drop
      def    all = table.result
      
      def u4id(id: Int)   = findById(id).result
@@ -41,6 +42,7 @@ trait UserDAO
      def insert(u: User) = table += u
      
      def count           = table.length.result
+     def max             = table.map(_.id).max.result
    }
    
    
