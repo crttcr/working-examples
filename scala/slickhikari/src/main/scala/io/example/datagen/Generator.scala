@@ -5,6 +5,8 @@ import io.example.cp.DTO.User
 
 object Generator 
 {
+  val random = new scala.util.Random
+  
   val first = Array(
       "Arnie", "Al", "Andy", "Amos", "Amy", "Ann", "Anne", "Annette",
       "Bill", "Buck", "Bob", "Brick", "Ben", "Beth", "Betsy", "Blithe", "Bone", "Babs", "Barbara",
@@ -16,8 +18,8 @@ object Generator
       "Anderson", "Anthony", "Adams", "Avery", "Apple", "Anesia", "Albright", "Axlerod", "Apeface",
       "Bowers", "Beavers", "Beason", "Butkis", "Beverly", "Benson", "Bennett", "Bengas", "Boniface",
       "Carter", "Carlson", "Caprioti", "Clevis", "Chinchilla", "Charles", "Conifer", "Clover", "Covis",
-      "Dick", "Dave", "David", "Dilbert", "Dan", "Dana", "Delilah", "Debbie", "Denise",
-      "Earl", "Evans", "Escher", "Edwards", "Electra",
+      "Dickens", "Davis", "Davids", "Dilbertson", "Daniels",
+      "Early", "Evans", "Escher", "Edwards", "Electra",
       "Fields", "Farmer", "Fullbright", "Flannery", "Ferris", "Franks",
       "Lee",
       "Mathis",
@@ -28,9 +30,8 @@ object Generator
         "me.com", "apple.com", "apple.org", 
         "google.com", "gmail.com", "aol.com", "bellsouth.net",
         "boogie.io", "pobox.com", "uptake.org", "cnn.com", "microsoft.com",
- 
       )
-        val random = new scala.util.Random
+
 }
 
 class Generator {
@@ -38,10 +39,10 @@ class Generator {
   
   def email(first: String, last: String): String = 
   {
-    val i = Generator.random.nextInt(domains.length)
-    val d = domains(i)
+    val d = randomDomain
+    val n = randomEmailName(first, last)
     
-    s"$first.$last@$d"
+    s"$n@$d"
   }
   
   def user(id: Int): User = 
@@ -78,5 +79,30 @@ class Generator {
     val i = Generator.random.nextInt(last.length)
     val n = last(i)
     n
+  }
+  
+  private def randomDomain: String = {
+    val i = Generator.random.nextInt(domains.length)
+    val n = domains(i)
+    n
+  }
+  
+  private def randomEmailName(f: String, l: String): String = {
+    
+    val i = Generator.random.nextInt(100)
+    if (i < 70)
+    {
+      s"$f.$l"      
+    } else if (i < 90) 
+    {
+      val letter = f.take(1)
+      s"$letter$l"
+    }
+    else 
+    {
+      val      n = Generator.random.nextInt(500)
+      val letter = f.take(1)
+      letter + l + n.toString
+    }
   }
 }

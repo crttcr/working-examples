@@ -12,29 +12,23 @@ import slick.jdbc.JdbcBackend.Database
 import io.example.datagen.Generator
 import org.apache.commons.lang3.time.StopWatch
 import io.example.util.DurationFormat
+import io.example.tally.DBName._
+import io.example.tally.Pool._
+
+import io.example.tally.ResultTabulator._
 
 object TestInsert extends App
 {
   val iterations = 1000
+
+  val w = new StopWatch
   
-  val h2_layer = new DatabaseLayer(H2Profile)
-  val pg_layer = new DatabaseLayer(PostgresProfile) 
-  
-  val h2r = new H2Runner("H2_No_Pool", h2_layer, SlickHelper.h2)
-  val hpr = new H2Runner("H2_HK_Pool", h2_layer, SlickHelper.hp)
-  val pgr = new PGRunner("PG_No_Pool", h2_layer, SlickHelper.pg)
-  val ppr = new PGRunner("PG_HK_Pool", h2_layer, SlickHelper.pp)
-  
-  val runners = List(h2r, hpr, pgr, ppr)
-  val       w = new StopWatch
-  
-  for (r <- runners)
+  for (r <- makeRunners)
   {
-    val name = r.name
-    val last = r.setup()
-    println(s"Last user [$last] from [$name]")
+    val name = r.dim.name
+    r.setup()
     w.start()
-    r.run(iterations, last)
+    r.run(iterations)
     val time = w.getNanoTime
     val dur = Duration(time, NANOSECONDS)
     val fmt = DurationFormat.format(dur)
@@ -43,26 +37,43 @@ object TestInsert extends App
     r.teardown()
   }
 
+  def makeRunners: Seq[Runner] = 
+  {
+    val h2_layer = new DatabaseLayer(H2Profile)
+    val pg_layer = new DatabaseLayer(PostgresProfile) 
+      val d1 = Dim(H2, NO_POOL, iterations)
+      val d2 = Dim(H2, HIKARI, iterations)
+      val d3 = Dim(Postgres, NO_POOL, iterations)
+      val d4 = Dim(Postgres, HIKARI, iterations)  
+      
+  val h2r = new H2Runner(d1, h2_layer, SlickHelper.h2)
+  val hpr = new H2Runner(d2, h2_layer, SlickHelper.hp)
+  val pgr = new PGRunner(d3, h2_layer, SlickHelper.pg)
+  val ppr = new PGRunner(d4, h2_layer, SlickHelper.pp)
+  
+  val runners = List(h2r, hpr, pgr, ppr)
+  
+    runners
+  }
 }
 
 trait Runner
 {
   val gen = new Generator()
   
-  def name: String
-  def setup(): Int
-  def run(iterations: Int, last: Int)
+  def dim: Dim
+  def setup(): Unit
+  def run(iterations: Int)
   def teardown(): Unit
 
 }
 
-class PGRunner(val name: String, val layer: DatabaseLayer, db: PGDB) extends Runner
+class PGRunner(val dim: Dim, val layer: DatabaseLayer, db: PGDB) extends Runner
 {
   
-  def run(iterations: Int, last: Int) = 
+  def run(iterations: Int) = 
   {
-    val range = last + 1 until last + iterations + 1
-    for (i <- range)
+    for (i <-  0 until iterations)
     {
       val      u = gen.user(i)
       val insert = layer.User.insert(u)
@@ -71,36 +82,28 @@ class PGRunner(val name: String, val layer: DatabaseLayer, db: PGDB) extends Run
     }
   }
   
-  def setup(): Int = 
+  def setup(): Unit = 
   {
     val create = layer.User.create
     val future = db.run(create)
     Await.result(future, 2 seconds)
-    
-    0
   }
   
   def teardown() = 
   {
-    val drop = layer.User.drop
-    val future = db.run(drop)
+    val program = layer.User.drop
+    val  future = db.run(program)
     Await.result(future, 2 seconds)    
   }
   
 }
 
-class H2Runner(val name: String, layer: DatabaseLayer, db: H2DB) extends Runner
+class H2Runner(val dim: Dim, layer: DatabaseLayer, db: H2DB) extends Runner
 {
-  // For H2, setup means creating the database; the table will be empty.
-  // So return 0 as last ID
-  // 
-    
-  def run(iterations: Int, last: Int) =
+  def run(iterations: Int) =
   {
-    val range = last + 1 until last + iterations + 1
-    
-    for (i <- range)
-    {
+    for (i <-  0 until iterations)
+   {
       val      u = gen.user(i)
       val insert = layer.User.insert(u)
       val      f = db.run(insert)
@@ -108,19 +111,17 @@ class H2Runner(val name: String, layer: DatabaseLayer, db: H2DB) extends Runner
     }
   }
   
-  def setup(): Int = 
+  def setup(): Unit = 
   {
     val create = layer.User.create
     val future = db.run(create)
     Await.result(future, 2 seconds)
-    
-    0
   }
   
   def teardown() = 
   {
-    val drop = layer.User.drop
-    val future = db.run(drop)
+    val program = layer.User.drop
+    val  future = db.run(program)
     Await.result(future, 2 seconds)    
   }
 }
