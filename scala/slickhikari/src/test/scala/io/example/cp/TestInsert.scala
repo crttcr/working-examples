@@ -66,8 +66,8 @@ object TestInsert extends App {
       {
          val r = d.db match
          {
-            case DBName.H2       => if (d.io == IOStyle.Async) new AsyncRunner(d, h2_dao, SlickHelper.h2) else new BlockRunner(d, h2_dao, SlickHelper.h2)
-            case DBName.Postgres => if (d.io == IOStyle.Async) new AsyncRunner(d, pg_dao, SlickHelper.pg) else new BlockRunner(d, pg_dao, SlickHelper.pg)
+            case DBName.H2       => if (d.io == IOStyle.Async) new AsyncRunner(d, h2_dao, SlickHelper.hp) else new BlockRunner(d, h2_dao, SlickHelper.h2)
+            case DBName.Postgres => if (d.io == IOStyle.Async) new AsyncRunner(d, pg_dao, SlickHelper.pp) else new BlockRunner(d, pg_dao, SlickHelper.pg)
          }
 
          runners = r :: runners
