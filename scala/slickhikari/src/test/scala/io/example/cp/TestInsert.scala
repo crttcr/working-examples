@@ -23,6 +23,9 @@ import slick.dbio.DBIOAction
 import java.util.concurrent.atomic.AtomicInteger
 import scala.util.Success
 import scala.util.Failure
+import io.example.tally.DBName
+import io.example.tally.Pool
+import io.example.tally.IOStyle
 
 object TestInsert extends App {
    val iterations = 1000
@@ -46,24 +49,27 @@ object TestInsert extends App {
    {
       val h2_dao = new DatabaseLayer(H2Profile)
       val pg_dao = new DatabaseLayer(PostgresProfile)
+      
       val d1 = Dim(H2, NO_POOL, Block)
       val d2 = Dim(H2, HIKARI, Block)
-      val d3 = Dim(Postgres, NO_POOL, Block)
-      val d4 = Dim(Postgres, HIKARI, Block)
-      val d5 = Dim(Postgres, HIKARI, Async)
-      val d6 = Dim(H2, HIKARI, Async)
+      val d3 = Dim(H2, NO_POOL, Async)
+      val d4 = Dim(H2, HIKARI, Async)
+      val d5 = Dim(Postgres, NO_POOL, Block)
+      val d6 = Dim(Postgres, HIKARI, Block)
+      val d7 = Dim(Postgres, NO_POOL, Async)
+      val d8 = Dim(Postgres, HIKARI, Async)
 
+      val r1 = new BlockRunner(d1, h2_dao, SlickHelper.h2)
+      val r2 = new BlockRunner(d2, h2_dao, SlickHelper.hp)
+      val r3 = new AsyncRunner(d3, h2_dao, SlickHelper.h2)
+      val r4 = new AsyncRunner(d4, h2_dao, SlickHelper.hp)
+      val r5 = new BlockRunner(d5, pg_dao, SlickHelper.pg)
+      val r6 = new BlockRunner(d6, pg_dao, SlickHelper.pp)
+      val r7 = new AsyncRunner(d7, pg_dao, SlickHelper.pg)
+      val r8 = new AsyncRunner(d8, pg_dao, SlickHelper.pp)
 
-      val h2r = new H2Runner(d1, h2_dao, SlickHelper.h2)
-      val hpr = new H2Runner(d2, h2_dao, SlickHelper.hp)
-      val pgr = new PGRunner(d3, pg_dao, SlickHelper.pg)
-      val ppr = new PGRunner(d4, pg_dao, SlickHelper.pp)
-      val ppa = new AsyncRunner(d5, pg_dao, SlickHelper.pp)
-      val hpa = new AsyncRunner(d6, h2_dao, SlickHelper.h2)
-
-      List(h2r, hpr, pgr, ppr, ppa, hpa)
+      List(r1, r2, r3, r4, r5, r6, r7, r8)
    }
-
 }
 
 trait Runner {
@@ -76,7 +82,34 @@ trait Runner {
 
 }
 
+class BlockRunner(val dim: Dim, val dao: DatabaseLayer, dba: Any) extends Runner {
+   val db = if (dba.isInstanceOf[PGDB]) dba.asInstanceOf[PGDB] else dba.asInstanceOf[H2DB]
 
+   def run(iterations: Int) =
+      {
+         for (i <- 0 until iterations) {
+            val u = gen.user(i)
+            val insert = dao.User.insert(u)
+            val f = db.run(insert)
+            val x = Await.result(f, 2 seconds)
+         }
+      }
+
+   def setup(): Unit =
+   {
+      val p = dao.User.create
+      val f = db.run(p)
+      Await.result(f, 2 seconds)
+   }
+
+   def teardown() =
+   {
+      val p = dao.User.drop
+      val f = db.run(p)
+      Await.result(f, 2 seconds)
+   }
+
+}
 class AsyncRunner(val dim: Dim, val dao: DatabaseLayer, dba: Any) extends Runner {
 
    val db = if (dba.isInstanceOf[PGDB]) dba.asInstanceOf[PGDB] else dba.asInstanceOf[H2DB]
