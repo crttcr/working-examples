@@ -47,13 +47,18 @@ object TestInsert extends App {
       val d2 = Dim(H2, HIKARI, Block)
       val d3 = Dim(Postgres, NO_POOL, Block)
       val d4 = Dim(Postgres, HIKARI, Block)
+      val d5 = Dim(Postgres, HIKARI, Async)
+      val d6 = Dim(H2, HIKARI, Async)
+
 
       val h2r = new H2Runner(d1, h2_dao, SlickHelper.h2)
       val hpr = new H2Runner(d2, h2_dao, SlickHelper.hp)
       val pgr = new PGRunner(d3, pg_dao, SlickHelper.pg)
       val ppr = new PGRunner(d4, pg_dao, SlickHelper.pp)
+      val ppa = new AsyncRunner(d5, pg_dao, SlickHelper.pp)
+      val hpa = new AsyncRunner(d6, h2_dao, SlickHelper.h2)
 
-      List(h2r, hpr, pgr, ppr)
+      List(h2r, hpr, pgr, ppr, ppa, hpa)
    }
 
 }
