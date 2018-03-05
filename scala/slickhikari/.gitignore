@@ -1,2 +1,4 @@
-## Eclipse binary directory
+## Eclipse directories
 bin
+.cache-main
+.cache-tests
