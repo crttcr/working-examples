@@ -45,13 +45,17 @@ object ResultTabulator
         }
   
   
-   case class Dim(db: DBName, pool: Pool, io: IOStyle)
+   case class Dim(db: DBName, pool: Pool, io: IOStyle) extends Ordered[Dim]
    {   
       def name = List(db, pool).mkString(".")
-       override def toString() = 
+    override def toString() = 
     {
      f"[$db%8s][$pool%7s][$io%5s]"
      }
+      
+     import scala.math.Ordered.orderingToOrdered
+
+     def compare(that: Dim): Int = (this.db, this.pool, this.io) compare (that.db, that.pool, that.io)
   }
   
   def apply() = new ResultTabulator()
@@ -105,18 +109,17 @@ class ResultTabulator
   
   def report: String =
   {
-     val es = results.toSeq  // .sortBy(_._1)
-     val sb = new StringBuilder()
+     val keys = results.keys.toSeq.sorted
+     val   sb = new StringBuilder()
      
      sb.append("                                                             ----------OPS/SECOND---------      PERF\n")
      sb.append("-DATABASE- --CP--- --IO--      RUNS   INSERTS   TOTAL_NANOS      BEST       AVG     WORST     FACTOR\n")
      
-     for (entry <- es) 
-     { 
-        val (d, l) = entry
-        
-        val st = stats(l)
-        sb.append(d)
+     for (k <- keys)
+     {
+        val v = results(k)
+        val st = stats(v)
+        sb.append(k)
         sb.append(" :: ")
         sb.append(st)
         sb.append("\n")
