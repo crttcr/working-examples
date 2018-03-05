@@ -20,9 +20,12 @@ import io.example.tally.IOStyle._
 import io.example.tally.ResultTabulator
 import io.example.tally.ResultTabulator._
 import slick.dbio.DBIOAction
+import java.util.concurrent.atomic.AtomicInteger
+import scala.util.Success
+import scala.util.Failure
 
 object TestInsert extends App {
-   val iterations = 100
+   val iterations = 1000
 
    val w = new StopWatch
    val rt = ResultTabulator()
@@ -70,6 +73,50 @@ trait Runner {
    def setup(): Unit
    def run(iterations: Int)
    def teardown(): Unit
+
+}
+
+
+class AsyncRunner(val dim: Dim, val dao: DatabaseLayer, dba: Any) extends Runner {
+
+   val db = if (dba.isInstanceOf[PGDB]) dba.asInstanceOf[PGDB] else dba.asInstanceOf[H2DB]
+   
+   val done = new AtomicInteger(0);
+   implicit val ec = scala.concurrent.ExecutionContext.global
+   
+   def run(iterations: Int) =
+   {
+      for (i <- 0 until iterations) {
+         val u = gen.user(i)
+         val insert = dao.User.insert(u)
+         val f = db.run(insert)
+        
+         f.onComplete
+         {
+            case Success(n)  => done.incrementAndGet
+            case Failure(ex) => done.incrementAndGet ; println(ex.getMessage)
+         }
+      }
+      
+      while (done.get < iterations)
+      {
+         Thread.sleep(1L)
+      }
+    }
+
+   def setup(): Unit =
+   {
+      val p = dao.User.create
+      val f = db.run(p)
+      Await.result(f, 2 seconds)
+   }
+
+   def teardown() =
+   {
+      val p = dao.User.drop
+      val f = db.run(p)
+      Await.result(f, 2 seconds)
+   }
 
 }
 
