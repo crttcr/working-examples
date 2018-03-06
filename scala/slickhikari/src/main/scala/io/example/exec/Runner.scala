@@ -40,8 +40,8 @@ class AsyncRunner(val dim: Dim, val dao: DatabaseLayer, dba: Any) extends Runner
    {
       for (i <- 0 until iterations) {
          val u = gen.user(i)
-         val insert = dao.User.insert(u)
-         val f = db.run(insert)
+         val p = dao.User.insert(u)
+         val f = db.run(p)
         
          f.onComplete
          {

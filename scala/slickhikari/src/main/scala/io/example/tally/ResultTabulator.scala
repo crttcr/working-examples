@@ -107,23 +107,46 @@ class ResultTabulator
       Stats(runs, tits, tnan, th_best, th_avg, th_worst, pct_base)
   }
   
+  def computeFactors(stats: Seq[(Dim, Stats)]): Seq[(Dim, Stats)] =
+  {
+    val (ps, hs) = stats.partition(_._1.db == Postgres)
+    
+    val min_ps = ps.map(_._2.ops_per_sec_avg).min
+    val min_hs = hs.map(_._2.ops_per_sec_avg).min
+    
+    def factorate(stats: Stats, min: Float): Stats = {
+      val  found = stats.ops_per_sec_avg
+      val   diff = found - min
+      val factor = 1 + diff / min
+      
+      stats.copy(percent_of_best = factor)
+    }
+    
+    val ps_revised = ps.map(t => (t._1, factorate(t._2, min_ps)))
+    val hs_revised = hs.map(t => (t._1, factorate(t._2, min_hs))) 
+    
+    ps_revised ++ hs_revised
+  }
+  
   def report: String =
   {
-     val keys = results.keys.toSeq.sorted
-     val   sb = new StringBuilder()
+    val tuples = results.toSeq
+    val revised = tuples.map(t => (t._1, stats(t._2)))
+    val factored = computeFactors(revised)
+    val sorted = factored.sortBy(_._1)
+        
+    val   sb = new StringBuilder()
      
      sb.append("                                                             ----------OPS/SECOND---------      PERF\n")
      sb.append("-DATABASE- --CP--- --IO--      RUNS   INSERTS   TOTAL_NANOS      BEST       AVG     WORST     FACTOR\n")
-     
-     for (k <- keys)
+     for (t <- sorted)
      {
-        val v = results(k)
-        val st = stats(v)
-        sb.append(k)
+        sb.append(t._1)
         sb.append(" :: ")
-        sb.append(st)
+        sb.append(t._2)
         sb.append("\n")
      }
+
     sb.toString
   }
 }

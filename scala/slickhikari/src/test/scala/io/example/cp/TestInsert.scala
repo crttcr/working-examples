@@ -31,18 +31,23 @@ import io.example.exec._
 
 
 object TestInsert extends App {
-   val iterations = 500
    val          w = new StopWatch
    val         rt = ResultTabulator()
 
-   for (r <- makeRunners) {
-      val name = r.dim.name
+   def runit(r: Runner, its: Int) = 
+   {
       r.setup()
       w.start()
-      r.run(iterations)
-      rt.collect(r.dim, w.getNanoTime, iterations)
+      r.run(its)
+      rt.collect(r.dim, w.getNanoTime, its)
       w.reset()
       r.teardown()
+   }
+   
+   for (r <- makeRunners) {
+     runit(r,  500)
+     runit(r, 1000)
+     runit(r, 1000)
    }
    
    println(rt.report)
