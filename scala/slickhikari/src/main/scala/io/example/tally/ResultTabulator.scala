@@ -128,25 +128,17 @@ class ResultTabulator
     ps_revised ++ hs_revised
   }
   
-  def report: String =
-  {
-    val tuples = results.toSeq
-    val revised = tuples.map(t => (t._1, stats(t._2)))
-    val factored = computeFactors(revised)
-    val sorted = factored.sortBy(_._1)
-        
-    val   sb = new StringBuilder()
+   def report: String =
+   {
+      val  revised = results.toSeq.map(t => (t._1, stats(t._2)))
+      val factored = computeFactors(revised)
+      val   sorted = factored.sortBy(_._1)
+      val       sb = new StringBuilder()
      
-     sb.append("                                                             ----------OPS/SECOND---------      PERF\n")
-     sb.append("-DATABASE- --CP--- --IO--      RUNS   INSERTS   TOTAL_NANOS      BEST       AVG     WORST     FACTOR\n")
-     for (t <- sorted)
-     {
-        sb.append(t._1)
-        sb.append(" :: ")
-        sb.append(t._2)
-        sb.append("\n")
-     }
+      sb.append("                                                             ----------OPS/SECOND---------      PERF\n")
+      sb.append("-DATABASE- --CP--- --IO--      RUNS   INSERTS   TOTAL_NANOS      BEST       AVG     WORST     FACTOR\n")
+      sorted.map(_.productIterator.mkString("", " :: ", "\n")).foreach(sb.append)
 
-    sb.toString
-  }
+      sb.toString
+   }
 }
