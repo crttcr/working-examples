@@ -3,6 +3,7 @@ package io.example.cp
 import DTO._
 
 import slick.jdbc.PostgresProfile
+import io.example.util.SlickElf
 
 object AddUserPostgres extends App
 {
@@ -17,7 +18,7 @@ object AddUserPostgres extends App
   
 //  val r1 = SlickHelper.pg_exec(create)
 //  val r2 = SlickHelper.pg_exec(insert)
-  val r3 = SlickHelper.pg_exec(select)
+  val r3 = SlickElf.pg_exec(select)
     
 //  println(s"Create: [$r1]")
 //  println(s"Insert: [$r2]")

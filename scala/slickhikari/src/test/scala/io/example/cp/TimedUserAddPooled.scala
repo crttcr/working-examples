@@ -4,6 +4,7 @@ import DTO._
 import slick.jdbc.H2Profile
 import org.apache.commons.lang3.time.StopWatch
 import io.example.datagen.Generator
+import io.example.util.SlickElf
 
 object TimedUserAddPooled extends App
 {
@@ -13,7 +14,7 @@ object TimedUserAddPooled extends App
   val generator = new Generator
   
   val create = db_layer.User.create
-  val r1 = SlickHelper.hp_exec(create)
+  val r1 = SlickElf.hp_exec(create)
  
   val w = StopWatch.createStarted()
 
@@ -21,13 +22,13 @@ object TimedUserAddPooled extends App
   {
     val ux: User = generator.user(i)
     val insert = db_layer.User.insert(ux)    
-    val r2 = SlickHelper.hp_exec(insert)
+    val r2 = SlickElf.hp_exec(insert)
   }
 
   val split = w.getNanoTime
   
   val select = db_layer.User.count
-  val r3 = SlickHelper.hp_exec(select)
+  val r3 = SlickElf.hp_exec(select)
   val end = w.getNanoTime;
 
   println(s"Added [$r3] users in [$split] nanos. Total time: [$end]")

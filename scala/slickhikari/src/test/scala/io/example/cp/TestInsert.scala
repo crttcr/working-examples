@@ -28,6 +28,7 @@ import io.example.tally.DBName
 import io.example.tally.Pool
 import io.example.tally.IOStyle
 import io.example.exec._
+import io.example.util.SlickElf
 
 
 object TestInsert extends App {
@@ -45,9 +46,11 @@ object TestInsert extends App {
    }
    
    for (r <- makeRunners) {
-     runit(r,  500)
-     runit(r, 1000)
-     runit(r, 1000)
+     runit(r,  2000)
+//     runit(r, 10000)
+//    runit(r,   500)
+//     runit(r,  1000)
+//     runit(r,  1000)
    }
    
    println(rt.report)
@@ -71,10 +74,10 @@ object TestInsert extends App {
          val r = d.db match
          {
             case DBName.H2       => 
-               val helper = if (d.pool == HIKARI) SlickHelper.hp else SlickHelper.h2
+               val helper = if (d.pool == HIKARI) SlickElf.hp else SlickElf.h2
                if (d.io == IOStyle.Async) new AsyncRunner(d, h2_dao, helper) else new BlockRunner(d, h2_dao, helper)
             case DBName.Postgres => 
-               val helper = if (d.pool == HIKARI) SlickHelper.pp else SlickHelper.pg
+               val helper = if (d.pool == HIKARI) SlickElf.pp else SlickElf.pg
                if (d.io == IOStyle.Async) new AsyncRunner(d, pg_dao, helper) else new BlockRunner(d, pg_dao, helper)
          }
 
