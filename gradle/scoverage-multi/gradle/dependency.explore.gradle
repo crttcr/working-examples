@@ -1,0 +1,19 @@
+
+	// Use this task
+	// <pre>
+	// $ ./gradlew allDeps
+	// </pre>
+	// to see all dependencies across all modules
+	//
+	task allDeps(type: DependencyReportTask) {}
+
+	// Use this task to track down suspicious/unexpected dependencies in a project
+	// NOTE: The 2 parameters are mandatory.
+	// Config values: runtime, testRuntime, compile, testCompile, etc.
+	//
+	// <pre>
+	// $ ./gradlew allDepInsight --configuration testRuntime --dependency org.slf4j:slf4j-simple
+	// </pre>
+	// e.g. where does  slf4j-simple artifact get brought in ???
+	//
+	task allDepInsight(type: DependencyInsightReportTask) << {}

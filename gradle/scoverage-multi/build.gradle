@@ -9,6 +9,7 @@ plugins {
 //	id 'org.scoverage'
 }
 
+apply from: "${rootDir}/gradle/dependency.explore.gradle"
 apply from: "${rootDir}/gradle/test-output.gradle"
 
 def scalaVersion = System.getProperty("scala.binary.version", /* default = */ "2.12.4")
