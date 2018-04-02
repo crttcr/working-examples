@@ -1,0 +1,19 @@
+plugins {
+	id 'scala'
+
+// It is necessary to not include the SCOVERAGE plugin in the root project
+// Each of the subprojects that need scala coverage will add the plugin in
+// their respective build files.
+//
+//	id 'org.scoverage' version '2.1.0'
+//	id 'org.scoverage'
+}
+
+apply from: "${rootDir}/gradle/test-output.gradle"
+
+def scalaVersion = System.getProperty("scala.binary.version", /* default = */ "2.12.4")
+
+
+repositories {
+   mavenCentral()
+}
