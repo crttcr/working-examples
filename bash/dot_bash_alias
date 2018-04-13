@@ -20,8 +20,15 @@ alias ff='find . -name '
 alias gr='gradle'
 
 ## Possibly the most useful alias since sliced bread
+## (and it's little brother)
 ##
 alias hg="history | grep"
+alias eg="env | grep"
+
+## Docker
+##
+alias dstopall='docker stop $(docker ps -q)'
+alias drmall='docker rm $(docker ps -a -q)'
 
 ## System utils
 ##
