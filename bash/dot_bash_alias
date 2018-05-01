@@ -20,10 +20,11 @@ alias ff='find . -name '
 alias gr='gradle'
 
 ## Possibly the most useful alias since sliced bread
-## (and it's little brother)
+## (and its siblings)
 ##
-alias hg="history | grep"
-alias eg="env | grep"
+alias hg="history | grep "
+alias eg="env | grep "
+alias ag="alias | grep "
 
 ## Docker
 ##
