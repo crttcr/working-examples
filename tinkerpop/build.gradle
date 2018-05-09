@@ -1,0 +1,31 @@
+plugins {
+	id 'java-library'
+	id 'eclipse'
+}
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+ext
+{
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
+
+apply from: "${rootDir}/gradle/dependency.explore.gradle"
+apply from: "${rootDir}/gradle/test-output.gradle"
+
+
+dependencies {
+	// Logging
+	//
+	api 'org.slf4j:slf4j-api:1.7+'
+
+	implementation 'org.apache.tinkerpop:gremlin-core:3.3.2'
+	implementation 'org.apache.tinkerpop:tinkergraph-gremlin:3.3.2'
+
+	testImplementation 'junit:junit:4.12'
+	testImplementation 'org.mockito:mockito-core:2.18.3'
+}
