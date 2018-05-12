@@ -35,7 +35,4 @@ public class Program {
 	
     }
 
-    public boolean someLibraryMethod() {
-        return true;
-    }
 }
