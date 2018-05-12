@@ -63,6 +63,11 @@ SED_FILE=${GRADLE_SCRIPT_DIR}/templates/build.gradle.single.${LANGUAGE_MODE}.sed
 
 sed -f $SED_FILE < $BUILD_TEMPLATE > build.gradle
 
+## Copy common Gradle files
+##
+cp ${GRADLE_SCRIPT_DIR}/templates/test-output.gradle gradle
+cp ${GRADLE_SCRIPT_DIR}/templates/dependency.explore.gradle gradle
+
 ## Bring in starting .gitignore file
 ##
 cp ${GRADLE_SCRIPT_DIR}/templates/dot_gitignore ./.gitignore

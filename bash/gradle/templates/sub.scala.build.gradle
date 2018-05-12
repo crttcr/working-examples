@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+
+version = "0.1"
+
+ext
+{
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
+
+repositories 
+{
+	mavenCentral()
+}
+
+dependencies 
+{
+	// Scala Library
+	// 
+   compile 'org.scala-lang:scala-library:2.12+'
+
+	// Logging
+	// 
+	compile 'org.slf4j:slf4j-api:1.7+'
+	compile 'org.slf4j:slf4j-simple:1.7+'
+
+	// Testing
+	//
+	testCompile 'junit:junit:4+'
+	testCompile 'org.mockito:mockito-all:2+'
+}
+

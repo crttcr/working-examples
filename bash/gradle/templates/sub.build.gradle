@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+version = "0.1"
+
+ext
+{
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
+
+repositories 
+{
+	mavenCentral()
+}
+
+dependencies 
+{
+	compile 'org.slf4j:slf4j-api:1.7+'
+
+	testCompile 'junit:junit:4+'
+	testCompile 'org.mockito:mockito-all:2+'
+}
+

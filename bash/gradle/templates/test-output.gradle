@@ -1,0 +1,44 @@
+tasks.withType(Test) {
+	testLogging {
+		exceptionFormat = 'full'
+//        showStandardStreams true
+//             events 'started', 'passed', 'failed', 'skipped'
+	}
+
+	def indentationLevel = 0
+
+	ext.getIndentation = { highlight ->
+		def character = (highlight) ? "> > " : "    "
+		return "${character * indentationLevel}"
+	}
+
+	beforeSuite { desc ->
+		println "\n${getIndentation(false)}SUITE: $desc.name"
+
+		indentationLevel++
+	}
+
+	beforeTest { desc ->
+//            logger.lifecycle("${getIndentation(false)}${desc.name} -> STARTING")
+//            printf "%s%s (STARTING)\n", getIndentation(false), desc.name
+	}
+
+	afterTest { desc, result ->
+		def highlight = (result.getResultType() != TestResult.ResultType.SUCCESS) ? true : false
+//            logger.lifecycle("${getIndentation(highlight)}${desc.name} -> ${result} (" + (result.getEndTime() - result.getStartTime()) + "ms)")
+		printf "%s%-102s -> %-7s %5dms\n", getIndentation(highlight), desc.name, result, (result.getEndTime() - result.getStartTime())
+	}
+
+	afterSuite { desc, result ->
+		indentationLevel--
+
+		def highlight = (result.successfulTestCount < result.testCount) ? true : false
+		def splitClassName = desc.getName().split("\\.")
+		def className = (splitClassName.length == 1) ? desc.getName() : splitClassName[splitClassName.length - 1]
+		println "${getIndentation(highlight)}RESULTS: Tests: ${result.testCount}, Successes: ${result.successfulTestCount}, Failures: ${result.failedTestCount}, Skipped: ${result.skippedTestCount} ($className)\n"
+	}
+
+	reports {
+		html.enabled = true
+	}
+}
