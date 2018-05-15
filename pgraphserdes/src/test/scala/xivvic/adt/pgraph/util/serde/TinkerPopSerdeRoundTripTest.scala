@@ -8,6 +8,8 @@ import org.scalatest.junit.JUnitRunner
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.T
+import xivvic.adt.pgraph.util.TinkerPopElf
+import org.apache.tinkerpop.gremlin.structure.Vertex
 
 @RunWith(classOf[JUnitRunner])
 class TinkerSerdeRoundTripTest
@@ -37,7 +39,7 @@ class TinkerSerdeRoundTripTest
 	}
 
 	////////////////////////////
-	// Helpers //
+	// Helpers                //
 	////////////////////////////
 
 	def sampleGraph(v: Int, e: Int): Graph =
@@ -56,15 +58,30 @@ class TinkerSerdeRoundTripTest
 	{
 		if (a == null && b == null) return;
 		if (a == null || b == null) fail("One graph is null, the other is not");
+
+		val va = TinkerPopElf.allVertices(a)
+		val vb = TinkerPopElf.allVertices(b)
+
+		assertVertexCardinality(va, vb);
 	}
+
+	def assertVertexCardinality(a: Array[Vertex], b: Array[Vertex]): Unit =
+	{
+		if (a == null && b == null) return;
+		if (a == null || b == null) fail("One array is null, the other is not");
+
+		if (a.length != b.length)
+		{
+			val fmt = f"Graph: mismatche vertex cardinality: (|a| = ${a.length}%d, |b| = ${b.length}%d)";
+			fail(fmt);
+		}
+	}
+
 	/*
 
-	Vertex[] va = TinkerElf.allVertices(a);
-	Vertex[] vb = TinkerElf.allVertices(b);
 	Edge[]   ea = TinkerElf.allEdges(a);
 	Edge[]   eb = TinkerElf.allEdges(b);
 
-	assertVertexCardinality(va, vb);
 	assertEdgeCardinality(ea, eb);
 
 	// FIXME: Need to test structure and content of graph, not just cardinality
