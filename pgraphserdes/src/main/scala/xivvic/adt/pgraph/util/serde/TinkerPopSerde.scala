@@ -5,11 +5,12 @@ import org.apache.tinkerpop.gremlin.structure.{Vertex => TVertex}
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
 import xivvic.adt.pgraph.util.TinkerPopElf
 import org.apache.tinkerpop.gremlin.structure.{Vertex => TVertex}
-import src.main.proto.PGraph.Builder
-import src.main.proto.PGraph
-import src.main.proto.{Vertex => PVertex}
-import src.main.proto.{Edge => PEdge}
+import xivvic.proto.adt.pgraph.PGraph.Builder
+import xivvic.proto.adt.pgraph.PGraph
+import xivvic.proto.adt.pgraph.{Vertex => PVertex}
+import xivvic.proto.adt.pgraph.{Edge => PEdge}
 import org.apache.tinkerpop.gremlin.structure.T
+import xivvic.adt.pgraph.convert.Tinker2Protobuf
 
 /**
  * TinkerPopSerde converts a TinkerGraph instance to a serialized form
@@ -19,23 +20,17 @@ object TinkerPopSerde
 {
 	def serialize(g: Graph): Array[Byte] =
 	{
-		val builder: Builder = PGraph.newBuilder()
-
-		// Note: It's possible to create a vertex prototype and reuse that
-		//
-		// 	    Vertex  proto = Vertex.newBuilder().addLabel("PERSON").build();
-		//        src.main.proto.Vertex pv = new src.main.proto.Vertex.Builder().build();
-
-		def cf(v: TVertex): Unit =
-		{
-			val label = v.label()
-			val pv = PVertex.newBuilder().addLabel(label).build()
-			builder.addV(pv)
-		}
-
 		val vs = TinkerPopElf.allVertices(g)
+		val es = TinkerPopElf.allEdges(g)
 
-		vs.foreach(cf)
+		val   builder = PGraph.newBuilder()
+		val converter = new Tinker2Protobuf(builder)
+
+		def     vcf = converter.vcf()
+		def     ecf = converter.ecf()
+
+		vs.foreach(vcf)
+		es.foreach(ecf)
 
 		val  pg = builder.build()
 		val ser = pg.toByteArray()

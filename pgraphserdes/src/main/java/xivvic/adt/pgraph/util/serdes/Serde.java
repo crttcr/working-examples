@@ -4,8 +4,6 @@ import org.apache.tinkerpop.gremlin.structure.Graph;
 //import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
 
-//import src.main.proto.Vertex;
-//import xivvic.adt.pgraph.util.TinkerElf;
 
 /**
  * Serde provides serialization and deserialization of property graphs from and
@@ -22,7 +20,7 @@ public class Serde
 	{
 	    Vertex  proto = Vertex.newBuilder().addLabel("PERSON").build();
 
-	    src.main.proto.Vertex pv = new src.main.proto.Vertex.Builder().build();
+	    xivvic.proto.adt.pgraph.Vertex pv = new xivvic.proto.adt.pgraph.Vertex.Builder().build();
 		 
 	    
 	}
