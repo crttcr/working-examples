@@ -4,7 +4,7 @@ import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.{Vertex => TVertex}
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
 
-object TinkerSerde
+object TinkerPopSerde
 {
 	def serialize(g: Graph): Array[Byte] = Array()
 

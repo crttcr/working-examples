@@ -8,11 +8,11 @@ import org.scalatest.junit.JUnitRunner
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 
 @RunWith(classOf[JUnitRunner])
-class TinkerSerdeDegenerateInputTest
+class TinkerPopSerdeDegenerateInputTest
 	extends FlatSpecLike
 		with Matchers
 {
-	import TinkerSerde._
+	import TinkerPopSerde._
 
 	behavior of "Serialize"
 

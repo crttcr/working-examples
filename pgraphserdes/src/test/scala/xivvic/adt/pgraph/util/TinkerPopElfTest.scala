@@ -1,7 +1,7 @@
 package xivvic.adt.pgraph.util
 
 import org.junit.runner.RunWith
-import xivvic.adt.pgraph.util.serde.TinkerSerde
+import xivvic.adt.pgraph.util.serde.TinkerPopSerde
 import org.scalatest.Matchers
 import org.scalatest.FlatSpecLike
 import org.scalatest.junit.JUnitRunner

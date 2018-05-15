@@ -14,7 +14,7 @@ class TinkerSerdeRoundTripTest
 	extends FlatSpecLike
 		with Matchers
 {
-	import TinkerSerde._
+	import TinkerPopSerde._
 
 	behavior of "Deserialize(Serialize(g))"
 
