@@ -1,7 +1,8 @@
 ==/Users/reid/Git/working-examples/pgraphserdes ==
-# Project Title
+# PGraphSerdes
 
-One Paragraph of project description goes here
+Property Graph serializer / deserializer, using TinkerPop as the abstraction
+layer above the actual graph store.
 
 ## Getting Started
 

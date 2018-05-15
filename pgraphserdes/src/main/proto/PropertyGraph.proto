@@ -1,0 +1,40 @@
+syntax= "proto3";
+
+package proto;
+
+option java_package = "src.main.proto";
+option java_outer_classname = "PropertyGraphProtos";
+option java_multiple_files = true;
+
+message Property {
+
+	enum Type {
+		STRING  = 0;
+		INTEGER = 1;
+		FLOAT   = 2;
+		BOOLEAN = 3;
+	}
+	
+	string name  = 1;
+	string value = 2;
+	Type    type = 3;
+}
+	
+message Vertex {
+	int32                id =  1;
+	repeated string   label =  2;
+	repeated Property     p = 10;
+}
+	
+message Edge {
+	int32                   id =  1;
+	string            rel_type =  2;
+	int32                 from =  3;
+	int32                   to =  4;
+	repeated Property        p = 10;
+}
+
+message PGraph {
+	repeated Vertex v = 1;
+	repeated Edge   e = 2;
+}
