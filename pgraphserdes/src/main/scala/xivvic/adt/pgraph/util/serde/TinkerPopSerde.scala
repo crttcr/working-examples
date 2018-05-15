@@ -11,6 +11,7 @@ import xivvic.proto.adt.pgraph.{Vertex => PVertex}
 import xivvic.proto.adt.pgraph.{Edge => PEdge}
 import org.apache.tinkerpop.gremlin.structure.T
 import xivvic.adt.pgraph.convert.Tinker2Protobuf
+import xivvic.adt.pgraph.convert.Protobuf2Tinker
 
 /**
  * TinkerPopSerde converts a TinkerGraph instance to a serialized form
@@ -41,17 +42,18 @@ object TinkerPopSerde
 	def deserialize(bs: Array[Byte]): Graph =
 	{
 		val rv = TinkerGraph.open()
-
 		if (bs == null || bs.length == 0) return rv
 
 	   val pg = PGraph.parseFrom(bs);
 		val vs = pg.getVList
+		val es = pg.getEList
 
-		vs.forEach {
-			pv =>
-			val label = pv.getLabel(0)
-			val    tv = rv.addVertex(T.label, label)
-		}
+		val converter = new Protobuf2Tinker(rv)
+		def       vcf = converter.vcf()
+		def       ecf = converter.ecf()
+
+		vs.forEach { pv => { vcf(pv) } }
+		es.forEach { ev => { ecf(ev) } }
 
 		rv
 	}
