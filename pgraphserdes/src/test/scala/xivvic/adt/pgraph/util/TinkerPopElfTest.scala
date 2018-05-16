@@ -16,7 +16,7 @@ class TinkerPopElfTest
 {
 	import TinkerPopElf._
 
-	behavior of "AllVertices"
+	behavior of "AllVertices: "
 
 	it should "return an empty array when given a null graph" in
 	{
@@ -26,7 +26,7 @@ class TinkerPopElfTest
 
 		// Act
 		//
-		val vs = TinkerElf.allVertices(g)
+		val vs = TinkerPopElf.allVertices(g)
 
 		// Assert
 		//
@@ -42,7 +42,7 @@ class TinkerPopElfTest
 
 		// Act
 		//
-		val vs = TinkerElf.allVertices(g)
+		val vs = TinkerPopElf.allVertices(g)
 
 		// Assert
 		//
@@ -59,7 +59,7 @@ class TinkerPopElfTest
 
 		// Act
 		//
-		val vs = TinkerElf.allVertices(g)
+		val vs = TinkerPopElf.allVertices(g)
 
 		// Assert
 		//
@@ -67,7 +67,26 @@ class TinkerPopElfTest
 		vs.length should be (1)
 	}
 
-	behavior of "AllEdges"
+	it should "return an array with three vertices when given a graph with three vertices" in
+	{
+		// Arrange
+		//
+		val  g = TinkerGraph.open
+		val v1 = g.addVertex(T.label, "service",      T.id, 1.asInstanceOf[Object], "name", "RDC", "topic", "strategic_data_in");
+		val v2 = g.addVertex(T.label, "server",       T.id, 2.asInstanceOf[Object], "IP", "10.0.1.100");
+		val v3 = g.addVertex(T.label, "kafka_broker", T.id, 3.asInstanceOf[Object], "url", "kafka.dev.uptake.com");
+
+		// Act
+		//
+		val vs = TinkerPopElf.allVertices(g)
+
+		// Assert
+		//
+		vs should not be (null)
+		vs.length should be (3)
+	}
+
+	behavior of "AllEdges   :"
 
 	it should "return an empty array when given a null graph" in
 	{
@@ -77,7 +96,7 @@ class TinkerPopElfTest
 
 		// Act
 		//
-		val es = TinkerElf.allEdges(g)
+		val es = TinkerPopElf.allEdges(g)
 
 		// Assert
 		//
@@ -93,7 +112,7 @@ class TinkerPopElfTest
 
 		// Act
 		//
-		val es = TinkerElf.allEdges(g)
+		val es = TinkerPopElf.allEdges(g)
 
 		// Assert
 		//
@@ -111,12 +130,33 @@ class TinkerPopElfTest
 
 		// Act
 		//
-		val vs = TinkerElf.allEdges(g)
+		val vs = TinkerPopElf.allEdges(g)
 
 		// Assert
 		//
 		vs should not be (null)
 		vs.length should be (1)
+	}
+
+	it should "return an array with three edge when given a graph with three edges" in
+	{
+		// Arrange
+		//
+		val  g = TinkerGraph.open
+		val v1 = g.addVertex(T.label, "service",      T.id, 1.asInstanceOf[Object], "name", "RDC", "topic", "strategic_data_in");
+		val v2 = g.addVertex(T.label, "server",       T.id, 2.asInstanceOf[Object], "IP", "10.0.1.100");
+		v1.addEdge("self",     v1, T.id, 11.asInstanceOf[Object], "weight", 0.5f.asInstanceOf[Object]);
+		v1.addEdge("RUNS_ON",  v2, T.id, 12.asInstanceOf[Object]);
+		v2.addEdge("HOST_FOR", v1, T.id, 13.asInstanceOf[Object]);
+
+		// Act
+		//
+		val vs = TinkerPopElf.allEdges(g)
+
+		// Assert
+		//
+		vs should not be (null)
+		vs.length should be (3)
 	}
 
 }

@@ -14,7 +14,7 @@ class TinkerPopSerdeDegenerateInputTest
 {
 	import TinkerPopSerde._
 
-	behavior of "Serialize"
+	behavior of "Serialize  :"
 
 	it should "return a zero length array when provided a null graph" in
 	{
@@ -44,7 +44,7 @@ class TinkerPopSerdeDegenerateInputTest
 		have.length should be (0)
 	}
 
-	behavior of "Deserialize"
+	behavior of "Deserialize:"
 
 	it should "return an empty graph when provided a null byte array" in
 	{

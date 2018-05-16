@@ -19,7 +19,7 @@ class PGProtoElfTest
 {
 	import PGProtoElf._
 
-	behavior of "AllVertices"
+	behavior of "AllVertices:"
 
 	it should "return an empty array when given a null graph" in
 	{
@@ -93,7 +93,7 @@ class PGProtoElfTest
 		vs.length should be (3)
 	}
 
-	behavior of "AllEdges"
+	behavior of "AllEdges   :"
 
 	it should "return an empty array when given a null graph" in
 	{
