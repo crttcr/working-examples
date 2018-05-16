@@ -12,6 +12,7 @@ import xivvic.proto.adt.pgraph.{Edge => PEdge}
 import org.apache.tinkerpop.gremlin.structure.T
 import xivvic.adt.pgraph.convert.Tinker2Protobuf
 import xivvic.adt.pgraph.convert.Protobuf2Tinker
+import xivvic.adt.pgraph.util.PGProtoElf
 
 /**
  * TinkerPopSerde converts a TinkerGraph instance to a serialized form
@@ -45,17 +46,16 @@ object TinkerPopSerde
 		if (bs == null || bs.length == 0) return rv
 
 	   val pg = PGraph.parseFrom(bs);
-		val vs = pg.getVList
-		val es = pg.getEList
+		val vs = PGProtoElf.allVertices(pg)
+		val es = PGProtoElf.allEdges(pg)
 
 		val converter = new Protobuf2Tinker(rv)
 		def       vcf = converter.vcf()
 		def       ecf = converter.ecf()
 
-		vs.forEach { pv => { vcf(pv) } }
-		es.forEach { ev => { ecf(ev) } }
+		vs.foreach(vcf)
+		es.foreach(ecf)
 
 		rv
 	}
-
 }
