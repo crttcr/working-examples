@@ -1,5 +1,6 @@
 package xivvic.adt.pgraph.util
 
+import scala.collection.mutable.ArrayBuffer
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.{Vertex, Edge}
 
@@ -13,7 +14,7 @@ object TinkerPopElf
 		if (g == null) { return Array() }
 
 		val it = g.vertices()
-		val rv = scala.collection.mutable.ArrayBuffer.empty[Vertex]
+		val rv = ArrayBuffer.empty[Vertex]
 
 		it.forEachRemaining(rv += _)
 
@@ -25,7 +26,7 @@ object TinkerPopElf
 		if (g == null) { return Array() }
 
 		val it = g.edges()
-		val rv = scala.collection.mutable.ArrayBuffer.empty[Edge]
+		val rv = ArrayBuffer.empty[Edge]
 
 		it.forEachRemaining(rv += _)
 		rv.toArray
