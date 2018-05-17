@@ -3,6 +3,7 @@ package xivvic.adt.pgraph.convert
 import org.apache.tinkerpop.gremlin.structure.{Graph => TGraph, Vertex => TVertex, Edge => TEdge}
 import xivvic.proto.adt.pgraph.{PGraph, Vertex => PVertex, Edge => PEdge}
 import org.apache.tinkerpop.gremlin.structure.T
+import xivvic.proto.adt.pgraph.Property
 
 class Tinker2Protobuf(val builder: PGraph.Builder)
 {
@@ -18,11 +19,27 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 		{
 			val label = tv.label()
 			val    id = tv.id().toString()
-			val pv = PVertex.newBuilder().addLabel(label).build()
+			val    vb = PVertex.newBuilder().addLabel(label).setId(id)
 
-			// FIXME: Add properties
-			//
+			val it = tv.properties()
 
+			while (it.hasNext())
+			{
+				val p = it.next()
+				if (p.isPresent())
+				{
+					val key = p.key()
+					val value = p.value()
+					val ptype = Property.Type.STRING
+
+					val newp = Property.newBuilder().setName(key).setType(ptype).setValue(value.toString).build()
+					vb.addP(newp)
+
+				}
+				println("Property: " + p)
+			}
+
+			val pv = vb.build()
 			vmap(id) = pv
 			builder.addV(pv)
 		}

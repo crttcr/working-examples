@@ -10,6 +10,8 @@ import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.T
 import xivvic.adt.pgraph.util.TinkerPopElf
 import org.apache.tinkerpop.gremlin.structure.Vertex
+import xivvic.adt.pgraph.util.TinkerPopGraphMatcher
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory
 
 @RunWith(classOf[JUnitRunner])
 class TinkerSerdeRoundTripTest
@@ -25,6 +27,24 @@ class TinkerSerdeRoundTripTest
 		// Arrange
 		//
 		val input: Graph = sampleGraph(1, 0)
+
+		// Act
+		//
+		val ser = serialize(input)
+		val result = deserialize(ser);
+
+		// Assert
+		//
+		ser should not be (null)
+		result should not be (null)
+		assertGraphsMatch(input, result);
+	}
+
+	it should "produce a matching result for the modern example" in
+	{
+		// Arrange
+		//
+		val input: Graph = TinkerFactory.createModern()
 
 		// Act
 		//
@@ -54,78 +74,17 @@ class TinkerSerdeRoundTripTest
 		rv
 	}
 
-	def assertGraphsMatch(a: Graph, b: Graph): Unit =
-	{
-		if (a == null && b == null) return;
-		if (a == null || b == null) fail("One graph is null, the other is not");
-
-		val va = TinkerPopElf.allVertices(a)
-		val vb = TinkerPopElf.allVertices(b)
-
-		assertVertexCardinality(va, vb);
-	}
-
-	def assertVertexCardinality(a: Array[Vertex], b: Array[Vertex]): Unit =
-	{
-		if (a == null && b == null) return;
-		if (a == null || b == null) fail("One array is null, the other is not");
-
-		if (a.length != b.length)
-		{
-			val fmt = f"Graph: mismatche vertex cardinality: (|a| = ${a.length}%d, |b| = ${b.length}%d)";
-			fail(fmt);
-		}
-	}
-
-	/*
-
-	Edge[]   ea = TinkerElf.allEdges(a);
-	Edge[]   eb = TinkerElf.allEdges(b);
-
-	assertEdgeCardinality(ea, eb);
-
 	// FIXME: Need to test structure and content of graph, not just cardinality
 	//
-	}
-
-	private void assertVertexCardinality(Vertex[] a, Vertex[] b)
+	def assertGraphsMatch(a: Graph, b: Graph): Unit =
 	{
-	if (a == null && b == null) return;
-	if (a == null || b == null) fail("One array is null, the other is not");
+		val matcher = new TinkerPopGraphMatcher(a, b)
 
-	if (a.length != b.length)
-	{
-		String fmt = "The graphs have different number of vertices: (a = %d, b = %d)";
-		String msg = String.format(fmt, a.length, b.length);
-		fail(msg);
-	}
+		val (ok_v, msg_v) = matcher.vertexCardinalityMatch()
+		val (ok_e, msg_e) = matcher.edgeCardinalityMatch()
+
+		if (! ok_v) fail(msg_v)
+		if (! ok_e) fail(msg_e)
 	}
 
-	private void assertEdgeCardinality(Edge[] a, Edge[] b)
-	{
-	if (a == null && b == null) return;
-	if (a == null || b == null) fail("One array is null, the other is not");
-
-	if (a.length != b.length)
-	{
-		String fmt = "The graphs have different number of edges: (a = %d, b = %d)";
-		String msg = String.format(fmt, a.length, b.length);
-		fail(msg);
-	}
-	}
-
-	public Graph sampleGraph(int v, int e)
-	{
-
-	Graph rv = TinkerGraph.open();
-
-	for (int i = 0; i < v; i++)
-	{
-		String label = Integer.toString(i);
-		rv.addVertex(label);
-	}
-
-	return rv;
-	}
-*/
 }

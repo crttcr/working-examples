@@ -28,14 +28,16 @@ object TinkerPopSerde
 		val   builder = PGraph.newBuilder()
 		val converter = new Tinker2Protobuf(builder)
 
-		def     vcf = converter.vcf()
-		def     ecf = converter.ecf()
+		def vcf = converter.vcf()
+		def ecf = converter.ecf()
 
 		vs.foreach(vcf)
 		es.foreach(ecf)
 
 		val  pg = builder.build()
 		val ser = pg.toByteArray()
+
+		println(pg)
 
 		ser
 	}
