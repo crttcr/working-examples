@@ -41,7 +41,7 @@ public class TinkerGraphExamples
     @Test
     public void ExCreateAVertexWithOnlyALabel()
     {
-	// Act
+	// Arrange
 	//
 	final String l ="A Label";
 
@@ -64,7 +64,7 @@ public class TinkerGraphExamples
     @Test
     public void ExCreateAVertexWithProperties()
     {
-	// Act
+	// Arrange
 	//
 	final String l ="A Label";
 	final String n = "Name";
@@ -99,7 +99,7 @@ public class TinkerGraphExamples
     @Test
     public void ExCreateAVertexWithRepeatedProperties()
     {
-	// Act
+	// Arrange
 	//
 	final String l ="A Label";
 	final String n = "Name";
@@ -140,11 +140,10 @@ public class TinkerGraphExamples
 	assertEquals("Ewing", pmap.get(n));  // Properties seem to maintain order under a single key.
     }
 
-
     @Test
     public void ExAddPropertiesToAVertexAfterCreation()
     {
-	// Act
+	// Arrange
 	//
 	final String l ="A Label";
 	final String n = "Name";
@@ -195,7 +194,7 @@ public class TinkerGraphExamples
     @Test
     public void ExCreateAnEdgeWithOnlyARelationshipType()
     {
-	// Act
+	// Arrange
 	//
 	final String l = "A Label";
 	final String r = "KNOWS";
@@ -220,7 +219,7 @@ public class TinkerGraphExamples
     @Test
     public void ExCreateAnEdgeWithProperties()
     {
-	// Act
+	// Arrange
 	//
 	final String l ="A Label";
 	final String n = "Name";
@@ -263,7 +262,7 @@ public class TinkerGraphExamples
     @Test
     public void ExCreateAnEdgeWithRepeatedProperties()
     {
-	// Act
+	// Arrange
 	//
 	final String l ="A Label";
 	final String r = "KNOWS";
@@ -272,7 +271,7 @@ public class TinkerGraphExamples
 	final Vertex b = subject.addVertex(l);
 
 	final Map<String, Object> pmap = new HashMap<>();
-	final List<Object> plist = new ArrayList<>();
+	final List<Object>       plist = new ArrayList<>();
 
 	// Act
 	//
@@ -300,6 +299,47 @@ public class TinkerGraphExamples
 	assertEquals(2, plist.size());  // weight + used.  Label is not considered a property for an edge.
 	assertEquals(r, e.label());
 	assertEquals(10, pmap.get("used"));
+    }
+
+    @Test
+    public void ExAddPropertiesToAnEdgeAfterCreation()
+    {
+	// Arrange
+	//
+	final String l ="A Label";
+	final String r = "KNOWS";
+
+	final Vertex a = subject.addVertex(l);
+	final Vertex b = subject.addVertex(l);
+
+	final Map<String, Object> pmap = new HashMap<>();
+	final List<Object>       plist = new ArrayList<>();
+
+	// Act
+	//
+	final Edge   e = a.addEdge(r, b);
+	final Edge   f = subject.traversal().E().next();
+	e.property("first", "Patrick");
+	e.property("middle", "Aloysius");
+	e.property("last", "Ewing");
+
+	final Iterator<Property<Object>> it = e.properties();
+
+	while (it.hasNext())
+	{
+	    final Property<Object> p = it.next();
+	    final String k = p.key();
+	    final Object o = p.value();
+	    pmap.put(k, o);
+	    plist.add(p);
+	}
+
+	// Assert
+	//
+	assertEquals(e, f);
+	assertEquals(r, e.label());
+	assertEquals("Patrick", pmap.get("first"));
+	assertEquals("Ewing", pmap.get("last"));
     }
 
 }
