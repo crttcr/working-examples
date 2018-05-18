@@ -54,7 +54,6 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 	{
 		te =>
 		{
-
 			// FIXME: Add properties
 			//
 
