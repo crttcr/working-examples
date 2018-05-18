@@ -4,6 +4,7 @@ import org.apache.tinkerpop.gremlin.structure.{Graph => TGraph, Vertex => TVerte
 import xivvic.proto.adt.pgraph.{PGraph, Vertex => PVertex, Edge => PEdge}
 import org.apache.tinkerpop.gremlin.structure.T
 import xivvic.proto.adt.pgraph.Property
+import org.apache.tinkerpop.gremlin.structure.VertexProperty
 
 class Tinker2Protobuf(val builder: PGraph.Builder)
 {
@@ -25,7 +26,7 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 
 			while (it.hasNext())
 			{
-				val p = it.next()
+				val p = it.next().asInstanceOf[VertexProperty[Object]]
 				if (p.isPresent())
 				{
 					val key = p.key()
@@ -36,7 +37,7 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 					vb.addP(newp)
 
 				}
-				println("Property: " + p)
+				// println("Property: " + p)
 			}
 
 			val pv = vb.build()
@@ -61,6 +62,7 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 			val   out = te.outVertex().id().toString()
 			val    in = te.inVertex().id().toString()
 			val    pe = PEdge.newBuilder()
+				.setRelType(label)
 				.setFrom(out)
 				.setTo(in)
 				.build()

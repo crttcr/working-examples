@@ -17,6 +17,8 @@ class Protobuf2Tinker(val graph: TGraph)
 	{
 		pv =>
 		{
+			// Fixme: Need to handle labels correctly.
+			//
 			val label = pv.getLabel(0)
 			val    id = pv.getId.toString
 			val props = pv.getPList
@@ -42,6 +44,7 @@ class Protobuf2Tinker(val graph: TGraph)
 			// FIXME: Set Propeties
 			//
 
+			println(s"Adding label [$label] to edge")
 			out.addEdge(label, in)
 
 		}
