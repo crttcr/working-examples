@@ -12,6 +12,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * TestBasicOperations calls the methods of the BasicOperations object to exercise them
+ * and demonstrate how to use Tinkerpop.
+ * 
+ */
 public class TestBasicOperations
 {
     private BasicOperations subject;
