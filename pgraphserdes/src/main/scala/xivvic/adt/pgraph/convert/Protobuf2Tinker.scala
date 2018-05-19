@@ -18,7 +18,7 @@ class Protobuf2Tinker(val graph: TGraph)
 	{
 		pv =>
 		{
-			val     id = pv.getId.toString
+			val     id = pv.getId
 			val labels = pv.getLabelList
 			val  props = vertexProperties2array(pv)
 			val   args = createVertexArgs(id, labels, props)
