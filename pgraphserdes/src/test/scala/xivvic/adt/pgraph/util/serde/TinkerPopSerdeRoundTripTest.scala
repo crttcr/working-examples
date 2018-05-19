@@ -12,6 +12,7 @@ import xivvic.adt.pgraph.util.TinkerPopElf
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import xivvic.adt.pgraph.util.TinkerPopGraphMatcher
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory
+import xivvic.adt.pgraph.util.TinkerPopVertexMatcher
 
 @RunWith(classOf[JUnitRunner])
 class TinkerSerdeRoundTripTest
@@ -85,6 +86,38 @@ class TinkerSerdeRoundTripTest
 
 		if (! ok_v) fail(msg_v)
 		if (! ok_e) fail(msg_e)
+
+		val a_vertices = a.traversal().V().toList()
+		val b_vertices = b.traversal().V().toList()
+
+		val vmap = getVertexMap(b_vertices)
+
+		val it = a_vertices.iterator()
+		while (it.hasNext())
+		{
+			val v = it.next()
+			val x = vmap.getOrElse(v.id().toString(), null)
+			val m = new TinkerPopVertexMatcher(v, x)
+
+			val (ok, msg) = m.vertexMatch()
+			if (! ok) fail(msg)
+		}
+
+	}
+
+	private def getVertexMap(vs: java.util.List[Vertex]): Map[String, Vertex] =
+	{
+		val rv = scala.collection.mutable.Map.empty[String, Vertex]
+		val it = vs.iterator()
+		while (it.hasNext())
+		{
+			val  v = it.next()
+			val id = v.id().toString()
+
+			rv(id) = v
+		}
+
+		rv.toMap
 	}
 
 }

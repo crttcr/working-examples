@@ -21,7 +21,7 @@ class Protobuf2Tinker(val graph: TGraph)
 			val     id = pv.getId.toString
 			val labels = pv.getLabelList
 			val  props = vertexProperties2array(pv)
-			val   args = createVertexArgs(labels, props)
+			val   args = createVertexArgs(id, labels, props)
 			val     tv = graph.addVertex(args:_*)
 
 			vmap(id) = tv
@@ -50,10 +50,14 @@ class Protobuf2Tinker(val graph: TGraph)
 	 * createVertexArgs combines the vertex labels and properties into a single array
 	 * that gets passed to the vertex's constructor.
 	 */
-	private def createVertexArgs(labels: ProtocolStringList, props: Array[Object]) =
+	private def createVertexArgs(id: String, labels: ProtocolStringList, props: Array[Object]) =
 	{
-		val rv = Array.ofDim[Object](2 * labels.size + props.length)
-		var index = 0
+		val rv = Array.ofDim[Object](2 + 2 * labels.size + props.length)
+
+		rv(0) = T.id
+		rv(1) = id
+
+		var index = 2
 
 		labels.forEach
 		{
