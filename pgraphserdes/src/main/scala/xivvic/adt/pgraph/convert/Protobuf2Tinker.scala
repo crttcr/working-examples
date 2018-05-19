@@ -47,7 +47,7 @@ class Protobuf2Tinker(val graph: TGraph)
 	}
 
 	/**
-	 * createVertexArgs combines the vertex labels and properties into a single array
+	 * createVertexArgs combines the vertex id and labels and properties into a single array
 	 * that gets passed to the vertex's constructor.
 	 */
 	private def createVertexArgs(id: String, labels: ProtocolStringList, props: Array[Object]) =
