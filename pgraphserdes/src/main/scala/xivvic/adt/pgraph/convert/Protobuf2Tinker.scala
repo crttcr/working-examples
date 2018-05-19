@@ -4,35 +4,32 @@ import org.apache.tinkerpop.gremlin.structure.{Graph => TGraph, Vertex => TVerte
 import xivvic.proto.adt.pgraph.{PGraph, Vertex => PVertex, Edge => PEdge, Property => PProperty}
 import org.apache.tinkerpop.gremlin.structure.T
 import xivvic.adt.pgraph.util.PGProtoElf
+import com.google.protobuf.ProtocolStringList
 
 class Protobuf2Tinker(val graph: TGraph)
 {
 	val vmap = collection.mutable.Map.empty[String, TVertex]
 
-	/** vcf returns a function that converts a Protobuf vertex
-	 *  to a TinkerPop vertex by constructing it and adding it
-	 *  to this object's graph. It also keeps track of what is
-	 *  constructed for edge references.
+	/** vcf returns a function that converts a Protobuf vertex to a TinkerPop vertex
+	 *  by constructing it and adding it to this object's graph. It also keeps track
+	 *  of the constructed vertices for use in building edges.
 	 */
 	def vcf(): PVertex => Unit =
 	{
 		pv =>
 		{
-			// FIXME: Need to handle labels correctly.
-			//
-			val label = pv.getLabel(0)
-			val    id = pv.getId.toString
-			val props = vertexProperties2array(pv)
-			val  args = createVertexArgs(label, props)
-			val    tv = graph.addVertex(args:_*)
+			val     id = pv.getId.toString
+			val labels = pv.getLabelList
+			val  props = vertexProperties2array(pv)
+			val   args = createVertexArgs(labels, props)
+			val     tv = graph.addVertex(args:_*)
 
 			vmap(id) = tv
 		}
 	}
 
-	/** ecf returns a function that converts a Protobuf edge
-	 *  to a TinkerPop edge by constructing it and adding it
-	 *  to this object's graph.
+	/** ecf returns a function that converts a Protobuf edge to a TinkerPop edge
+	 *  by constructing it and adding it to this object's graph.
 	 */
 	def ecf(): PEdge => Unit =
 	{
@@ -49,15 +46,28 @@ class Protobuf2Tinker(val graph: TGraph)
 		}
 	}
 
-	private def createVertexArgs(label: String, props: Array[Object]) =
+	/**
+	 * createVertexArgs combines the vertex labels and properties into a single array
+	 * that gets passed to the vertex's constructor.
+	 */
+	private def createVertexArgs(labels: ProtocolStringList, props: Array[Object]) =
 	{
-		val rv = Array.ofDim[Object](2 + props.length)
-		rv(0) = T.label
-		rv(1) = label
+		val rv = Array.ofDim[Object](2 * labels.size + props.length)
+		var index = 0
+
+		labels.forEach
+		{
+			label =>
+			{
+				rv(index)     = T.label
+				rv(index + 1) = label
+				index += 2
+			}
+		}
 
 		for (i <- 0 until props.length)
 		{
-			rv(i + 2) = props(i)
+			rv(i + index) = props(i)
 		}
 
 		rv
