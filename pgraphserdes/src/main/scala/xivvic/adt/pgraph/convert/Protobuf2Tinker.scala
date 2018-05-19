@@ -1,8 +1,9 @@
 package xivvic.adt.pgraph.convert
 
-import org.apache.tinkerpop.gremlin.structure.{Graph => TGraph, Vertex => TVertex, Edge => TEdge}
-import xivvic.proto.adt.pgraph.{PGraph, Vertex => PVertex, Edge => PEdge}
+import org.apache.tinkerpop.gremlin.structure.{Graph => TGraph, Vertex => TVertex, Edge => TEdge, Property => TProperty}
+import xivvic.proto.adt.pgraph.{PGraph, Vertex => PVertex, Edge => PEdge, Property => PProperty}
 import org.apache.tinkerpop.gremlin.structure.T
+import xivvic.adt.pgraph.util.PGProtoElf
 
 class Protobuf2Tinker(val graph: TGraph)
 {
@@ -17,19 +18,22 @@ class Protobuf2Tinker(val graph: TGraph)
 	{
 		pv =>
 		{
-			// Fixme: Need to handle labels correctly.
+			// FIXME: Need to handle labels correctly.
 			//
 			val label = pv.getLabel(0)
 			val    id = pv.getId.toString
-			val props = pv.getPList
+			val props = vertexProperties2array(pv)
+			val  args = createVertexArgs(label, props)
+			val    tv = graph.addVertex(args:_*)
 
-			// FIXME: Set Properties
-			//
-			val    tv = graph.addVertex(T.label, label)
 			vmap(id) = tv
 		}
 	}
 
+	/** ecf returns a function that converts a Protobuf edge
+	 *  to a TinkerPop edge by constructing it and adding it
+	 *  to this object's graph.
+	 */
 	def ecf(): PEdge => Unit =
 	{
 		pe =>
@@ -39,15 +43,72 @@ class Protobuf2Tinker(val graph: TGraph)
 			val  in_id = pe.getTo
 			val    out = vmap(out_id)
 			val     in = vmap(in_id)
-			val  props = pe.getPList
+			val props  = edgeProperties2array(pe)
 
-			// FIXME: Set Propeties
-			//
-
-			println(s"Adding label [$label] to edge")
-			out.addEdge(label, in)
-
+			out.addEdge(label, in, props:_*)
 		}
+	}
+
+	private def createVertexArgs(label: String, props: Array[Object]) =
+	{
+		val rv = Array.ofDim[Object](2 + props.length)
+		rv(0) = T.label
+		rv(1) = label
+
+		for (i <- 0 until props.length)
+		{
+			rv(i + 2) = props(i)
+		}
+
+		rv
+	}
+
+	private def vertexProperties2array(pv: PVertex): Array[Object] =
+	{
+		val  props = pv.getPList
+		val     rv = new scala.collection.mutable.ArrayBuffer[Object]
+
+		props.forEach
+		{
+			p =>
+			{
+				val n = p.getName
+				val v = p.getValue
+				val t = p.getType
+				val o = PGProtoElf.propertyString2Object(v, t)
+
+				rv += n
+				rv += v
+
+				println(rv)
+			}
+		}
+
+		rv.toArray
+	}
+
+	private def edgeProperties2array(pe: PEdge): Array[Object] =
+	{
+		val props = pe.getPList
+		val    rv = new scala.collection.mutable.ArrayBuffer[Object]
+
+		props.forEach
+		{
+			p =>
+			{
+				val n = p.getName
+				val v = p.getValue
+				val t = p.getType
+				val o = PGProtoElf.propertyString2Object(v, t)
+
+				rv += n
+				rv += v
+
+				println(rv)
+			}
+		}
+
+		rv.toArray
 	}
 
 }
