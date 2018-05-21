@@ -53,21 +53,14 @@ class TinkerPopEdgeMatcher(val a: Edge, val b: Edge)
 		{
 			k =>
 			{
-				val list_a = ma.getOrElse(k, List())
-				val list_b = mb.getOrElse(k, List())
+				val oa = ma.get(k)
+				val ob = mb.get(k)
 
-				if (list_a.size != list_b.size)
-					return (false, s"Edge property mismatch: key [$k] has different number of values")
-
-				val zip = list_a zip list_b
-
-				zip.foreach
+				(oa, ob) match
 				{
-					pair =>
-					{
-						if (pair._1.toString != pair._2.toString)
-							return (false, s"Edge property mismatch: key [$k] values [$pair._1, $pair._2]")
-					}
+					case (Some(va), Some(vb)) if va.equals(vb) => // match, do nothing
+					case (None, None)                          => // match, do nothing
+					case _                                     => return (false, "Properties do not match")
 				}
 
 			}
@@ -80,9 +73,9 @@ class TinkerPopEdgeMatcher(val a: Edge, val b: Edge)
 	// Helpers             //
 	/////////////////////////
 
-	private def getPropertyMap(v: Edge): Map[String, List[Object]] =
+	private def getPropertyMap(v: Edge): Map[String, Object] =
 	{
-		val rv = scala.collection.mutable.Map.empty[String, List[Object]]
+		val rv = scala.collection.mutable.Map.empty[String, Object]
 		val it = v.properties();
 
 		while (it.hasNext())
@@ -90,9 +83,8 @@ class TinkerPopEdgeMatcher(val a: Edge, val b: Edge)
 			val p = it.next()
 			val k = p.key()
 			val v = p.value().asInstanceOf[Object]
-			val l = rv.getOrElse(k, List.empty[Object])
 
-			rv(k) = v :: l
+			rv(k) = v
 		}
 
 		rv.toMap

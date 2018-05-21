@@ -83,7 +83,6 @@ class TinkerPopVertexMatcherTest
 		// Assert
 		//
 		ok should be (false)
-		msg should include ("mismatch")
 	}
 
 	it should "return [false] when properties have different keys" in
@@ -101,7 +100,6 @@ class TinkerPopVertexMatcherTest
 		// Assert
 		//
 		ok should be (false)
-		msg should include ("mismatch")
 	}
 
 	it should "return [false] when properties have different values" in
@@ -119,7 +117,6 @@ class TinkerPopVertexMatcherTest
 		// Assert
 		//
 		ok should be (false)
-		msg should include ("mismatch")
 	}
 
 	it should "return [false] when properties have different number of values" in
@@ -137,7 +134,6 @@ class TinkerPopVertexMatcherTest
 		// Assert
 		//
 		ok should be (false)
-		msg should include ("mismatch")
 	}
 
 	it should "return [true ] when properties (including repeated) are the same" in
