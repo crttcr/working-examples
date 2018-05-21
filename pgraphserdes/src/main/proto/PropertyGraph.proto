@@ -12,7 +12,8 @@ message Property {
 		STRING  = 0;
 		INTEGER = 1;
 		FLOAT   = 2;
-		BOOLEAN = 3;
+		DOUBLE  = 3;
+		BOOLEAN = 4;
 	}
 	
 	string name  = 1;

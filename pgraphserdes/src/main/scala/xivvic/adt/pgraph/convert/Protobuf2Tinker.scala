@@ -35,12 +35,13 @@ class Protobuf2Tinker(val graph: TGraph)
 	{
 		pe =>
 		{
+			val     id = pe.getId
 			val  label = pe.getRelType
 			val out_id = pe.getFrom
 			val  in_id = pe.getTo
 			val    out = vmap(out_id)
 			val     in = vmap(in_id)
-			val props  = edgeProperties2array(pe)
+			val props  = edgeProperties2array(id, pe)
 
 			out.addEdge(label, in, props:_*)
 		}
@@ -93,18 +94,19 @@ class Protobuf2Tinker(val graph: TGraph)
 
 				rv += n
 				rv += v
-
-				println(rv)
 			}
 		}
 
 		rv.toArray
 	}
 
-	private def edgeProperties2array(pe: PEdge): Array[Object] =
+	private def edgeProperties2array(id: String, pe: PEdge): Array[Object] =
 	{
 		val props = pe.getPList
 		val    rv = new scala.collection.mutable.ArrayBuffer[Object]
+
+		rv += T.id
+		rv += id
 
 		props.forEach
 		{
@@ -116,13 +118,12 @@ class Protobuf2Tinker(val graph: TGraph)
 				val o = PGProtoElf.propertyString2Object(v, t)
 
 				rv += n
-				rv += v
-
-				println(rv)
+				rv += o
 			}
 		}
 
-		rv.toArray
+		val array = rv.toArray
+		array
 	}
 
 }

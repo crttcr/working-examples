@@ -42,7 +42,7 @@ class TinkerPopElementMatcherTest
 		m.atLeastOneElementIsNull should be (false)
 	}
 
-	behavior of "matchGivenNullVertex  :"
+	behavior of "matchGivenNullVertex   :"
 
 	it should "return [true ] when both vertices are null" in
 	{

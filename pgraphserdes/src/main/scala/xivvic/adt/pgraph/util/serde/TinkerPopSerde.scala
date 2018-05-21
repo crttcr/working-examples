@@ -37,7 +37,9 @@ object TinkerPopSerde
 		val  pg = builder.build()
 		val ser = pg.toByteArray()
 
-		println(pg)
+//		println("SERIALIALIZED FORM---------------------------------------------------")
+//		println(pg)
+//		println("SERIALIALIZED FORM COMPLETE------------------------------------------")
 
 		ser
 	}

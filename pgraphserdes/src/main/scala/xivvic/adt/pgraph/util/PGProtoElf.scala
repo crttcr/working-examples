@@ -43,12 +43,12 @@ object PGProtoElf
 
 	def propertyString2Object(v: String, t: Property.Type): Object =
 	{
-		val str = Property.Type.STRING
-
+		// TODO: Error Handling for these conversions.
+		//
 		t match {
-			case x if x == Property.Type.STRING    => v
 			case x if x == Property.Type.BOOLEAN   => if (v.equalsIgnoreCase("true")) java.lang.Boolean.TRUE else java.lang.Boolean.FALSE
 			case x if x == Property.Type.FLOAT     => new java.lang.Float(v)
+			case x if x == Property.Type.DOUBLE    => new java.lang.Double(v)
 			case x if x == Property.Type.INTEGER   => new java.lang.Integer(v)
 			case _                                 => v
 		}

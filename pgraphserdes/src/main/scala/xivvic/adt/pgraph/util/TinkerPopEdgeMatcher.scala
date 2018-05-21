@@ -42,9 +42,9 @@ class TinkerPopEdgeMatcher(val a: Edge, val b: Edge)
 
 		if (ka != kb)
 		{
-			Console.err.println("Edge property key mismatch")
-			Console.err.println("a: " + ka)
-			Console.err.println("b: " + kb)
+//			Console.err.println("Edge property key mismatch")
+//			Console.err.println("a: " + ka)
+//			Console.err.println("b: " + kb)
 
 			return (false, s"Edge property mismatch: keys are not the same")
 		}
@@ -56,13 +56,8 @@ class TinkerPopEdgeMatcher(val a: Edge, val b: Edge)
 				val oa = ma.get(k)
 				val ob = mb.get(k)
 
-				(oa, ob) match
-				{
-					case (Some(va), Some(vb)) if va.equals(vb) => // match, do nothing
-					case (None, None)                          => // match, do nothing
-					case _                                     => return (false, "Properties do not match")
-				}
-
+				if (! valuesMatch(oa, ob))
+					return (false, s"Property[$k] mismatch: $oa != $ob")
 			}
 		}
 
@@ -72,6 +67,21 @@ class TinkerPopEdgeMatcher(val a: Edge, val b: Edge)
 	/////////////////////////
 	// Helpers             //
 	/////////////////////////
+
+	private def valuesMatch(oa: Option[Object], ob: Option[Object]): Boolean =
+	{
+//		Console.err.println(s"Edge property test")
+//		Console.err.println("a: " + oa)
+//		Console.err.println("b: " + ob)
+
+		(oa, ob) match
+		{
+			case (None, None)       => return true
+			case (Some(x), None)    => return false
+			case (None, Some(x))    => return false
+			case (Some(x), Some(y)) => x == y
+		}
+	}
 
 	private def getPropertyMap(v: Edge): Map[String, Object] =
 	{

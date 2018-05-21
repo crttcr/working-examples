@@ -40,12 +40,14 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 	{
 		te =>
 		{
+			val    id = te.id.toString
 			val label = te.label()
 			val   out = te.outVertex().id().toString()
 			val    in = te.inVertex().id().toString()
 			val    it = te.properties()
 
 			val    eb = PEdge.newBuilder()
+				.setId(id)
 				.setRelType(label)
 				.setFrom(out)
 				.setTo(in)
@@ -66,7 +68,7 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 			{
 				val key = p.key()
 				val value = p.value()
-				val ptype = PProperty.Type.STRING
+				val ptype = determinePType(value)
 
 				val newp = PProperty.newBuilder().setName(key).setType(ptype).setValue(value.toString).build()
 				eb.addP(newp)
@@ -85,10 +87,9 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 			val p = it.next().asInstanceOf[VertexProperty[Object]]
 			if (p.isPresent())
 			{
-				val key = p.key()
+				val   key = p.key()
 				val value = p.value()
-				val ptype = PProperty.Type.STRING
-
+				val ptype = determinePType(value)
 				val newp = PProperty.newBuilder().setName(key).setType(ptype).setValue(value.toString).build()
 				vb.addP(newp)
 
@@ -96,6 +97,22 @@ class Tinker2Protobuf(val builder: PGraph.Builder)
 			// println("Property: " + p)
 		}
 
+	}
+
+	private def determinePType(v: Any): PProperty.Type =
+	{
+		v match
+		{
+			case x: scala.Double      => PProperty.Type.DOUBLE
+			case x: java.lang.Double  => PProperty.Type.DOUBLE
+			case x: scala.Float       => PProperty.Type.FLOAT
+			case x: java.lang.Float   => PProperty.Type.FLOAT
+			case x: scala.Boolean     => PProperty.Type.BOOLEAN
+			case x: java.lang.Boolean => PProperty.Type.BOOLEAN
+			case x: scala.Int         => PProperty.Type.INTEGER
+			case x: java.lang.Integer => PProperty.Type.INTEGER
+			case _                    => PProperty.Type.STRING
+		}
 	}
 
 }

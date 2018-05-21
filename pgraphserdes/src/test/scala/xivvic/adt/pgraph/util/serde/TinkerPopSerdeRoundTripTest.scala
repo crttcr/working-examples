@@ -13,9 +13,11 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import xivvic.adt.pgraph.util.TinkerPopGraphMatcher
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory
 import xivvic.adt.pgraph.util.TinkerPopVertexMatcher
+import xivvic.adt.pgraph.util.TinkerPopEdgeMatcher
+import org.apache.tinkerpop.gremlin.structure.Edge
 
 @RunWith(classOf[JUnitRunner])
-class TinkerSerdeRoundTripTest
+class TinkerPopSerdeRoundTripTest
 	extends FlatSpecLike
 		with Matchers
 {
@@ -99,10 +101,47 @@ class TinkerSerdeRoundTripTest
 			val x = vmap.getOrElse(v.id().toString(), null)
 			val m = new TinkerPopVertexMatcher(v, x)
 
+//			println(s"Attempt to match: $v with $x")
 			val (ok, msg) = m.vertexMatch()
+//			println(s"Result was $ok")
+
 			if (! ok) fail(msg)
 		}
 
+		val a_edges = a.traversal().E().toList()
+		val b_edges = b.traversal().E().toList()
+
+		val emap = getEdgeMap(b_edges)
+		val edge_it = a_edges.iterator()
+
+		while (edge_it.hasNext())
+		{
+			val  e = edge_it.next()
+			val id = e.id.toString
+			val  x = emap.getOrElse(id, null)
+			val  m = new TinkerPopEdgeMatcher(e, x)
+
+			val (ok, msg) = m.edgeMatch()
+
+		if (! ok) fail(msg)
+		}
+
+	}
+
+	private def getEdgeMap(es: java.util.List[Edge]): Map[String, Edge] =
+	{
+		val rv = scala.collection.mutable.Map.empty[String, Edge]
+
+		val it = es.iterator
+		while (it.hasNext())
+		{
+			val  e = it.next
+			val id = e.id().toString
+
+			rv(id) = e
+		}
+
+		rv.toMap
 	}
 
 	private def getVertexMap(vs: java.util.List[Vertex]): Map[String, Vertex] =
@@ -119,5 +158,4 @@ class TinkerSerdeRoundTripTest
 
 		rv.toMap
 	}
-
 }
