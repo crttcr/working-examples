@@ -222,7 +222,6 @@ public class TinkerGraphExamples
 	// Arrange
 	//
 	final String l ="A Label";
-	final String n = "Name";
 	final String r = "KNOWS";
 
 	final Vertex a = subject.addVertex(l);
@@ -235,7 +234,6 @@ public class TinkerGraphExamples
 	final Edge   e = a.addEdge(r, b, "weight", 0.5F, "color", "BLUE");
 	final Edge   f = subject.traversal().E().next();
 
-	f.property(n);
 	final Iterator<Property<Object>> it = f.properties();
 
 	while (it.hasNext())
