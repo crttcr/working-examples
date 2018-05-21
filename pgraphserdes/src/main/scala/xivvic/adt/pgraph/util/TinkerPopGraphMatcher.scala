@@ -2,6 +2,7 @@ package xivvic.adt.pgraph.util
 
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
+import org.apache.tinkerpop.gremlin.structure.VertexProperty
 
 class TinkerPopGraphMatcher(a: Graph, b: Graph)
 {
