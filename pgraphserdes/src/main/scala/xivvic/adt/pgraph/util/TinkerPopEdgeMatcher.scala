@@ -1,32 +1,31 @@
 package xivvic.adt.pgraph.util
 
 import org.apache.tinkerpop.gremlin.structure.Graph
-import org.apache.tinkerpop.gremlin.structure.Vertex
-import org.apache.tinkerpop.gremlin.structure.VertexProperty
+import org.apache.tinkerpop.gremlin.structure.Edge
+import org.apache.tinkerpop.gremlin.structure.Property
 
-object TinkerPopVertexMatcher
+object TinkerPopEdgeMatcher
 {
-	type TPVMFuntion = () => (Boolean, String)
+	type TPEMFuntion = () => (Boolean, String)
 }
 
-class TinkerPopVertexMatcher(val a: Vertex, val b: Vertex)
+class TinkerPopEdgeMatcher(val a: Edge, val b: Edge)
 	extends TinkerPopElementMatcher
 {
 
-	def vertexMatch(): (Boolean, String) =
+	def edgeMatch(): (Boolean, String) =
 	{
 		if (atLeastOneElementIsNull) return matchGivenNullElement()
 
 		val (label_match, reason)      = elementLabelMatch
-		val (property_match, reasonxx) = vertexPropertyMatch
+		val (property_match, reasonxx) = edgePropertyMatch
 		if (! label_match)    return (false, reason)
 		if (! property_match) return (false, reasonxx)
 
 		(true, "labels and properties match");
 	}
 
-
-	def vertexPropertyMatch: (Boolean, String) =
+	def edgePropertyMatch: (Boolean, String) =
 	{
 		if (atLeastOneElementIsNull) return matchGivenNullElement()
 
@@ -35,7 +34,7 @@ class TinkerPopVertexMatcher(val a: Vertex, val b: Vertex)
 
 		if (ma.size != mb.size)
 		{
-			return (false, s"Vertex property mismatch: [$ma.size] vs [$mb.size]")
+			return (false, s"Edge property mismatch: [$ma.size] vs [$mb.size]")
 		}
 
 		val ka = ma.keySet
@@ -43,11 +42,11 @@ class TinkerPopVertexMatcher(val a: Vertex, val b: Vertex)
 
 		if (ka != kb)
 		{
-			Console.err.println("Vertex property key mismatch")
+			Console.err.println("Edge property key mismatch")
 			Console.err.println("a: " + ka)
 			Console.err.println("b: " + kb)
 
-			return (false, s"Vertex property mismatch: keys are not the same")
+			return (false, s"Edge property mismatch: keys are not the same")
 		}
 
 		ka.foreach
@@ -58,7 +57,7 @@ class TinkerPopVertexMatcher(val a: Vertex, val b: Vertex)
 				val list_b = mb.getOrElse(k, List())
 
 				if (list_a.size != list_b.size)
-					return (false, s"Vertex property mismatch: key [$k] has different number of values")
+					return (false, s"Edge property mismatch: key [$k] has different number of values")
 
 				val zip = list_a zip list_b
 
@@ -67,7 +66,7 @@ class TinkerPopVertexMatcher(val a: Vertex, val b: Vertex)
 					pair =>
 					{
 						if (pair._1.toString != pair._2.toString)
-							return (false, s"Vertex property mismatch: key [$k] values [$pair._1, $pair._2]")
+							return (false, s"Edge property mismatch: key [$k] values [$pair._1, $pair._2]")
 					}
 				}
 
@@ -81,7 +80,7 @@ class TinkerPopVertexMatcher(val a: Vertex, val b: Vertex)
 	// Helpers             //
 	/////////////////////////
 
-	private def getPropertyMap(v: Vertex): Map[String, List[Object]] =
+	private def getPropertyMap(v: Edge): Map[String, List[Object]] =
 	{
 		val rv = scala.collection.mutable.Map.empty[String, List[Object]]
 		val it = v.properties();
@@ -98,4 +97,5 @@ class TinkerPopVertexMatcher(val a: Vertex, val b: Vertex)
 
 		rv.toMap
 	}
+
 }
