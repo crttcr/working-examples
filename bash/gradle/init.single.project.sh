@@ -14,8 +14,9 @@ GRADLE_SCRIPT_DIR=~/bin/gradle
 ## Make sure the user does not accidentally create in 
 ## the wrong directory.
 ##
-printf "\nStarting [%b$0%b]\n" "$BLUE" "$NC"
-printf "New project files and directory structure will in starting directory.\n"
+printf "\nExecuting [%b$0%b]\n" "$BLUE" "$NC"
+printf "New project files + directory structure\n"
+printf "will be created in the starting directory.\n\n"
 printf "Currently: [%b$here%b]\n" "$BLUE" "$NC"
 confirmOrDie
 
