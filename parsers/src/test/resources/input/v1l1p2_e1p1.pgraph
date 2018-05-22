@@ -1,0 +1,7 @@
+(v:PERSON 
+	{ name = "Donald", 
+	  color = "CHEETOH"
+	}
+)
+
+(v)---[:LOVES {level="Intense"}]--->(v)
