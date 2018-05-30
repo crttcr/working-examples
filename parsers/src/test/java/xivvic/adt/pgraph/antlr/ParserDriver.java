@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.commons.lang3.StringUtils;
 
 import lombok.val;
 
@@ -46,7 +47,6 @@ public class ParserDriver
 
 	}
 
-
 	public static boolean testInputFile(File input) throws Exception
 	{
 		val fis = new FileInputStream(input);
@@ -82,21 +82,23 @@ public class ParserDriver
 	{
 		try
 		{
-			final byte[]   bytes = Files.readAllBytes(expected.toPath());
+			val   bytes = Files.readAllBytes(expected.toPath());
 			final String content = new String(bytes);
 			final String   rtrim = result.trim();
 			final String   etrim = content.trim();
-//			final String    diff = StringUtils.
+			final String    diff = StringUtils.difference(rtrim, etrim);
 
-			System.out.println("PARSED-CONTENT --------------");
+			if (diff.length() == 0)
+				return true;
+
+			System.out.println("Parsed content did not match expected: " + expected.getName());
+			System.out.println("PARSED--------------");
 			System.out.println(rtrim);
-			System.out.println("EXPECT-CONTENT --------------");
+			System.out.println("EXPECT--------------");
 			System.out.println(etrim);
-			System.out.println("DIFF");
-
+			System.out.println("DIFF----------------");
+			System.out.println(diff);
 			System.out.println("END");
-
-			return rtrim.equals(etrim);
 		} catch (final IOException e)
 		{
 			e.printStackTrace();

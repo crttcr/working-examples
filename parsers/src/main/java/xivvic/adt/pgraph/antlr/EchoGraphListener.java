@@ -13,20 +13,17 @@ import xivvic.adt.pgraph.antlr.PropertyGraphParser.PropertiesContext;
 public class EchoGraphListener
 	extends PropertyGraphBaseListener
 {
-
-	// FIXME: Add edge listeners
 	// FIXME: Need to synthesize ID if it is not provided
 	//
 
 	private final StringBuilder sb = new StringBuilder();
-	private final boolean quiet = false;
+	private final boolean quiet = true;
 
 	public String result() { return sb.toString(); }
 
-
 	@Override public void exitPragma(PropertyGraphParser.PragmaContext ctx)
 	{
-		writeProperty(ctx.prop());
+		writeProperty("##", "", ctx.prop());
 	}
 
 	@Override public void exitVertex(PropertyGraphParser.VertexContext ctx)
@@ -38,7 +35,7 @@ public class EchoGraphListener
 
 	@Override public void exitEdge(PropertyGraphParser.EdgeContext ctx)
 	{
-		writeName("EDGE  ", ctx.NAME(1));
+		writeName("EDGE", ctx.NAME(1));
 		writeProperties(ctx.properties());
 	}
 
@@ -54,17 +51,17 @@ public class EchoGraphListener
 		while (pit.hasNext())
 		{
 			final PropContext pc = pit.next();
-			writeProperty(pc);
+			writeProperty("\t\t", "PROP", pc);
 		}
 	}
 
-	private void writeProperty(PropContext c)
+	private void writeProperty(String prefix, String label, PropContext c)
 	{
 		if (c == null) return;
 
 		final String pname = c.NAME().getText();
 		final String value = c.value().getText();
-		final String  text = String.format("\t\tPROP %s -> %s\n", pname, value);
+		final String  text = String.format("%s%s %s = %s\n", prefix, label, pname, value);
 		sb.append(text);
 
 		if (! quiet)

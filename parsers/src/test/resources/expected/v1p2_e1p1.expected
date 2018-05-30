@@ -1,8 +1,7 @@
 VERTEX: v
 	LABEL: PERSON
-		PROP name -> "Donald"
-		PROP color -> "CHEETOH"
-EDGE: 
-	LABEL: LOVES
-		PROP level -> "Intense"
+		PROP name = "Donald"
+		PROP color = "CHEETOH"
+EDGE: LOVES
+		PROP level = "Intense"
 		

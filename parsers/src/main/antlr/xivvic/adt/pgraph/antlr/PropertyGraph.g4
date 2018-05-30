@@ -6,7 +6,7 @@ package xivvic.adt.pgraph.antlr;
 
 // A Property Graph consists of up to 3 different types of records in the following order:
 //
-// pragma  e.g.  ## edge.auto.id=GENERATE
+// pragma  e.g.  ## edge.auto.id="GENERATE"
 // vertex  e.g.  (c:COMPONENT:SINK { color = "red" })
 // edge    e.g.  (c)--[:RUNS_ON {cpu = 2.0}]->(s)
 //
@@ -64,7 +64,7 @@ DOUBLE: REAL ('d' | 'D') ;
 
 // Whitespace & Comments
 //
-LINE_COMMENT : ('#'|'//') .*? '\r'? '\n' -> skip ;
+LINE_COMMENT : '//'.*? '\r'? '\n' -> skip ;
 LINE_ESCAPE: '\\' '\r'? '\n'             -> skip ;
 WS: [ \t]+                               -> skip ;
 NL: '\r'? '\n'                           -> skip;

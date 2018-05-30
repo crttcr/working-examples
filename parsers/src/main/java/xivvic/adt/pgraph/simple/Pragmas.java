@@ -13,5 +13,4 @@ import lombok.experimental.Accessors;
 public class Pragmas
 {
 	@Singular private List<Property> properties;
-
 }
