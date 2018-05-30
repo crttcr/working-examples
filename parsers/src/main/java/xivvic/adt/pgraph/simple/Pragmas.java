@@ -12,5 +12,7 @@ import lombok.experimental.Accessors;
 @Builder
 public class Pragmas
 {
+	public static final String VERTEX_GENERATOR_CLASS = "vertex.auto.id.generator.class";
+
 	@Singular private List<Property> properties;
 }

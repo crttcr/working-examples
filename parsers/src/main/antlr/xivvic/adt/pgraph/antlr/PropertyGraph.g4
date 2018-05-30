@@ -41,9 +41,6 @@ value
 // Lexical Items
 //
 
-// Names
-//
-NAME: [a-zA-Z_][a-zA-Z0-9._+-]* ;
 
 // Strings (single and double quoted)
 //
@@ -53,7 +50,10 @@ DQSTR : '"'  (~['"] | '\\"' | SQSTR)* '"';
 
 // Boolean
 //
-BOOL   : 'true' | 'TRUE' | 'True' | 'false' | 'FALSE' | 'False' ;
+BOOL   : TRUE | FALSE ;
+TRUE   : 'true'  ;
+FALSE  : 'false' ;
+
 
 // Numerics
 //
@@ -62,9 +62,18 @@ REAL: '-'? INT '.' [0-9]+ ;
 FLOAT: REAL ('f' | 'F') ;
 DOUBLE: REAL ('d' | 'D') ;
 
+// Names 
+// (Since names can match 'true' and 'false' and the like, they need to come at the end of the lexer rules)
+//
+NAME: [a-zA-Z_][a-zA-Z0-9._+-]* ;
+
+
 // Whitespace & Comments
 //
 LINE_COMMENT : '//'.*? '\r'? '\n' -> skip ;
 LINE_ESCAPE: '\\' '\r'? '\n'             -> skip ;
 WS: [ \t]+                               -> skip ;
 NL: '\r'? '\n'                           -> skip;
+
+
+

@@ -13,9 +13,6 @@ import xivvic.adt.pgraph.antlr.PropertyGraphParser.PropertiesContext;
 public class EchoGraphListener
 	extends PropertyGraphBaseListener
 {
-	// FIXME: Need to synthesize ID if it is not provided
-	//
-
 	private final StringBuilder sb = new StringBuilder();
 	private final boolean quiet = true;
 

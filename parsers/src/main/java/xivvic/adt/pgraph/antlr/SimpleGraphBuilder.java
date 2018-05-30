@@ -22,6 +22,7 @@ import xivvic.adt.pgraph.simple.Graph;
 import xivvic.adt.pgraph.simple.Pragmas;
 import xivvic.adt.pgraph.simple.Property;
 import xivvic.adt.pgraph.simple.Vertex;
+import xivvic.adt.pgraph.simple.util.SequenceGenerator;
 
 
 /**
@@ -35,7 +36,6 @@ import xivvic.adt.pgraph.simple.Vertex;
 public class SimpleGraphBuilder
 	extends PropertyGraphBaseListener
 {
-
 	private final Pragmas.PragmasBuilder prag_builder = Pragmas.builder();
 	private final Graph.GraphBuilder graph_builder = Graph.builder();
 	private final Map<String, Vertex> vmap = new HashMap<>();
@@ -87,8 +87,19 @@ public class SimpleGraphBuilder
 
 	private String getOrCreateId(List<Property> props)
 	{
-		// FIXME:  Implement
-		return "Jumbo Osaki";
+
+		val opt = props.stream().filter(p -> p.name().equals("id")).findFirst();
+
+		if (opt.isPresent())
+		{
+			val p = opt.get();
+			return p.value().toString();
+		}
+
+
+		val id = SequenceGenerator.next_id_string();
+
+		return id;
 	}
 
 	@Override public void exitEdge(PropertyGraphParser.EdgeContext c)
@@ -105,12 +116,15 @@ public class SimpleGraphBuilder
 		graph_builder.edge(e);
 	}
 
-	private List<Property> createProperties(@NonNull PropertiesContext c)
+	private List<Property> createProperties(PropertiesContext c)
 	{
+		val rv = new ArrayList<Property>();
+		if (c == null)
+			return rv;
+
 		final List<PropContext> lpc = c.prop();
 		Objects.requireNonNull(lpc);
 
-		val rv = new ArrayList<Property>();
 		final Iterator<PropContext> pit = lpc.iterator();
 		while (pit.hasNext())
 		{
@@ -138,7 +152,9 @@ public class SimpleGraphBuilder
 
 		switch (option.getSymbol().getType())
 		{
-			case PropertyGraphLexer.BOOL:   return text.toLowerCase().startsWith("t") ? Boolean.TRUE : Boolean.FALSE;
+			case PropertyGraphLexer.TRUE:   return Boolean.TRUE;
+			case PropertyGraphLexer.FALSE:  return Boolean.FALSE;
+			case PropertyGraphLexer.BOOL:   return text.startsWith("t") ? Boolean.TRUE : Boolean.FALSE;
 			case PropertyGraphLexer.INT:    return new Integer(text);
 			case PropertyGraphLexer.FLOAT:  return new Float(text);
 			case PropertyGraphLexer.DOUBLE: return new Double(text);
@@ -146,8 +162,8 @@ public class SimpleGraphBuilder
 			case PropertyGraphLexer.STRING:
 			case PropertyGraphLexer.SQSTR:
 			case PropertyGraphLexer.DQSTR:
-				return option.getText();
-
+				val clean = text.substring(1, text.length() - 1);
+				return clean;
 		}
 
 		throw new IllegalArgumentException("Unable to handle option type " + option +  " with text: " + text);
