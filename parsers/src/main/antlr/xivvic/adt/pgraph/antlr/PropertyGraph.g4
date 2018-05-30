@@ -2,10 +2,18 @@ grammar PropertyGraph;
 
 @header {
 package xivvic.adt.pgraph.antlr;
-} 
+}
 
-graph: vertex+ edge* EOF ;
+// A Property Graph consists of up to 3 different types of records in the following order:
+//
+// pragma  e.g.  ## edge.auto.id=GENERATE
+// vertex  e.g.  (c:COMPONENT:SINK { color = "red" })
+// edge    e.g.  (c)--[:RUNS_ON {cpu = 2.0}]->(s)
+//
 
+graph: pragma* vertex+ edge* EOF ;
+
+pragma: '##' prop ;
 
 vertex: '(' vname ':' label (':' label)* properties? ')' ;
 vname: NAME;
@@ -15,24 +23,23 @@ ename: NAME;
 
 label: NAME;
 
-properties: '{' prop (',' prop)+ '}' ;
-prop      : pname EQUAL value ;
+// If the properties rule is matched, i.e. the input text has an opening '{'
+// then there must be at least one property.
+//
+// An empty set of properties can simply be indicated in the source as omitting
+// the opening and closing curly braces, {}.
+//
+properties: '{' prop (',' prop)* '}' ;
+prop      : pname '=' value ;
 pname     : NAME;
 
-value     : 
-	  string
-	| bool
-	| integer
-	| flt
-	| dbl
+value
+    : STRING
+	| BOOL
+	| INT
+	| FLOAT
+	| DOUBLE
 	;
-	
-string : SQSTR | DQSTR ;
-bool   : 'true' | 'TRUE' | 'True' | 'false' | 'FALSE' | 'False' ;
-integer: INT;
-flt    : FLOAT;
-dbl    : DOUBLE;
-
 
 // Lexical Items
 //
@@ -43,10 +50,15 @@ NAME: [a-zA-Z_][a-zA-Z0-9._+-]* ;
 
 // Strings (single and double quoted)
 //
+STRING : SQSTR | DQSTR ;
 SQSTR : '\'' (~['"] | '\\' '\'' | DQSTR)* '\'';
 DQSTR : '"'  (~['"] | '\\"' | SQSTR)* '"';
 
-// Values
+// Boolean
+//
+BOOL   : 'true' | 'TRUE' | 'True' | 'false' | 'FALSE' | 'False' ;
+
+// Numerics
 //
 INT: '0' | '-'? [1-9][0-9]* ;
 REAL: '-'? INT '.' [0-9]+ ;
