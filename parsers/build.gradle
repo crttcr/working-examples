@@ -23,11 +23,11 @@ dependencies
 	// Logging
 	//
 	api 'org.slf4j:slf4j-api:1.7+'
-
-
-	// Logging
-	//
 	implementation 'org.slf4j:slf4j-api:1.7.25'
+	
+	
+	implementation 'org.apache.commons:commons-lang3:3.7'
+	implementation 'org.projectlombok:lombok:1.16.22'
 
 	// Testing
 	//

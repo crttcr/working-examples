@@ -3,10 +3,12 @@ package xivvic.adt.pgraph.antlr;
 import java.util.Iterator;
 import java.util.List;
 
+import org.antlr.v4.runtime.tree.TerminalNode;
+
+import lombok.NonNull;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.LabelContext;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.PropContext;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.PropertiesContext;
-import xivvic.adt.pgraph.antlr.PropertyGraphParser.VnameContext;
 
 public class EchoGraphListener
 	extends PropertyGraphBaseListener
@@ -21,13 +23,23 @@ public class EchoGraphListener
 
 	public String result() { return sb.toString(); }
 
+
+	@Override public void exitPragma(PropertyGraphParser.PragmaContext ctx)
+	{
+		writeProperty(ctx.prop());
+	}
+
 	@Override public void exitVertex(PropertyGraphParser.VertexContext ctx)
 	{
-		writeVertexName(ctx.vname());
-		writeLabels(ctx.label());
+		writeName("VERTEX", ctx.NAME());
+		writeVertexLabels(ctx.label());
 		writeProperties(ctx.properties());
+	}
 
-
+	@Override public void exitEdge(PropertyGraphParser.EdgeContext ctx)
+	{
+		writeName("EDGE  ", ctx.NAME(1));
+		writeProperties(ctx.properties());
 	}
 
 	private void writeProperties(PropertiesContext c)
@@ -42,24 +54,30 @@ public class EchoGraphListener
 		while (pit.hasNext())
 		{
 			final PropContext pc = pit.next();
-			final String pname = pc.pname().getText();
-			final String value = pc.value().getText();
-			final String  text = String.format("\t\tPROP %s -> %s\n", pname, value);
-			sb.append(text);
-
-			if (! quiet)
-			{
-				System.out.print(text);
-			}
+			writeProperty(pc);
 		}
 	}
 
-	private void writeVertexName(VnameContext c)
+	private void writeProperty(PropContext c)
 	{
 		if (c == null) return;
 
-		final String name = c.getText();
-		final String text = "VERTEX: " + name + "\n";
+		final String pname = c.NAME().getText();
+		final String value = c.value().getText();
+		final String  text = String.format("\t\tPROP %s -> %s\n", pname, value);
+		sb.append(text);
+
+		if (! quiet)
+		{
+			System.out.print(text);
+		}
+
+	}
+
+	private void writeName(@NonNull String context, @NonNull TerminalNode n)
+	{
+		final String name = n.getText();
+		final String text = context + ": " + name + "\n";
 
 		sb.append(text);
 
@@ -70,7 +88,7 @@ public class EchoGraphListener
 
 	}
 
-	private void writeLabels(List<LabelContext> cs)
+	private void writeVertexLabels(List<LabelContext> cs)
 	{
 		if (cs == null) return;
 

@@ -7,11 +7,11 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
+import lombok.val;
 
 
 public class ParserDriver
@@ -23,25 +23,6 @@ public class ParserDriver
 
 	public static void main(String[] args) throws Exception
 	{
-		//final String input = "(x:DOG {height = 2.3F, weight=12.5D, age=23, name='ROVER \"funky\"', fur=\"wiry\"})\n(_:CAT {a=4})";
-
-		/*
-
-		final CharStream cs = CharStreams.fromString(input);
-		final PropertyGraphLexer lex = new PropertyGraphLexer(cs);
-		final CommonTokenStream tokens = new CommonTokenStream(lex);
-		final PropertyGraphParser parse = new PropertyGraphParser(tokens);
-
-		final ParseTree tree = parse.graph();
-
-		final ParseTreeWalker walker = new ParseTreeWalker();
-
-		walker.walk(new EchoGraphListener(), tree);
-
-
-		System.out.println(tree.toStringTree());
-		*/
-
 		final File[] inputs = getInputFiles();
 		int win = 0;
 		int lose = 0;
@@ -60,7 +41,7 @@ public class ParserDriver
 			}
 		}
 
-		final String msg = String.format("Wins [%d], Losses [%d]", win, lose);
+		val msg = String.format("Wins [%d], Losses [%d]", win, lose);
 		System.out.println(msg);
 
 	}
@@ -68,17 +49,16 @@ public class ParserDriver
 
 	public static boolean testInputFile(File input) throws Exception
 	{
-		final FileInputStream fis = new FileInputStream(input);
-		final BufferedInputStream bis = new BufferedInputStream(fis);
-		final CharStream cs = CharStreams.fromStream(bis);
-		final PropertyGraphLexer lex = new PropertyGraphLexer(cs);
-		final CommonTokenStream tokens = new CommonTokenStream(lex);
-		final PropertyGraphParser parse = new PropertyGraphParser(tokens);
+		val fis = new FileInputStream(input);
+		val bis = new BufferedInputStream(fis);
+		val cs = CharStreams.fromStream(bis);
+		val lex = new PropertyGraphLexer(cs);
+		val tokens = new CommonTokenStream(lex);
+		val parse = new PropertyGraphParser(tokens);
+		val tree = parse.graph();
 
-		final ParseTree tree = parse.graph();
-
-		final ParseTreeWalker walker = new ParseTreeWalker();
-		final EchoGraphListener listener = new EchoGraphListener();
+		val walker = new ParseTreeWalker();
+		val listener = new EchoGraphListener();
 
 		walker.walk(listener, tree);
 
@@ -106,9 +86,15 @@ public class ParserDriver
 			final String content = new String(bytes);
 			final String   rtrim = result.trim();
 			final String   etrim = content.trim();
+//			final String    diff = StringUtils.
 
+			System.out.println("PARSED-CONTENT --------------");
 			System.out.println(rtrim);
+			System.out.println("EXPECT-CONTENT --------------");
 			System.out.println(etrim);
+			System.out.println("DIFF");
+
+			System.out.println("END");
 
 			return rtrim.equals(etrim);
 		} catch (final IOException e)

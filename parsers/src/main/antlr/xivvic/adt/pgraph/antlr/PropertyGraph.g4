@@ -15,13 +15,11 @@ graph: pragma* vertex+ edge* EOF ;
 
 pragma: '##' prop ;
 
-vertex: '(' vname ':' label (':' label)* properties? ')' ;
-vname: NAME;
-
-edge:   '(' vname ')' '-'+ '[' ':' ename properties? ']' '-'+ '>' '(' vname ')' ;
-ename: NAME;
-
+vertex: '(' NAME ':' label (':' label)* properties? ')' ;
 label: NAME;
+
+edge:   '(' NAME ')' '-'+ '[' ':' NAME properties? ']' '-'+ '>' '(' NAME ')' ;
+
 
 // If the properties rule is matched, i.e. the input text has an opening '{'
 // then there must be at least one property.
@@ -30,8 +28,7 @@ label: NAME;
 // the opening and closing curly braces, {}.
 //
 properties: '{' prop (',' prop)* '}' ;
-prop      : pname '=' value ;
-pname     : NAME;
+prop      : NAME '=' value ;
 
 value
     : STRING

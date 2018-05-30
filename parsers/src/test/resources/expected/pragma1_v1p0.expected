@@ -1,0 +1,4 @@
+PRAGMA:
+	vertex.auto.id=GENERATE
+VERTEX: _
+	LABEL: PERSON
