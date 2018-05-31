@@ -2,7 +2,6 @@ package xivvic.adt.pgraph.antlr;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -125,10 +124,10 @@ public class SimpleGraphBuilder
 		final List<PropContext> lpc = c.prop();
 		Objects.requireNonNull(lpc);
 
-		final Iterator<PropContext> pit = lpc.iterator();
-		while (pit.hasNext())
+		val it = lpc.iterator();
+		while (it.hasNext())
 		{
-			val pc = pit.next();
+			val pc = it.next();
 			val  p = createProperty(pc);
 			rv.add(p);
 		}
@@ -166,18 +165,20 @@ public class SimpleGraphBuilder
 				return clean;
 		}
 
-		throw new IllegalArgumentException("Unable to handle option type " + option +  " with text: " + text);
+		val fmt = "Option unknown: lexer token (from first child of context) not handled in switch statement.\n\tType [%s]\n\tText [%s]\n\tContext [%s]\n";
+		val msg = String.format(fmt, option, text, c.getText());
+
+		throw new IllegalArgumentException(msg);
 	}
 
 	private List<String> labels(@NonNull List<LabelContext> cs)
 	{
 		val rv = new ArrayList<String>();
-		final Iterator<LabelContext> it = cs.iterator();
+		val it = cs.iterator();
 
 		while (it.hasNext())
 		{
-			final LabelContext c = it.next();
-			final String label = c.getText();
+			val label = it.next().getText();
 			rv.add(label);
 		}
 
