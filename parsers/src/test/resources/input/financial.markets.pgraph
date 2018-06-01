@@ -1,0 +1,26 @@
+// Financial Markets provides a sample snapshot of what a model might look like
+// for traded instruments.
+//
+//
+## vertex.auto.id = "GENERATE_SEQUENCE"
+
+(cs: ISSUE_TYPE { name = "Common Stock" })
+(ps: ISSUE_TYPE { name = "Preferred Stock" })
+(cp: ISSUE_TYPE { name = "Convertible Preferred Stock" })
+(bd: ISSUE_TYPE { name = "Bond" })
+
+(jpm: ISSUER
+	{
+	name = "JP Morgan Chase",
+	label = "JPM"
+	}
+)
+
+(jpm.cs: ISSUE { ticker = "JPM" })
+(jpm.ps: ISSUE { ticker = "JPM.PS" })
+
+(jpm.cs)--[:IS_A]->(cs)
+(jpm.ps)--[:IS_A]->(ps)
+
+(jpm)--[:ISSUED]->(jpm.cs)
+(jpm)--[:ISSUED]->(jpm.ps)

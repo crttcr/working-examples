@@ -26,12 +26,15 @@ edge:   '(' NAME ')' '-'+ '[' ':' NAME properties? ']' '-'+ '>' '(' NAME ')' ;
 //
 // An empty set of properties can simply be indicated in the source as omitting
 // the opening and closing curly braces, {}.
+// 
+// Also, the list of properties can end in a comma, for convenience
 //
-properties: '{' prop (',' prop)* '}' ;
+properties: '{' prop (',' prop)* ','? '}' ;
 prop      : NAME '=' value ;
 
 value
     : STRING
+    | NAME      // Treated like a string.
 	| BOOL
 	| INT
 	| FLOAT

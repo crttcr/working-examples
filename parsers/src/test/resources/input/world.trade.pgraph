@@ -1,0 +1,41 @@
+// World Trade models international trade flow
+//
+//
+// To add:
+// TARIFF
+// IMPORT
+// EXPORT
+//
+// COUNTRY + PRODUCT as separate models
+// Combine and add trade relations
+//
+// Apply trade data as time-based animation
+//
+
+## vertex.auto.id = "GENERATE_SEQUENCE"
+
+(cyp: COUNTRY { name = "Cyprus"})
+(grc: COUNTRY { name = "Greece"})
+(gbr: COUNTRY { name = "United Kingdom"})
+(lby: COUNTRY { name = "Libya"})
+(isr: COUNTRY { name = "Israel"})
+(ita: COUNTRY { name = "Italy"})
+(fra: COUNTRY { name = "France"})
+(usa: COUNTRY { name = "United States"})
+
+
+
+(animal: PRODUCT_CLASS { class = "Animal"})
+(vegetable: PRODUCT_CLASS { class = "Vegetable"})
+(food: PRODUCT_CLASS { class = "Food"})
+(drug: PRODUCT_CLASS { class = "Drugs"})
+(mineral: PRODUCT_CLASS { class = "Minerals"})
+(chemical: PRODUCT_CLASS { class = "Chemicals"})
+(fuel: PRODUCT_CLASS { class = "Fuel"})
+(hides_skins: PRODUCT_CLASS { class = "Hides/Skins"})
+(textiles_clothes: PRODUCT_CLASS { class = "Textiles/Clothes"})
+(wood: PRODUCT_CLASS { class = "Wood"})
+(stone_glass: PRODUCT_CLASS { class = "Stone/Glass"})
+
+(isr)--[:EXPORTS]->(drug)
+(isr)--[:IMPORTS]->(drug)

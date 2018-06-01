@@ -1,0 +1,126 @@
+// RDC is a multi component system developed to capture, catalog, and store messages
+// on a Kafka topic at scale.
+//
+//
+// This file is a combination of structural and communication relationships.
+// Deployment is not considered.
+//
+## vertex.auto.id = "GENERATE_SEQUENCE"
+
+(svc: SERVICE
+	{
+	name = "Raw Data Capture Service"
+	}
+)
+
+(r: COMPONENT
+	{
+	id   = "Reader.001",     // Components have identity
+	name = "RDC.Reader",
+	type = "RDC.Reader",
+	}
+)
+(w: COMPONENT
+	{
+	id   = "Writer.001",
+	name = "RDC.Writer",
+	type = "RDC.Writer",
+	}
+)
+(e: COMPONENT
+	{
+	id   = "EventWriter.001",
+	name = "RDC.EventWriter",
+	type = "RDC.EventWriter"
+	}
+)
+(t: COMPONENT
+	{
+	id   = "Terminus.001",
+	name = "RDC.Terminus",
+	type = "RDC.Terminus"
+	}
+)
+
+(src: PORT
+	{
+	label     = "Source",
+	direction = "INPUT",
+	bindkey   = "Topic.Source",
+	type      = "KafkaTopic"
+	}
+)
+
+(storage: PORT
+	{
+	label     = "Storage",
+	direction = "OUTPUT",
+	bindkey   = "AWS.S3",
+	type      = "AWS.S3"
+	}
+)
+
+(events: PORT
+	{
+	label     = "Events",
+	direction = "OUTPUT",
+	bindkey   = "Topic.Events",
+	type      = "KafkaTopic"
+	}
+)
+
+(dest: PORT
+	{
+	label     = "Destination",
+	direction = "OUTPUT",
+	bindkey   = "Topic.Destination",
+	type      = "KafkaTopic"
+	}
+)
+
+(message_queue: QUEUE : INTERNAL
+	{
+	label     = "Message Queue"
+	}
+)
+
+(event_queue: QUEUE : INTERNAL
+	{
+	label     = "Event Queue"
+	}
+)
+
+(completion_queue: QUEUE : INTERNAL
+	{
+	label     = "Completion Queue"
+	}
+)
+
+// Are these 3 necessary, since the components
+// provide more descriptive interaction?  
+// Saves having to do graph crawl.
+//
+(svc)--[:HAS]->(src)
+(svc)--[:HAS]->(events)
+(svc)--[:HAS]->(dest)
+
+(r)--[:IS_PART_OF]->(svc)
+(w)--[:IS_PART_OF]->(svc)
+(e)--[:IS_PART_OF]->(svc)
+(t)--[:IS_PART_OF]->(svc)
+
+(r)--[:READS_FROM]->(src)
+(w)--[:WRITES_TO]->(storage)
+(e)--[:WRITES_TO]->(events)
+
+(r)--[:WRITES_TO]->(message_queue)
+(w)--[:READS_FROM]->(message_queue)
+
+(w)--[:WRITES_TO]->(event_queue)
+(e)--[:READS_FROM]->(event_queue)
+
+(e)--[:WRITES_TO]->(completion_queue)
+(t)--[:READS_FROM]->(completion_queue)
+
+
+

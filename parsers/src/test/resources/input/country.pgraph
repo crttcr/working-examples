@@ -1,0 +1,14 @@
+// Country provides Vertices for all countries
+//
+//
+
+## vertex.auto.id = "GENERATE_SEQUENCE"
+
+(cyp: COUNTRY { name = "Cyprus"})
+(grc: COUNTRY { name = "Greece"})
+(gbr: COUNTRY { name = "United Kingdom"})
+(lby: COUNTRY { name = "Libya"})
+(isr: COUNTRY { name = "Israel"})
+(ita: COUNTRY { name = "Italy"})
+(fra: COUNTRY { name = "France"})
+(usa: COUNTRY { name = "United States"})

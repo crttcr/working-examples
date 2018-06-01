@@ -62,7 +62,7 @@ public class Formatter
 
 		sb.append("Edge:")
 		.append("(")
-		.append(e.from().id())
+		.append(e.from().id())    // FIXME: This can throw an NPE because construction of edges is not constrained to valid node references.
 		.append(")")
 		.append("--[:")
 		.append(e.relation())

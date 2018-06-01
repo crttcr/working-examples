@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.Accessors;
+import xivvic.adt.pgraph.antlr.GraphParseResult.GraphParseResultBuilder;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.LabelContext;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.PropContext;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.PropertiesContext;
@@ -31,6 +32,9 @@ import xivvic.adt.pgraph.simple.util.SequenceGenerator;
  *
  */
 
+// FIXME: Warn when a vertex label is reused
+//
+
 @Accessors(fluent = true)
 public class SimpleGraphBuilder
 	extends PropertyGraphBaseListener
@@ -45,10 +49,15 @@ public class SimpleGraphBuilder
 	@Getter
 	private Graph graph = null;
 
+	@Getter
+	private GraphParseResult result = null;
+
+	private GraphParseResultBuilder result_builder = GraphParseResult.builder();
 
 	@Override public void exitGraph(@NonNull PropertyGraphParser.GraphContext ctx)
 	{
-		graph = graph_builder.build();
+		result = result_builder.build();
+		graph  = graph_builder.build();
 	}
 
 	@Override public void exitPragma(@NonNull PropertyGraphParser.PragmaContext ctx)
@@ -80,6 +89,13 @@ public class SimpleGraphBuilder
 
 		val v = builder.id(id).labels(labels).properties(props).build();
 
+		val existing = vmap.get(name);
+		if (existing != null && name.equals("_") == false)
+		{
+			val err = GraphBuilderElf.getReusedSymbolicNameError(c.NAME(), c);
+			result_builder.error(err);
+		}
+
 		vmap.put(name, v);
 		graph_builder.vertex(v);
 	}
@@ -107,8 +123,28 @@ public class SimpleGraphBuilder
 		val   props = createProperties(c.properties());
 		val out_ref = c.NAME(0).getText();
 		val  in_ref = c.NAME(2).getText();
+
 		val     out = vmap.get(out_ref);
 		val      in = vmap.get( in_ref);
+
+		boolean failed = false;
+
+		if (out == null)
+		{
+			val err = GraphBuilderElf.getReferencedSymbolNotFoundError(c.NAME(0), c);
+			result_builder.error(err);
+			failed = true;
+		}
+
+		if (in == null)
+		{
+			val err = GraphBuilderElf.getReferencedSymbolNotFoundError(c.NAME(2), c);
+			result_builder.error(err);
+			failed = true;
+		}
+
+		if (failed)
+			return;
 
 		val e = new Edge(rel, out, in, props);
 
@@ -157,6 +193,7 @@ public class SimpleGraphBuilder
 			case PropertyGraphLexer.INT:    return new Integer(text);
 			case PropertyGraphLexer.FLOAT:  return new Float(text);
 			case PropertyGraphLexer.DOUBLE: return new Double(text);
+			case PropertyGraphLexer.NAME:   return text;
 
 			case PropertyGraphLexer.STRING:
 			case PropertyGraphLexer.SQSTR:
