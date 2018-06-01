@@ -1,0 +1,76 @@
+## vertex.auto.id = "GENERATE_SEQUENCE"
+VERTEX: svc
+	LABEL: SERVICE
+		PROP name = "Raw Data Capture Service"
+VERTEX: r
+	LABEL: COMPONENT
+		PROP id = "Reader.001"
+		PROP name = "RDC.Reader"
+		PROP type = "RDC.Reader"
+VERTEX: w
+	LABEL: COMPONENT
+		PROP id = "Writer.001"
+		PROP name = "RDC.Writer"
+		PROP type = "RDC.Writer"
+VERTEX: e
+	LABEL: COMPONENT
+		PROP id = "EventWriter.001"
+		PROP name = "RDC.EventWriter"
+		PROP type = "RDC.EventWriter"
+VERTEX: t
+	LABEL: COMPONENT
+		PROP id = "Terminus.001"
+		PROP name = "RDC.Terminus"
+		PROP type = "RDC.Terminus"
+VERTEX: src
+	LABEL: PORT
+		PROP label = "Source"
+		PROP direction = "INPUT"
+		PROP bindkey = "Topic.Source"
+		PROP type = "KafkaTopic"
+VERTEX: storage
+	LABEL: PORT
+		PROP label = "Storage"
+		PROP direction = "OUTPUT"
+		PROP bindkey = "AWS.S3"
+		PROP type = "AWS.S3"
+VERTEX: events
+	LABEL: PORT
+		PROP label = "Events"
+		PROP direction = "OUTPUT"
+		PROP bindkey = "Topic.Events"
+		PROP type = "KafkaTopic"
+VERTEX: dest
+	LABEL: PORT
+		PROP label = "Destination"
+		PROP direction = "OUTPUT"
+		PROP bindkey = "Topic.Destination"
+		PROP type = "KafkaTopic"
+VERTEX: message_queue
+	LABEL: QUEUE
+	LABEL: INTERNAL
+		PROP label = "Message Queue"
+VERTEX: event_queue
+	LABEL: QUEUE
+	LABEL: INTERNAL
+		PROP label = "Event Queue"
+VERTEX: completion_queue
+	LABEL: QUEUE
+	LABEL: INTERNAL
+		PROP label = "Completion Queue"
+EDGE: HAS
+EDGE: HAS
+EDGE: HAS
+EDGE: IS_PART_OF
+EDGE: IS_PART_OF
+EDGE: IS_PART_OF
+EDGE: IS_PART_OF
+EDGE: READS_FROM
+EDGE: WRITES_TO
+EDGE: WRITES_TO
+EDGE: WRITES_TO
+EDGE: READS_FROM
+EDGE: WRITES_TO
+EDGE: READS_FROM
+EDGE: WRITES_TO
+EDGE: READS_FROM

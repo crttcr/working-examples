@@ -1,0 +1,27 @@
+## vertex.auto.id = GENERATE_SEQUENCE
+VERTEX: cs
+	LABEL: ISSUE_TYPE
+		PROP name = "Common Stock"
+VERTEX: ps
+	LABEL: ISSUE_TYPE
+		PROP name = "Preferred Stock"
+VERTEX: cp
+	LABEL: ISSUE_TYPE
+		PROP name = "Convertible Preferred Stock"
+VERTEX: bd
+	LABEL: ISSUE_TYPE
+		PROP name = "Bond"
+VERTEX: jpm
+	LABEL: ISSUER
+		PROP name = "JP Morgan Chase"
+		PROP label = "JPM"
+VERTEX: jpm.cs
+	LABEL: ISSUE
+		PROP ticker = "JPM"
+VERTEX: jpm.ps
+	LABEL: ISSUE
+		PROP ticker = "JPM.PS"
+EDGE: IS_A
+EDGE: IS_A
+EDGE: ISSUED
+EDGE: ISSUED

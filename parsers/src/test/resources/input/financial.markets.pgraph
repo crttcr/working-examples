@@ -2,7 +2,7 @@
 // for traded instruments.
 //
 //
-## vertex.auto.id = "GENERATE_SEQUENCE"
+## vertex.auto.id = GENERATE_SEQUENCE
 
 (cs: ISSUE_TYPE { name = "Common Stock" })
 (ps: ISSUE_TYPE { name = "Preferred Stock" })

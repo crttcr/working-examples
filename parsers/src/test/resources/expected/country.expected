@@ -1,0 +1,26 @@
+## vertex.auto.id.generator = STRING_SEQUENCE
+## vertex.auto.id.prefix = xiv.country.iso3
+VERTEX: cyp
+	LABEL: COUNTRY
+		PROP name = "Cyprus"
+VERTEX: grc
+	LABEL: COUNTRY
+		PROP name = "Greece"
+VERTEX: gbr
+	LABEL: COUNTRY
+		PROP name = "United Kingdom"
+VERTEX: lby
+	LABEL: COUNTRY
+		PROP name = "Libya"
+VERTEX: isr
+	LABEL: COUNTRY
+		PROP name = "Israel"
+VERTEX: ita
+	LABEL: COUNTRY
+		PROP name = "Italy"
+VERTEX: fra
+	LABEL: COUNTRY
+		PROP name = "France"
+VERTEX: usa
+	LABEL: COUNTRY
+		PROP name = "United States"

@@ -2,7 +2,8 @@
 //
 //
 
-## vertex.auto.id = "GENERATE_SEQUENCE"
+## vertex.auto.id.generator = STRING_SEQUENCE
+## vertex.auto.id.prefix    = xiv.country.iso3
 
 (cyp: COUNTRY { name = "Cyprus"})
 (grc: COUNTRY { name = "Greece"})

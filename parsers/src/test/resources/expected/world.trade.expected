@@ -1,0 +1,60 @@
+## vertex.auto.id = "GENERATE_SEQUENCE"
+VERTEX: cyp
+	LABEL: COUNTRY
+		PROP name = "Cyprus"
+VERTEX: grc
+	LABEL: COUNTRY
+		PROP name = "Greece"
+VERTEX: gbr
+	LABEL: COUNTRY
+		PROP name = "United Kingdom"
+VERTEX: lby
+	LABEL: COUNTRY
+		PROP name = "Libya"
+VERTEX: isr
+	LABEL: COUNTRY
+		PROP name = "Israel"
+VERTEX: ita
+	LABEL: COUNTRY
+		PROP name = "Italy"
+VERTEX: fra
+	LABEL: COUNTRY
+		PROP name = "France"
+VERTEX: usa
+	LABEL: COUNTRY
+		PROP name = "United States"
+VERTEX: animal
+	LABEL: PRODUCT_CLASS
+		PROP class = "Animal"
+VERTEX: vegetable
+	LABEL: PRODUCT_CLASS
+		PROP class = "Vegetable"
+VERTEX: food
+	LABEL: PRODUCT_CLASS
+		PROP class = "Food"
+VERTEX: drug
+	LABEL: PRODUCT_CLASS
+		PROP class = "Drugs"
+VERTEX: mineral
+	LABEL: PRODUCT_CLASS
+		PROP class = "Minerals"
+VERTEX: chemical
+	LABEL: PRODUCT_CLASS
+		PROP class = "Chemicals"
+VERTEX: fuel
+	LABEL: PRODUCT_CLASS
+		PROP class = "Fuel"
+VERTEX: hides_skins
+	LABEL: PRODUCT_CLASS
+		PROP class = "Hides/Skins"
+VERTEX: textiles_clothes
+	LABEL: PRODUCT_CLASS
+		PROP class = "Textiles/Clothes"
+VERTEX: wood
+	LABEL: PRODUCT_CLASS
+		PROP class = "Wood"
+VERTEX: stone_glass
+	LABEL: PRODUCT_CLASS
+		PROP class = "Stone/Glass"
+EDGE: EXPORTS
+EDGE: IMPORTS
