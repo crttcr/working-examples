@@ -9,7 +9,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import lombok.val;
-import xivvic.adt.pgraph.antlr.GraphDefinitionError.Severity;
+import xivvic.adt.pgraph.antlr.error.AccumulatingErrorListener;
+import xivvic.adt.pgraph.antlr.error.GraphDefinitionError.Severity;
+import xivvic.adt.pgraph.antlr.error.GraphDefinitionResult;
+import xivvic.adt.pgraph.antlr.error.GraphDefinitionResult.GraphDefinitionResultBuilder;
 import xivvic.adt.pgraph.simple.Formatter;
 
 
@@ -20,18 +23,19 @@ public class SimpleGraphDriver
 	public static void main(String[] args) throws Exception
 	{
 		val  input = getInput();
-		val     cs = CharStreams.fromString(input);
-		val    lex = new PropertyGraphLexer(cs);
-		val tokens = new CommonTokenStream(lex);
-		val  parse = new PropertyGraphParser(tokens);
+		val tokens = string2tokens(input);
+
+		val result_builder = GraphDefinitionResult.builder();
+		val  parse = constructAndConfigureParser(tokens, result_builder);
 		val   tree = parse.graph();
 
 		val   walker = new ParseTreeWalker();
-		val listener = new SimpleGraphBuilder();
+
+		val listener = new SimpleGraphBuilder(result_builder);
 
 		walker.walk(listener, tree);
 
-		val result = listener.result();
+		val result = result_builder.build();
 
 		val ok = handleErrors(result);
 
@@ -44,7 +48,28 @@ public class SimpleGraphDriver
 
 	}
 
-	public static boolean handleErrors(GraphParseResult result)
+	private static CommonTokenStream string2tokens(String input)
+	{
+		val     cs = CharStreams.fromString(input);
+		val    lex = new PropertyGraphLexer(cs);
+		val tokens = new CommonTokenStream(lex);
+
+		return tokens;
+	}
+
+	private static PropertyGraphParser constructAndConfigureParser(CommonTokenStream tokens, GraphDefinitionResultBuilder result_builder)
+	{
+		val  parser = new PropertyGraphParser(tokens);
+		val error_listener = new AccumulatingErrorListener(result_builder);
+
+		parser.removeErrorListeners();
+		parser.addErrorListener(error_listener);
+
+		return parser;
+	}
+
+
+	private static boolean handleErrors(GraphDefinitionResult result)
 	{
 		val fail = result.isFailure();
 

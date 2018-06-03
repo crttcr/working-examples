@@ -1,5 +1,8 @@
 package xivvic.adt.pgraph.antlr;
 
+ import static xivvic.adt.pgraph.antlr.error.GraphDefinitionError.FMT_SYMBOL_NOT_RESOLVED;
+import static xivvic.adt.pgraph.antlr.error.GraphDefinitionError.FMT_SYMBOL_REUSE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +15,13 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.Accessors;
-import xivvic.adt.pgraph.antlr.GraphParseResult.GraphParseResultBuilder;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.LabelContext;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.PropContext;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.PropertiesContext;
 import xivvic.adt.pgraph.antlr.PropertyGraphParser.ValueContext;
+import xivvic.adt.pgraph.antlr.error.GraphDefinitionError;
+import xivvic.adt.pgraph.antlr.error.GraphDefinitionError.Severity;
+import xivvic.adt.pgraph.antlr.error.GraphDefinitionResult.GraphDefinitionResultBuilder;
 import xivvic.adt.pgraph.simple.Edge;
 import xivvic.adt.pgraph.simple.Graph;
 import xivvic.adt.pgraph.simple.Pragmas;
@@ -32,9 +37,6 @@ import xivvic.adt.pgraph.simple.util.SequenceGenerator;
  *
  */
 
-// FIXME: Warn when a vertex label is reused
-//
-
 @Accessors(fluent = true)
 public class SimpleGraphBuilder
 	extends PropertyGraphBaseListener
@@ -49,14 +51,15 @@ public class SimpleGraphBuilder
 	@Getter
 	private Graph graph = null;
 
-	@Getter
-	private GraphParseResult result = null;
+	private final GraphDefinitionResultBuilder result_builder;
 
-	private GraphParseResultBuilder result_builder = GraphParseResult.builder();
+	public SimpleGraphBuilder(@NonNull GraphDefinitionResultBuilder result_builder)
+	{
+		this. result_builder = result_builder;
+	}
 
 	@Override public void exitGraph(@NonNull PropertyGraphParser.GraphContext ctx)
 	{
-		result = result_builder.build();
 		graph  = graph_builder.build();
 	}
 
@@ -92,7 +95,7 @@ public class SimpleGraphBuilder
 		val existing = vmap.get(name);
 		if (existing != null && name.equals("_") == false)
 		{
-			val err = GraphBuilderElf.getReusedSymbolicNameError(c.NAME(), c);
+			val err = GraphDefinitionError.getSymbolError(c.NAME(), c, Severity.WARNING, FMT_SYMBOL_REUSE);
 			result_builder.error(err);
 		}
 
@@ -131,14 +134,14 @@ public class SimpleGraphBuilder
 
 		if (out == null)
 		{
-			val err = GraphBuilderElf.getReferencedSymbolNotFoundError(c.NAME(0), c);
+			val err = GraphDefinitionError.getSymbolError(c.NAME(0), c, Severity.FAILURE, FMT_SYMBOL_NOT_RESOLVED);
 			result_builder.error(err);
 			failed = true;
 		}
 
 		if (in == null)
 		{
-			val err = GraphBuilderElf.getReferencedSymbolNotFoundError(c.NAME(2), c);
+			val err = GraphDefinitionError.getSymbolError(c.NAME(2), c, Severity.FAILURE, FMT_SYMBOL_NOT_RESOLVED);
 			result_builder.error(err);
 			failed = true;
 		}

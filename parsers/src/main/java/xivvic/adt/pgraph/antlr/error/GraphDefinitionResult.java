@@ -1,4 +1,4 @@
-package xivvic.adt.pgraph.antlr;
+package xivvic.adt.pgraph.antlr.error;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.val;
-import xivvic.adt.pgraph.antlr.GraphDefinitionError.Severity;
+import xivvic.adt.pgraph.antlr.error.GraphDefinitionError.Severity;
 
 @Builder
-public class GraphParseResult
+public class GraphDefinitionResult
 {
 	public static enum Result
 	{
@@ -37,4 +37,6 @@ public class GraphParseResult
 					.filter(e -> e.severity() == sev)
 					.collect(Collectors.toList());
 	}
+
+	public static class GraphDefinitionResultBuilder {}
 }
