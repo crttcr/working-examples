@@ -26,15 +26,14 @@ public class SimpleGraphDriver
 		val tokens = string2tokens(input);
 
 		val result_builder = GraphDefinitionResult.builder();
-		val  parse = constructAndConfigureParser(tokens, result_builder);
-		val   tree = parse.graph();
+		val       listener = new SimpleGraphBuilder(result_builder);
+		val         parser = constructAndConfigureParser(tokens, result_builder);
 
-		val   walker = new ParseTreeWalker();
+		walkTreeFromRoot(parser, listener);
+		processResult(result_builder, listener);
+	}
 
-		val listener = new SimpleGraphBuilder(result_builder);
-
-		walker.walk(listener, tree);
-
+	private static void processResult(GraphDefinitionResultBuilder result_builder, SimpleGraphBuilder listener) {
 		val result = result_builder.build();
 
 		val ok = handleErrors(result);
@@ -45,7 +44,12 @@ public class SimpleGraphDriver
 			val   msg = Formatter.format(graph);
 			System.out.println(msg);
 		}
+	}
 
+	private static void walkTreeFromRoot(PropertyGraphParser parse, SimpleGraphBuilder listener) {
+		val     tree = parse.graph();
+		val   walker = new ParseTreeWalker();
+		walker.walk(listener, tree);
 	}
 
 	private static CommonTokenStream string2tokens(String input)
@@ -87,21 +91,19 @@ public class SimpleGraphDriver
 
 		}
 
-
-
 		return ! fail;
 	}
 
 
-	public static String getInput()
+	private static String getInput()
 	{
 //		val  input = "(x:DOG {height = 2.3F, weight=12.5D, age=23, name='HBH \"The Ham\"', fur=\"wiry\"})\n(_:CAT {a=4,id='Sylvester'})\n(x)--[:CHASES {comic=true}]->(_)";
 //		return input;
 
-		val expected = new File(INPUT_DIR, "country.pgraph");
+//		val expected = new File(INPUT_DIR, "country.pgraph");
 //		val expected = new File(INPUT_DIR, "financial.markets.pgraph");
 //		val expected = new File(INPUT_DIR, "world.trade.pgraph");
-//		val expected = new File(INPUT_DIR, "rdc.pgraph");
+		val expected = new File(INPUT_DIR, "rdc.pgraph");
 
 		@val
 		byte[] bytes = null;
