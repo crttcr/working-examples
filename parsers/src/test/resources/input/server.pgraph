@@ -1,0 +1,8 @@
+// Example server resources
+//
+//
+## vertex.auto.id.generator = STRING_SEQUENCE
+## vertex.auto.id.prefix    = xiv.server
+
+(s1: SERVER { name = "alpha", ip="10.0.2.101"})
+(s2: SERVER { name = "bogon", ip="10.0.2.102"})

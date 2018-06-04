@@ -100,15 +100,16 @@ public class SimpleGraphDriver
 //		val  input = "(x:DOG {height = 2.3F, weight=12.5D, age=23, name='HBH \"The Ham\"', fur=\"wiry\"})\n(_:CAT {a=4,id='Sylvester'})\n(x)--[:CHASES {comic=true}]->(_)";
 //		return input;
 
-//		val expected = new File(INPUT_DIR, "country.pgraph");
-//		val expected = new File(INPUT_DIR, "financial.markets.pgraph");
-//		val expected = new File(INPUT_DIR, "world.trade.pgraph");
-		val expected = new File(INPUT_DIR, "rdc.pgraph");
+		val input = new File(INPUT_DIR, "deployment.pgraph");
+//		val input = new File(INPUT_DIR, "country.pgraph");
+//		val input = new File(INPUT_DIR, "financial.markets.pgraph");
+//		val input = new File(INPUT_DIR, "world.trade.pgraph");
+//		val input = new File(INPUT_DIR, "rdc.pgraph");
 
 		@val
 		byte[] bytes = null;
 		try {
-			bytes = Files.readAllBytes(expected.toPath());
+			bytes = Files.readAllBytes(input.toPath());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

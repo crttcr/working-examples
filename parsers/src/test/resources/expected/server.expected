@@ -1,0 +1,10 @@
+## vertex.auto.id.generator = STRING_SEQUENCE
+## vertex.auto.id.prefix = xiv.server
+VERTEX: s1
+	LABEL: SERVER
+		PROP name = "alpha"
+		PROP ip = "10.0.2.101"
+VERTEX: s2
+	LABEL: SERVER
+		PROP name = "bogon"
+		PROP ip = "10.0.2.102"

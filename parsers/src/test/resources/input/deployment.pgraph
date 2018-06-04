@@ -1,0 +1,30 @@
+// Example server resources
+//
+//
+// NOTE: This deployment model points out the need for a reference capability in the model parser.
+// It does not make sense to redefine elements that should be defined in a more narrow, appropriate scope.
+//
+// FIXME: Implement inclusion or reference capability in the parser
+//
+## vertex.auto.id.generator = STRING_SEQUENCE
+## vertex.auto.id.prefix    = xiv.deployment
+
+(s1: SERVER)
+(s2: SERVER)
+(s3: SERVER)
+(b1: BROKER)
+(b2: BROKER)
+(t1: TOPIC)
+(t2: TOPIC)
+(t3: TOPIC)
+(t4: TOPIC)
+(v:  SERVICE)
+
+(b1)--[:DEPLOYED_TO]->(s1)
+(b2)--[:DEPLOYED_TO]->(s2)
+(v )--[:DEPLOYED_TO]->(s3)
+
+(v )--[:READS_FROM]->(t1)
+(v )--[:WRITES_TO]->(t2)
+(v )--[:WRITES_TO]->(t3)
+(v )--[:WRITES_TO]->(t4)

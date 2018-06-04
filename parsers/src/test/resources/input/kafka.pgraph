@@ -1,0 +1,12 @@
+// Example server resources
+//
+//
+## vertex.auto.id.generator = STRING_SEQUENCE
+## vertex.auto.id.prefix    = xiv.kafka
+
+(b1: BROKER { name = "broker_1"})
+(b2: BROKER { name = "broker_2"})
+(t1: TOPIC  { name = "source",      partitions = 16})
+(t2: TOPIC  { name = "failure",     partitions =  8})
+(t3: TOPIC  { name = "quarantine",  partitions =  8})
+(t4: TOPIC  { name = "destination", partitions = 16})

@@ -1,0 +1,24 @@
+## vertex.auto.id.generator = STRING_SEQUENCE
+## vertex.auto.id.prefix = xiv.kafka
+VERTEX: b1
+	LABEL: BROKER
+		PROP name = "broker_1"
+VERTEX: b2
+	LABEL: BROKER
+		PROP name = "broker_2"
+VERTEX: t1
+	LABEL: TOPIC
+		PROP name = "source"
+		PROP partitions = 16
+VERTEX: t2
+	LABEL: TOPIC
+		PROP name = "failure"
+		PROP partitions = 8
+VERTEX: t3
+	LABEL: TOPIC
+		PROP name = "quarantine"
+		PROP partitions = 8
+VERTEX: t4
+	LABEL: TOPIC
+		PROP name = "destination"
+		PROP partitions = 16

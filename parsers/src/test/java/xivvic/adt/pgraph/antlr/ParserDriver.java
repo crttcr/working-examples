@@ -15,6 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 import lombok.val;
 
 
+// NOTE: This is not a good class to use for an example of running an Antlr parser.
+// See {@link SimpleGraphDriver} which catches both lexical and semantic errors.
+//
 public class ParserDriver
 {
 	private static String    INPUT_DIR = "src/test/resources/input";
