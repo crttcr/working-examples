@@ -1,0 +1,41 @@
+apply plugin: 'java-library'
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+
+ext
+{
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
+
+// apply from: "${rootDir}/gradle/dependency.explore.gradle"
+// apply from: "${rootDir}/gradle/test-output.gradle"
+
+repositories 
+{
+	mavenCentral()
+}
+
+dependencies 
+{
+	// Commons Lang
+	//
+	compile 'org.apache.commons:commons-lang3:3.7'
+
+	// Logging
+	//
+	compile 'org.slf4j:slf4j-api:1.7.25'
+
+	// Scala & Akka
+	// 
+   compile 'org.scala-lang:scala-library:2.12.6'
+	compile group: 'org.scalatest', name: 'scalatest_2.12', version: '3.0.5'
+	compile group: 'com.typesafe.akka', name: 'akka-testkit_2.12', version: '2.5.12'
+
+
+	// Testing
+	//
+	testImplementation 'junit:junit:4.12'
+	testImplementation 'org.mockito:mockito-core:2.18.3'
+}
+
