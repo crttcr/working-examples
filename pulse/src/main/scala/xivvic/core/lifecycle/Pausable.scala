@@ -4,26 +4,31 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 trait Pausable
 {
-	private var isPaused = new AtomicBoolean()
+	private var state = new AtomicBoolean()
+
+	def onPause():  Unit = {}
+	def onResume(): Unit = {}
 
 	def pause(): Boolean =
 	{
-		if (isPaused.get)
+		if (state.get)
 		{
 			false
 		}
 		else
 		{
-			isPaused.set(true)
+			onPause()
+			state.set(true)
 			true
 		}
 	}
 
 	def resume(): Boolean =
 	{
-		if (isPaused.get)
+		if (state.get)
 		{
-			isPaused.set(true)
+			onResume()
+			state.set(false)
 			true
 		}
 		else
@@ -32,4 +37,5 @@ trait Pausable
 		}
 	}
 
+	def isPaused = state.get
 }
