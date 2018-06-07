@@ -77,8 +77,6 @@ class TinkerPopSerdeRoundTripTest
 		rv
 	}
 
-	// FIXME: Need to test structure and content of graph, not just cardinality
-	//
 	def assertGraphsMatch(a: Graph, b: Graph): Unit =
 	{
 		val matcher = new TinkerPopGraphMatcher(a, b)

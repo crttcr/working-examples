@@ -43,13 +43,65 @@ object PGProtoElf
 
 	def propertyString2Object(v: String, t: Property.Type): Object =
 	{
-		// TODO: Error Handling for these conversions.
-		//
+
+		def convertBoolean(v: String): Object =
+		{
+			if (v.equalsIgnoreCase("true"))
+				java.lang.Boolean.TRUE
+			else
+				java.lang.Boolean.FALSE
+		}
+
+		def convertInteger(v: String): Object =
+		{
+			try
+			{
+				new java.lang.Integer(v)
+			}
+			catch
+			{
+     			case e: NumberFormatException =>
+     				val msg = e.getLocalizedMessage
+     				println(s"Unable to convert [$v] to integer: $msg")
+     				v
+	   	}
+		}
+
+		def convertFloat(v: String): Object =
+		{
+			try
+			{
+				new java.lang.Float(v)
+			}
+			catch
+			{
+     			case e: NumberFormatException =>
+     				val msg = e.getLocalizedMessage
+     				println(s"Unable to convert [$v] to float: $msg")
+     				v
+	   	}
+		}
+
+		def convertDouble(v: String): Object =
+		{
+			try
+			{
+				new java.lang.Double(v)
+			}
+			catch
+			{
+     			case e: NumberFormatException =>
+     				val msg = e.getLocalizedMessage
+     				println(s"Unable to convert [$v] to double: $msg")
+     				v
+	   	}
+		}
+
 		t match {
-			case x if x == Property.Type.BOOLEAN   => if (v.equalsIgnoreCase("true")) java.lang.Boolean.TRUE else java.lang.Boolean.FALSE
-			case x if x == Property.Type.FLOAT     => new java.lang.Float(v)
-			case x if x == Property.Type.DOUBLE    => new java.lang.Double(v)
-			case x if x == Property.Type.INTEGER   => new java.lang.Integer(v)
+			case x if x == Property.Type.BOOLEAN   => convertBoolean(v)
+			case x if x == Property.Type.FLOAT     => convertFloat(v)
+			case x if x == Property.Type.DOUBLE    => convertDouble(v)
+			case x if x == Property.Type.INTEGER   => convertInteger(v)
 			case _                                 => v
 		}
 	}
