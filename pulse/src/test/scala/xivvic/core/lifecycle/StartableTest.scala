@@ -19,9 +19,9 @@ class StartableTest
 		val subject = getSubject
 	}
 
-	behavior of "hasStarted:"
+	behavior of "initialization code:"
 
-	it should "not be started immediately after construction and onStart should not have been called" in
+	it should "should start in correct state and not call onStart()" in
 	{
 		// Arrange
 		//
@@ -33,9 +33,9 @@ class StartableTest
 		f.subject.latch.getCount should be (1L)
 	}
 
-	behavior of "Start     :"
+	behavior of "Start()            :"
 
-	it should "return true and have correct state when called immediately after construction" in
+	it should "return true, call onStart() and hasStarted should be true" in
 	{
 		// Arrange
 		//
@@ -52,7 +52,7 @@ class StartableTest
 		f.subject.latch.getCount should be (0L)
 	}
 
-	it should "return false and still be started when start called multiple times" in
+	it should "return false and not call onStarted() when called multiple times" in
 	{
 		// Arrange
 		//

@@ -22,7 +22,7 @@ class PausableTest
 
 	behavior of "initialization code:"
 
-	it should "not be paused immediately after construction and onPause()/onResume() should not have been called" in
+	it should "start in correct state and not call onPause()/onResume()" in
 	{
 		// Arrange
 		//
@@ -37,7 +37,7 @@ class PausableTest
 
 	behavior of "pause              :"
 
-	it should "return true when first called, call the onPause() hook, and have the correct state" in
+	it should "call the onPause() hook and set isPaused to true" in
 	{
 		// Arrange
 		//
@@ -55,7 +55,27 @@ class PausableTest
 		f.subject.resumeCounter.get should be (0L)
 	}
 
-	it should "return true when called after resume, call the onPause() hook, and have the correct state" in
+	it should "return false when called twice without 'resume'" in
+	{
+		// Arrange
+		//
+		val f = fixture
+
+		// Act
+		//
+		val  ok = f.subject.pause()
+		val not = f.subject.pause()
+
+		// Assert
+		//
+		ok	 should be (true)
+		not should be (false)
+		f.subject.isPaused should be (true)
+		f.subject. pauseCounter.get should be (1L)
+		f.subject.resumeCounter.get should be (0L)
+	}
+
+	it should "call onPause() and set isPaused to true after 'resume'" in
 	{
 		// Arrange
 		//
@@ -76,9 +96,9 @@ class PausableTest
 		f.subject.resumeCounter.get should be (1L)
 	}
 
-	behavior of "resume            :"
+	behavior of "resume             :"
 
-	it should "return false when first called, not call either hook, and have the correct state" in
+	it should "return false and not call onResume() when not paused" in
 	{
 		// Arrange
 		//
@@ -96,7 +116,7 @@ class PausableTest
 		f.subject.resumeCounter.get should be (0L)
 	}
 
-	it should "return true when called after pause, call the onResume() hook, and have the correct state" in
+	it should "return true when paused and call nResume() no longer be paused" in
 	{
 		// Arrange
 		//
@@ -116,7 +136,7 @@ class PausableTest
 		f.subject.resumeCounter.get should be (1L)
 	}
 
-	behavior of "resume/resume     :"
+	behavior of "pause/resume       :"
 
 	it should "support repeated calls to pause and resume" in
 	{

@@ -8,8 +8,8 @@ ext
 	targetCompatibility = '1.8'
 }
 
-// apply from: "${rootDir}/gradle/dependency.explore.gradle"
-// apply from: "${rootDir}/gradle/test-output.gradle"
+apply from: "${rootDir}/gradle/dependency.explore.gradle"
+apply from: "${rootDir}/gradle/test-output.gradle"
 
 repositories 
 {

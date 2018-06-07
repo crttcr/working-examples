@@ -19,9 +19,9 @@ class StoppableTest
 		val subject = getSubject
 	}
 
-	behavior of "hasStopped:"
+	behavior of "initialization code:"
 
-	it should "not be stopped immediately after construction and onStop should not have been called" in
+	it should "should start in correct state and not call onStop()" in
 	{
 		// Arrange
 		//
@@ -33,9 +33,9 @@ class StoppableTest
 		f.subject.latch.getCount should be (1L)
 	}
 
-	behavior of "Stop     :"
+	behavior of "Stop()             :"
 
-	it should "return true and have correct state when called immediately after construction" in
+	it should "return true and call onStop() and set hasStopped to 'true'" in
 	{
 		// Arrange
 		//
@@ -52,7 +52,7 @@ class StoppableTest
 		f.subject.latch.getCount should be (0L)
 	}
 
-	it should "return false and still be stopped when start called multiple times" in
+	it should "return false and not call onStop() again when called multiple times" in
 	{
 		// Arrange
 		//
