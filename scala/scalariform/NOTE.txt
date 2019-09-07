@@ -1,0 +1,6 @@
+Basically, Scalariform sucks and cannot be used.
+
+A) Using tabs for indentation eliminates useful alignment choices
+B) Forces opening curly to be hidden in K&R style
+
+
