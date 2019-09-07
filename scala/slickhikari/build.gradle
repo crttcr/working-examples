@@ -42,7 +42,7 @@ dependencies {
 	compile group: 'org.scalamock', name: 'scalamock_2.12', version: '4.1.0'
 	
 	testCompile 'org.scalatest:scalatest_2.12:3.0.4'
-	testCompile 'org.mockito:mockito-core:2.13.0'
+	testCompile 'org.mockito:mockito-core:3.0.0'
 	testCompile 'junit:junit:4.12'
 	testCompile 'com.h2database:h2:1.4.196'
 

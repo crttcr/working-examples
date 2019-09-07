@@ -46,6 +46,6 @@ dependencies
 	//
    testImplementation 'org.scalatest:scalatest_2.12:3.0.5'
 	testImplementation 'junit:junit:4.12'
-	testImplementation 'org.mockito:mockito-core:2.18.3'
+	testImplementation 'org.mockito:mockito-core:3.0.0'
 	testImplementation 'commons-codec:commons-codec:1.11'
 }

@@ -29,6 +29,6 @@ dependencies
 	// Testing
 	//
 	testCompile 'junit:junit:4+'
-	testCompile 'org.mockito:mockito-all:2+'
+	testCompile 'org.mockito:mockito-core:3.0.0'
 }
 
